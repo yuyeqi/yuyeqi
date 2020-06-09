@@ -53,31 +53,51 @@
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table"></table>
                 </div>
-                <div class="layui-card-body ">
-                    <div class="page">
-                        <div>
-                            <a class="prev" href="">&lt;&lt;</a>
-                            <a class="num" href="">1</a>
-                            <span class="current">2</span>
-                            <a class="num" href="">3</a>
-                            <a class="num" href="">489</a>
-                            <a class="next" href="">&gt;&gt;</a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 </div>
 </body>
+<script type="text/html" id="titleTpl">
+
+</script>
 <script>
-    layui.use(['laydate','form'], function(){
+    layui.use(['laydate','form','table'], function(){
         var laydate = layui.laydate;
         var  form = layui.form;
         var table = layui.table;
         //表格展示
         table.render({
-            elem
+            elem: '#table'
+            ,url: '{{ route('admin_lists') }}'
+            ,cellMinWidth: 80
+            ,cols: [[
+                {field:'id', width:80, title: 'ID', sort: true}
+                ,{field:'username', width:80, title: '用户名'}
+                ,{field:'phone', width:80, title: '手机'}
+                ,{field:'account', width:80, title: '账户'}
+                ,{field:'email', title: '邮件', minWidth: 100}
+                ,{field:'status', title: '状态',templet: function(d){
+                        if(d.status == 0){
+                            return '<button type="button" class="layui-btn layui-btn-normal">正常</button>'
+                        }else{
+                            return '<button type="button" class="layui-btn layui-btn-danger">禁用</button>'
+                        }
+                    } }
+                ,{field:'login_ip', title: '登陆ip'}
+                ,{field:'is_login', title: '登陆状态',templet: function(d){
+                        if(d.is_login == 0){
+                            return '<button type="button" class="layui-btn layui-btn-disabled">离线</button>'
+                        }else{
+                            return '<button type="button" class="layui-btn layui-btn-danger">在线</button>'
+                        }
+                    }}
+                ,{field:'login_time', title: '登陆时间'}
+                ,{field:'update_user_name', title: '更新人'}
+                ,{field:'update_time', title: '更新时间'}
+                ,{field:'create_time', title: '创建时间'}
+            ]]
+            ,page: true
         })
         // 监听全选
         form.on('checkbox(checkall)', function(data){

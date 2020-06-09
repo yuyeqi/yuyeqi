@@ -19,4 +19,5 @@ Route::middleware(['login'])->group(function () {
     Route::get('index/welcome','Admin\IndexController@welcome')->name('welcome');
     //后台用户
     Route::get('admin/index','Admin\AdminController@index')->name('admin_index');
+    Route::get('admin/lists','Admin\AdminController@getAdminLists')->name('admin_lists');
 });

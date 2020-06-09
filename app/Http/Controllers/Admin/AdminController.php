@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Service\AdminService;
+use App\Library\Render;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 
@@ -24,14 +25,26 @@ class AdminController extends BaseController
     }
 
     /**
-     * 后台用户列表
-     * @param Request $request\
+     * 后台用户列表页面展示
      */
-    public function index($search = null){
-        $lists = $this->adminService->getAdminLists($search);
-        return view('admin.admin.index',['lists'=>$lists]);
+    public function index(){
+        return view('admin.admin.index');
     }
 
+    /**
+     * 请求后台列表数据
+     * @param null $search
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAdminLists(Request $request){
+        //接收参数
+        $keyword = trim($request->get('keywords',''));
+        $status = intval($request->get('status','0'));
+        $limit = intval($request->get('limit','10'));
+        //获取数据
+        $lists = $this->adminService->getAdminLists($keyword,$status,$limit);
+        return Render::table($lists->items(),$lists->total());
+    }
     /**
      * 展示登陆页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
