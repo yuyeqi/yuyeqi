@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Service\AdminService;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 
@@ -11,15 +12,23 @@ use Illuminate\Http\Request;
 class AdminController extends BaseController
 
 {
+    private $adminService;
+
+    /**
+     * 构造方法
+     * AdminController constructor.
+     * @param Admin $admin
+     */
+    public function __construct(){
+        $this->adminService = isset($this->adminService) ?: new AdminService();
+    }
+
     /**
      * 后台用户列表
      * @param Request $request\
      */
-    public function index(){
-        $lists = Admin::where('status',0)
-            ->orderBy('id','desc')
-            ->take(10)
-            ->get()->toArray();
+    public function index($search = null){
+        $lists = $this->adminService->getAdminLists($search);
         return view('admin.admin.index',['lists'=>$lists]);
     }
 
