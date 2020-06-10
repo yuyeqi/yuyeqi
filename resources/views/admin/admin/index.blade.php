@@ -31,45 +31,40 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                    <form class="layui-form layui-col-space5">
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input"  autocomplete="off" placeholder="截止日" name="end" id="end">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-                        </div>
-                    </form>
+                    <div class="layui-inline">
+                        <input class="layui-input" name="keywords" autocomplete="off">
+                    </div>
+                    <button class="layui-btn" data-type="reload">搜索</button>
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','./member-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('admin_add') }}',800,600)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
-                    <table class="layui-hide" id="table"></table>
+                    <table class="layui-hide" id="table" lay-filter="tableTool"></table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-<script type="text/html" id="titleTpl">
-
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-normak layui-btn-xs" lay-event="detail">停用</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
     layui.use(['laydate','form','table'], function(){
         var laydate = layui.laydate;
         var  form = layui.form;
         var table = layui.table;
+        var $ = layui.$;
+        var username = $("input[name='username']").val();
         //表格展示
         table.render({
             elem: '#table'
-            ,url: '{{ route('admin_lists') }}'
+            ,url: "{{ route('admin_lists') }}"
             ,cellMinWidth: 150
             ,cols: [[
                 {field:'id', width:80, title: 'ID', sort: true}
@@ -96,21 +91,38 @@
                 ,{field:'update_user_name', title: '更新人'}
                 ,{field:'update_time', title: '更新时间'}
                 ,{field:'create_time', title: '创建时间'}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:200}
             ]]
             ,page: true
             ,id: 'tableId'
         })
+        //监听工具条
+        //监听工具条
+        table.on('tool(tableTool)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                member_stop(data,data.id);return false;
+                layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if(obj.event === 'edit'){
+                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+            }
+        });
         //执行重载
         var $ = layui.$,active = {
             reload: function (){
-                var username = '11';
+                var keywords = $("input[name='keywords']").val();
                 //执行重载
                 table.reload('tableId',{
                     page: {
                         curr: 1
                     }
                     , where: {
-                        username:1111
+                        keywords:keywords,
                     }
                 })
             }
@@ -140,6 +152,7 @@
     });
     /*用户-停用*/
     function member_stop(obj,id){
+        xadmin.open('编辑','member-edit.html',600,400);return false;
         layer.confirm('确认要停用吗？',function(index){
             if($(obj).attr('title')=='启用'){
                 //发异步把用户状态进行更改

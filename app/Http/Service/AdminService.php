@@ -26,7 +26,7 @@ class AdminService
      * 后台用户列表
      * @param $search
      */
-    public function getAdminLists($keyword,$status,$limit){
-        return $this->admin->getAdminLists($keyword,$status,$limit);
+    public function getAdminLists($keyword,$limit){
+        return $this->admin->getAdminLists($keyword,$limit);
     }
 }

@@ -39,10 +39,9 @@ class AdminController extends BaseController
     public function getAdminLists(Request $request){
         //接收参数
         $keyword = trim($request->get('keywords',''));
-        $status = intval($request->get('status','0'));
         $limit = intval($request->get('limit','10'));
         //获取数据
-        $lists = $this->adminService->getAdminLists($keyword,$status,$limit);
+        $lists = $this->adminService->getAdminLists($keyword,$limit);
         return Render::table($lists->items(),$lists->total());
     }
     /**
@@ -52,12 +51,18 @@ class AdminController extends BaseController
     public function showLogin(){
         return view('admin.admin.login');
     }
-    /**
-     * 用户登陆
-     * @param $account  账号
-     * @param $password 密码
-     */
-    public function login($account,$password){
 
+    /**
+     * 添加用户
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function add(Request $request){
+        //展示添加页面
+        if ($request->isMethod("get")){
+            return view('admin.admin.add');
+        }
+        //添加数据
+        $data = $request->only([]);
     }
 }

@@ -19,26 +19,18 @@ class Admin extends Model
     }
 
     //后台用户列表
-    public function getAdminLists($keyword,$status,$limit){
-        //设置搜索条件
-        $map = ['is_delete'=>0];
-        if (isset($status) && !empty($status)){
-            $map[] = ['status',$status];
-        }
-        if (isset($keyword) && !empty($keyword)){
-            self::where(function ($query) use ($keyword){
-                $query->where('username','like','%'.$keyword.'%')
-                    ->orWhere('phone','like','%'.$keyword.'%')
-                    ->orWhere('accunt','like','%'.$keyword.'%');
-            });
-        }
+    public function getAdminLists($keyword,$limit){
         //查询
         $field = ['id','username','phone','sex','account','status','is_login','update_user_name',
             'create_user_name','login_time','update_time','create_time'];
-        $lists = self::where($map)
+        $lists = self::where(['is_delete'=>0])
+            ->when($keyword != '',function ($query) use ($keyword){
+                return $query->where('username','like','%'.$keyword.'%')
+                    ->orWhere('phone','like','%'.$keyword.'%')
+                    ->orWhere('account','like','%'.$keyword.'%');
+            })
             ->whereIn('status',[0,1])
             ->select($field)
-            ->orderBy('id','desc')
             ->paginate($limit);
         return $lists;
     }

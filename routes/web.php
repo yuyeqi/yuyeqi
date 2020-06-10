@@ -20,4 +20,5 @@ Route::middleware(['login'])->group(function () {
     //后台用户
     Route::get('admin/index','Admin\AdminController@index')->name('admin_index');
     Route::get('admin/lists','Admin\AdminController@getAdminLists')->name('admin_lists');
+    Route::get('admin/add','Admin\AdminController@add')->name('admin_add');
 });
