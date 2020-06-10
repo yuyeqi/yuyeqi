@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Admin extends Model
 {
@@ -12,6 +13,10 @@ class Admin extends Model
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
 
+    //登录时间获取器
+    public function getLoginTimeAttribute(){
+        return date('Y-m-d H:i:s', $this->attributes['login_time']);
+    }
 
     //后台用户列表
     public function getAdminLists($keyword,$status,$limit){

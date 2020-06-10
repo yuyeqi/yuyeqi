@@ -70,12 +70,12 @@
         table.render({
             elem: '#table'
             ,url: '{{ route('admin_lists') }}'
-            ,cellMinWidth: 80
+            ,cellMinWidth: 150
             ,cols: [[
                 {field:'id', width:80, title: 'ID', sort: true}
-                ,{field:'username', width:80, title: '用户名'}
-                ,{field:'phone', width:80, title: '手机'}
-                ,{field:'account', width:80, title: '账户'}
+                ,{field:'username', width:150, title: '用户名'}
+                ,{field:'phone', width:150, title: '手机'}
+                ,{field:'account', width:150, title: '账户'}
                 ,{field:'email', title: '邮件', minWidth: 100}
                 ,{field:'status', title: '状态',templet: function(d){
                         if(d.status == 0){
@@ -98,6 +98,27 @@
                 ,{field:'create_time', title: '创建时间'}
             ]]
             ,page: true
+            ,id: 'tableId'
+        })
+        //执行重载
+        var $ = layui.$,active = {
+            reload: function (){
+                var username = '11';
+                //执行重载
+                table.reload('tableId',{
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        username:1111
+                    }
+                })
+            }
+        }
+        //点击搜索
+        $('.layui-card-body .layui-btn').on('click',function (){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
         })
         // 监听全选
         form.on('checkbox(checkall)', function(data){
