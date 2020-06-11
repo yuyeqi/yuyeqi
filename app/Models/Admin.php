@@ -12,11 +12,17 @@ class Admin extends Model
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
+    protected $dateFormat = 'int';
 
     //登录时间获取器
     public function getLoginTimeAttribute(){
         return date('Y-m-d H:i:s', $this->attributes['login_time']);
     }
+
+    //设置保存字段
+    protected $fillable = [
+        'username','phone','email','account','password','sex','create_user_id','create_user_name','update_id','update_user_name'
+    ];
 
     //后台用户列表
     public function getAdminLists($keyword,$limit){
@@ -31,7 +37,17 @@ class Admin extends Model
             })
             ->whereIn('status',[0,1])
             ->select($field)
+            ->orderBy('id','desc')
             ->paginate($limit);
         return $lists;
+    }
+
+    /**
+     * 添加用户
+     * @param $data
+     * @return bool
+     */
+    public function addAdmin($data){
+        return self::create($data);
     }
 }

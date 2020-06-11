@@ -29,4 +29,12 @@ class AdminService
     public function getAdminLists($keyword,$limit){
         return $this->admin->getAdminLists($keyword,$limit);
     }
+
+    public function addAdmin($data){
+        $data['create_user_id'] = 1;
+        $data['create_user_name'] = '朱永利';
+        $data['update_id'] = 1;
+        $data['update_user_name'] = '朱永利';
+        return $this->admin->addAdmin($data);
+    }
 }

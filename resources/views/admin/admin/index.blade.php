@@ -1,31 +1,16 @@
-<!DOCTYPE html>
-<html class="x-admin-sm">
-<head>
-    <meta charset="UTF-8">
-    <title>欢迎页面-X-admin2.2</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-    <link rel="stylesheet" href="/static/admin/css/font.css">
-    <link rel="stylesheet" href="/static/admin/css/xadmin.css">
-    <script src="/static/admin/lib/layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="/static/admin/js/xadmin.js"></script>
-    <!--[if lt IE 9]>
-    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body>
+@extends('admin.layouts.app')
+@section('title','管理员列表')
+@section('nav')
+<!-- 导航开始 -->
 <div class="x-nav">
-          <span class="layui-breadcrumb">
-            <a href="">首页</a>
-            <a href="">演示</a>
-            <a>
-              <cite>导航元素</cite></a>
-          </span>
+    <span class="layui-breadcrumb">
+        <a href="">首页</a>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
         <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
 </div>
+<!-- 导航结束 -->
+@endsection
+@section('content')
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
@@ -38,7 +23,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('admin_add') }}',800,600)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('admin_add_show') }}',700,500)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -47,10 +32,10 @@
         </div>
     </div>
 </div>
-</body>
+@endsection
+@section('js')
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-normak layui-btn-xs" lay-event="detail">停用</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -74,7 +59,7 @@
                 ,{field:'email', title: '邮件', minWidth: 100}
                 ,{field:'status', title: '状态',templet: function(d){
                         if(d.status == 0){
-                            return '<button type="button" class="layui-btn layui-btn-normal">正常</button>'
+                            return '<button type="button" onclick="member_stop('+d.id+')" class="layui-btn layui-btn-normal">正常</button>'
                         }else{
                             return '<button type="button" class="layui-btn layui-btn-danger">禁用</button>'
                         }
@@ -152,7 +137,7 @@
     });
     /*用户-停用*/
     function member_stop(obj,id){
-        xadmin.open('编辑','member-edit.html',600,400);return false;
+        xadmin.open('编辑','member-edit.html',800,600);return false;
         layer.confirm('确认要停用吗？',function(index){
             if($(obj).attr('title')=='启用'){
                 //发异步把用户状态进行更改
@@ -191,4 +176,4 @@
         });
     }
 </script>
-</html>
+@endsection

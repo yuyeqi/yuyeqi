@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\AdminPost;
 use App\Http\Service\AdminService;
 use App\Library\Render;
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * 后台用户控制器
@@ -53,16 +55,23 @@ class AdminController extends BaseController
     }
 
     /**
+     * 展示添加页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function addShow(){
+        return view('admin.admin.add');
+    }
+    /**
      * 添加用户
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function add(Request $request){
-        //展示添加页面
-        if ($request->isMethod("get")){
-            return view('admin.admin.add');
-        }
+    public function add(AdminPost $request){
+        $data = $request->only('username','account','phone','password','sex','email','remark');
         //添加数据
-        $data = $request->only([]);
+        if ($this->adminService->addAdmin($data)){
+            return  Render::success('添加成功');
+        }
+        return Render::error('添加失败');
     }
 }
