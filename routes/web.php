@@ -22,4 +22,5 @@ Route::middleware(['login'])->group(function () {
     Route::get('admin/lists','Admin\AdminController@getAdminLists')->name('admin_lists');
     Route::get('admin/addShow','Admin\AdminController@addShow')->name('admin_add_show');
     Route::post('admin/add','Admin\AdminController@add')->name('admin_add');
+    Route::get('admin/showInfo/{id}','Admin\AdminController@showInfo');
 });

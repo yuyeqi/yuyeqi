@@ -74,4 +74,15 @@ class AdminController extends BaseController
         }
         return Render::error('添加失败');
     }
+
+    /**
+     * 查看用户信息
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function showInfo($id){
+        $id = 9;
+        $detail = $this->adminService->getAdminDetail($id);
+        return view('admin.admin.show',['detail'=>$detail]);
+    }
 }

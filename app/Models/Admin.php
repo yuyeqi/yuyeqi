@@ -21,7 +21,7 @@ class Admin extends Model
 
     //设置保存字段
     protected $fillable = [
-        'username','phone','email','account','password','sex','create_user_id','create_user_name','update_id','update_user_name'
+        'username','phone','email','account','password','sex','create_user_id','create_user_name','update_user_id','update_user_name'
     ];
 
     //后台用户列表
@@ -30,7 +30,7 @@ class Admin extends Model
         $field = ['id','username','phone','sex','account','status','is_login','update_user_name',
             'create_user_name','login_time','update_time','create_time'];
         $lists = self::where(['is_delete'=>0])
-            ->when($keyword != '',function ($query) use ($keyword){
+            ->when(!empty($keyword),function ($query) use ($keyword){
                 return $query->where('username','like','%'.$keyword.'%')
                     ->orWhere('phone','like','%'.$keyword.'%')
                     ->orWhere('account','like','%'.$keyword.'%');
@@ -49,5 +49,15 @@ class Admin extends Model
      */
     public function addAdmin($data){
         return self::create($data);
+    }
+
+    /**
+     * 后台用户详情
+     * @param $id
+     * @return mixed
+     */
+    public function getAdminDetail($id){
+        $map = ['id'=>$id,'is_delete'=>0];
+        return self::where($map)->first();
     }
 }

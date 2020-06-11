@@ -4,6 +4,7 @@
 namespace App\Http\Service;
 
 use App\Models\Admin;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * 后台用户服务层
@@ -30,11 +31,26 @@ class AdminService
         return $this->admin->getAdminLists($keyword,$limit);
     }
 
+    /**
+     * 添加用户
+     * @param $data
+     * @return bool
+     */
     public function addAdmin($data){
         $data['create_user_id'] = 1;
         $data['create_user_name'] = '朱永利';
         $data['update_id'] = 1;
         $data['update_user_name'] = '朱永利';
+        $data['password'] = Crypt::encrypt($data['password']);
         return $this->admin->addAdmin($data);
+    }
+
+    /**
+     * 后台用户详情
+     * @param $id
+     * @return mixed
+     */
+    public function getAdminDetail($id){
+        return $this->admin->getAdminDetail($id);
     }
 }

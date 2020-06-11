@@ -86,15 +86,14 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'detail'){
-                member_stop(data,data.id);return false;
-                layer.msg('ID：'+ data.id + ' 的查看操作');
+                xadmin.open('查看',"/admin/showInfo/"+data.id,800,600);
             } else if(obj.event === 'del'){
                 layer.confirm('真的删除行么', function(index){
                     obj.del();
                     layer.close(index);
                 });
             } else if(obj.event === 'edit'){
-                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+
             }
         });
         //执行重载
@@ -137,7 +136,6 @@
     });
     /*用户-停用*/
     function member_stop(obj,id){
-        xadmin.open('编辑','member-edit.html',800,600);return false;
         layer.confirm('确认要停用吗？',function(index){
             if($(obj).attr('title')=='启用'){
                 //发异步把用户状态进行更改
