@@ -81,8 +81,70 @@ class AdminController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function showInfo($id){
-        $id = 9;
         $detail = $this->adminService->getAdminDetail($id);
         return view('admin.admin.show',['detail'=>$detail]);
+    }
+
+    /**
+     * 编辑
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function edit($id){
+        $detail = $this->adminService->getAdminDetail($id);
+        return view('admin.admin.edit',['detail'=>$detail]);
+    }
+
+    /**
+     * 更新用户信息
+     * @param AdminPost $adminPost
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function editPost(AdminPost $adminPost,$id){
+        $data = $adminPost->only('id','username','account','phone','password','sex','email','remark');
+        //修改
+        if ($this->adminService->updateAdmin($data)){
+            return  Render::success('修改成功');
+        }
+        return Render::error('修改失败');
+    }
+
+    /**
+     * 设置密码
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePwd(Request $request){
+        $data = $request->only('id','password');
+        //数据验证
+        $validator =Validator::make($data,[
+            'id' => 'required',
+            'password' => 'required|min:6|max:16',
+        ],[
+            'id' => '缺少必要参数',
+            'password.required' => '密码不能为空',
+            'password.min' => '用户名或密码错误',
+            'password.max' => '用户名或密码错误'
+        ]);
+        if ($validator->fails()){
+            return Render::error($validator->errors()->first());
+        }
+        //修改密码
+        if($this->adminService->updatePwd($data)){
+            return Render::success('设置成功');
+        }
+        return Render::error('设置失败');
+    }
+
+    /**
+     * 删除司机
+     * @param $id
+     * @return mixed
+     */
+    public function delete($id){
+        if ($this->adminService->deleteAdmin($id)){
+            return  Render::success('删除成功');
+        }
+        return  Render::error('删除失败');
     }
 }

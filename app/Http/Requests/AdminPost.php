@@ -9,6 +9,8 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AdminPost extends FormRequest implements ValidatesWhenResolved
 {
+    use SceneValidator;
+
     /**
      * 重写验证方法
      * @param Validator $validator
@@ -37,10 +39,11 @@ class AdminPost extends FormRequest implements ValidatesWhenResolved
      */
     public function rules()
     {
+        $id = $this->route('id');
         return [
-            'username' => 'required|max:32|unique:hp_admin,username',
-            'account' => 'required|max:20|unique:hp_admin,account',
-            'phone' => 'required|size:11|unique:hp_admin,phone',
+            'username' => 'required|max:32|unique:hp_admin,username,'.$id,
+            'account' => 'required|max:20|unique:hp_admin,account,'.$id,
+            'phone' => 'required|size:11|unique:hp_admin,phone,'.$id,
             'email' => 'required|email',
             'sex' => 'required',
             'password' => 'required|between:6,18'
@@ -67,4 +70,31 @@ class AdminPost extends FormRequest implements ValidatesWhenResolved
             'password.between' => '密码长度必须在6-12'
         ];
     }
+
+    /**
+     * 场景规则
+     * @return array
+     */
+    public function scene(){
+        return [
+            //add 场景
+            'add' => [
+                'username' ,       //复用 rules() 下 name 规则
+                'account',
+                'phone',
+                'email',
+                'sex',
+                'password'
+            ],
+            //edit场景
+            'edit' => [
+                'username' ,       //复用 rules() 下 name 规则
+                'account',
+                'phone',
+                'email',
+                'sex',
+            ],
+        ];
+    }
+
 }

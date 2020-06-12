@@ -37,6 +37,7 @@
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="pwd">设置密码</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
@@ -76,7 +77,7 @@
                 ,{field:'update_user_name', title: '更新人'}
                 ,{field:'update_time', title: '更新时间'}
                 ,{field:'create_time', title: '创建时间'}
-                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:200}
+                ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:250}
             ]]
             ,page: true
             ,id: 'tableId'
@@ -86,14 +87,13 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'detail'){
-                xadmin.open('查看',"/admin/showInfo/"+data.id,800,600);
+                xadmin.open('查看',"/admin/showInfo/"+data.id,600,650);
             } else if(obj.event === 'del'){
-                layer.confirm('真的删除行么', function(index){
-                    obj.del();
-                    layer.close(index);
-                });
+                layer.confirm('确认要删除吗？',function (){
+                    member_del(data.id);
+                })
             } else if(obj.event === 'edit'){
-
+                xadmin.open('编辑',"/admin/edit/"+data.id,600,650);
             }
         });
         //执行重载
@@ -137,6 +137,9 @@
     /*用户-停用*/
     function member_stop(obj,id){
         layer.confirm('确认要停用吗？',function(index){
+            var status
+
+
             if($(obj).attr('title')=='启用'){
                 //发异步把用户状态进行更改
                 $(obj).attr('title','停用')
@@ -149,15 +152,44 @@
                 $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
                 layer.msg('已启用!',{icon: 5,time:1000});
             }
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'get',
+                url: '/admin/delete/'+id,
+                dataType: 'json',
+                success: function (data) {
+                    layer.msg(data.msg,{icon:1,time:1000});
+                    //刷新页面
+                    window.parent.location.reload();
+                    //layer.close(obj);
+                },
+                error: function (xhr,type) {
+
+                }
+            })
         });
     }
     /*用户-删除*/
-    function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
-        });
+    function member_del(id){
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'get',
+            url: '/admin/delete/'+id,
+            dataType: 'json',
+            success: function (data) {
+                layer.msg(data.msg,{icon:1,time:1000});
+                //刷新页面
+                window.parent.location.reload();
+                //layer.close(obj);
+            },
+            error: function (xhr,type) {
+
+            }
+        })
     }
     function delAll (argument) {
         var ids = [];

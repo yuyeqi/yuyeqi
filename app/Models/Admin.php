@@ -60,4 +60,13 @@ class Admin extends Model
         $map = ['id'=>$id,'is_delete'=>0];
         return self::where($map)->first();
     }
+
+    /**
+     * 修改用户
+     * @param $data
+     * @return bool
+     */
+    public function updateAdmin($data){
+        return self::where(["id"=>$data['id']])->update($data);
+    }
 }
