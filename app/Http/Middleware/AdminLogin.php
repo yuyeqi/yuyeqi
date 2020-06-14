@@ -15,6 +15,10 @@ class AdminLogin
      */
     public function handle($request, Closure $next)
     {
+        $admin = session('admin');
+        if ($admin == null){
+            return redirect('public/login');
+        }
         return $next($request);
     }
 }

@@ -13,6 +13,8 @@ class Admin extends Model
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
     protected $dateFormat = 'int';
+    //隐藏字段
+    protected $hidden = ['password','create_user_id','is_delete','create_user_id','update_user_id'];
 
     //登录时间获取器
     public function getLoginTimeAttribute(){
@@ -68,5 +70,15 @@ class Admin extends Model
      */
     public function updateAdmin($data){
         return self::where(["id"=>$data['id']])->update($data);
+    }
+
+    /**
+     * 批量更新
+     * @param $ids
+     * @param $data
+     * @return mixed
+     */
+    public function deleteAll($ids,$data){
+        return self::whereIn('id',$ids)->update($data);
     }
 }

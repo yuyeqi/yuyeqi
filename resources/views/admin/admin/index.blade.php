@@ -41,10 +41,11 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
+    var table;
     layui.use(['laydate','form','table'], function(){
         var laydate = layui.laydate;
         var  form = layui.form;
-        var table = layui.table;
+        table = layui.table;
         var $ = layui.$;
         var username = $("input[name='username']").val();
         //表格展示
@@ -53,16 +54,17 @@
             ,url: "{{ route('admin_lists') }}"
             ,cellMinWidth: 150
             ,cols: [[
-                {field:'id', width:80, title: 'ID', sort: true}
+                {type: 'checkbox',field: 'left'}
+                ,{field:'id', width:80, title: 'ID', sort: true}
                 ,{field:'username', width:150, title: '用户名'}
                 ,{field:'phone', width:150, title: '手机'}
                 ,{field:'account', width:150, title: '账户'}
                 ,{field:'email', title: '邮件', minWidth: 100}
                 ,{field:'status', title: '状态',templet: function(d){
                         if(d.status == 0){
-                            return '<button type="button" onclick="member_stop('+d.id+')" class="layui-btn layui-btn-normal">正常</button>'
+                            return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
                         }else{
-                            return '<button type="button" class="layui-btn layui-btn-danger">禁用</button>'
+                            return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'
                         }
                     } }
                 ,{field:'login_ip', title: '登陆ip'}
@@ -94,6 +96,8 @@
                 })
             } else if(obj.event === 'edit'){
                 xadmin.open('编辑',"/admin/edit/"+data.id,600,650);
+            }else if(obj.event === 'pwd'){
+                setPasword(data.id);
             }
         });
         //执行重载
@@ -135,35 +139,22 @@
         });
     });
     /*用户-停用*/
-    function member_stop(obj,id){
-        layer.confirm('确认要停用吗？',function(index){
-            var status
-
-
-            if($(obj).attr('title')=='启用'){
-                //发异步把用户状态进行更改
-                $(obj).attr('title','停用')
-                $(obj).find('i').html('&#xe62f;');
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                layer.msg('已停用!',{icon: 5,time:1000});
-            }else{
-                $(obj).attr('title','启用')
-                $(obj).find('i').html('&#xe601;');
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                layer.msg('已启用!',{icon: 5,time:1000});
-            }
+    function member_stop(id,status){
+        var status = status == 0 ? 1 : 0;
+        var msg = status ? '确认要停用吗？' : '确认要启用吗？';
+        layer.confirm(msg,function(index){
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                type: 'get',
-                url: '/admin/delete/'+id,
+                type: 'post',
+                url: "{{ route('admin_update_status') }}",
                 dataType: 'json',
+                data: {id:id,status:status},
                 success: function (data) {
                     layer.msg(data.msg,{icon:1,time:1000});
                     //刷新页面
-                    window.parent.location.reload();
-                    //layer.close(obj);
+                    location.reload()
                 },
                 error: function (xhr,type) {
 
@@ -183,8 +174,7 @@
             success: function (data) {
                 layer.msg(data.msg,{icon:1,time:1000});
                 //刷新页面
-                window.parent.location.reload();
-                //layer.close(obj);
+                location.reload()
             },
             error: function (xhr,type) {
 
@@ -193,16 +183,59 @@
     }
     function delAll (argument) {
         var ids = [];
-        // 获取选中的id
-        $('tbody input').each(function(index, el) {
-            if($(this).prop('checked')){
-                ids.push($(this).val())
+        var checkStatus = table.checkStatus('tableId').data;
+        $.each(checkStatus,function (index,val) {
+            ids.push(val['id'])
+        })
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            url: '{{route("admin_delete_all")}}',
+            dataType: 'json',
+            data: {ids: ids},
+            success: function (data) {
+                if(data.code == 0){
+                    layer.msg(data.msg,{icon:1,time:1000});
+                }else{
+                    layer.msg(data.msg,{icon:5,time:1000});
+                }
+                //刷新页面
+                location.reload();
+            },
+            error: function (xhr,type) {
+
             }
-        });
-        layer.confirm('确认要删除吗？'+ids.toString(),function(index){
-            //捉到所有被选中的，发异步进行删除
-            layer.msg('删除成功', {icon: 1});
-            $(".layui-form-checked").not('.header').parents('tr').remove();
+        })
+    }
+    //设置密码
+    function setPasword(id) {
+        //prompt层
+        layer.prompt({title: '请输入新密码，并确认', formType: 1}, function(pass, index){
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '{{route("admin_update_pwd")}}',
+                dataType: 'json',
+                data: {id: id,password: pass},
+                success: function (data) {
+                    if(data.code == 0){
+                        layer.msg(data.msg,{icon:1,time:1000});
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                    }
+
+                    //刷新页面
+                    //window.parent.location.reload();
+                },
+                error: function (xhr,type) {
+
+                }
+            })
+            layer.close(index);
         });
     }
 </script>

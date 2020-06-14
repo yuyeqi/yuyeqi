@@ -118,13 +118,13 @@ class AdminController extends BaseController
         $data = $request->only('id','password');
         //数据验证
         $validator =Validator::make($data,[
-            'id' => 'required',
+            'id' => 'required|int',
             'password' => 'required|min:6|max:16',
         ],[
             'id' => '缺少必要参数',
             'password.required' => '密码不能为空',
-            'password.min' => '用户名或密码错误',
-            'password.max' => '用户名或密码错误'
+            'password.min' => '密码长度必须是6-16位',
+            'password.max' => '密码长度必须是6-16位'
         ]);
         if ($validator->fails()){
             return Render::error($validator->errors()->first());
@@ -144,6 +144,38 @@ class AdminController extends BaseController
     public function delete($id){
         if ($this->adminService->deleteAdmin($id)){
             return  Render::success('删除成功');
+        }
+        return  Render::error('删除失败');
+    }
+
+    /**
+     * 设置用户状态
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateStatus(Request $request){
+        $data = $request->only('id','status');
+        //数据验证
+        $validator =Validator::make($data,[
+            'id' => 'required|integer',
+            'status' => 'required|integer',
+        ]);
+        //更新状态
+        if ($this->adminService->updateStatus($data)){
+            return Render::success('设置成功');
+        }
+        return  Render::error('设置失败');
+    }
+
+    /**
+     * 批量删除
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteAll(Request $request){
+        $ids = $request->input('ids');
+        if($this->adminService->deleteAll($ids)){
+            return Render::success('删除成功');
         }
         return  Render::error('删除失败');
     }

@@ -30,44 +30,21 @@
             <div class="left_open">
                 <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
             </div>
-            <ul class="layui-nav left fast-add" lay-filter="">
-                <li class="layui-nav-item">
-                    <a href="javascript:;">+新增</a>
-                    <dl class="layui-nav-child">
-                        <!-- 二级菜单 -->
-                        <dd>
-                            <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">
-                                <i class="iconfont">&#xe6a2;</i>弹出最大化</a></dd>
-                        <dd>
-                            <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">
-                                <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a></dd>
-                        <dd>
-                            <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">
-                                <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a></dd>
-                        <dd>
-                            <a onclick="xadmin.add_tab('在tab打开','member-list.html')">
-                                <i class="iconfont">&#xe6b8;</i>在tab打开</a></dd>
-                        <dd>
-                            <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">
-                                <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a></dd>
-                    </dl>
-                </li>
-            </ul>
             <ul class="layui-nav right" lay-filter="">
                 <li class="layui-nav-item">
-                    <a href="javascript:;">admin</a>
-                    <dl class="layui-nav-child">
+                    <a href="javascript:;">{{ Session::get('admin')['username'] }}</a>
+                    {{--<dl class="layui-nav-child">
                         <!-- 二级菜单 -->
                         <dd>
                             <a onclick="xadmin.open('个人信息','http://www.baidu.com')">个人信息</a></dd>
                         <dd>
                             <a onclick="xadmin.open('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
                         <dd>
-                            <a href="./login.html">退出</a></dd>
-                    </dl>
+                            <a href="{{ route('loginOut') }}">退出</a></dd>
+                    </dl>--}}
                 </li>
                 <li class="layui-nav-item to-index">
-                    <a href="/">前台首页</a></li>
+                    <a href="{{ route('loginOut') }}">退出</a></li>
             </ul>
         </div>
         <!-- 顶部结束 -->
@@ -78,14 +55,60 @@
                 <ul id="nav">
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="会员管理">&#xe6b8;</i>
-                            <cite>用户列表</cite>
+                            <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe726;</i>
+                            <cite>管理员管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('管理员列表','{{ route("admin_index") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>管理员列表</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('角色管理','admin-role.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>角色管理</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('权限分类','admin-cate.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>权限分类</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('权限管理','admin-rule.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>权限管理</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="配置管理">&#xe6b8;</i>
+                            <cite>配置管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
                                 <a onclick="xadmin.add_tab('用户列表','{{ route("admin_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>用户列表</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="会员管理">&#xe6b8;</i>
+                            <cite>用户管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('用户列表','{{ route("admin_index") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>用户列表</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('用户列表','{{ route("admin_index") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>用户分类</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -110,7 +133,7 @@
                     <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="分类管理">&#xe723;</i>
-                            <cite>分类管理</cite>
+                            <cite>商品管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
@@ -123,7 +146,7 @@
                     <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="城市联动">&#xe723;</i>
-                            <cite>城市联动</cite>
+                            <cite>日志管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
@@ -135,36 +158,8 @@
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe726;</i>
-                            <cite>管理员管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('管理员列表','admin-list.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>管理员列表</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('角色管理','admin-role.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>角色管理</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('权限分类','admin-cate.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>权限分类</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('权限管理','admin-rule.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>权限管理</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="系统统计">&#xe6ce;</i>
-                            <cite>系统统计</cite>
+                            <cite>报备管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
@@ -212,7 +207,7 @@
                     <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="图标字体">&#xe6b4;</i>
-                            <cite>图标字体</cite>
+                            <cite>私人定制</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
@@ -225,7 +220,35 @@
                     <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="其它页面">&#xe6b4;</i>
-                            <cite>其它页面</cite>
+                            <cite>案例管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="login.html" target="_blank">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>登录页面</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('错误页面','error.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>错误页面</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('示例页面','demo.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>示例页面</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('更新日志','log.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>更新日志</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="其它页面">&#xe6b4;</i>
+                            <cite>新闻管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
@@ -253,7 +276,7 @@
                     <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="第三方组件">&#xe6b4;</i>
-                            <cite>layui第三方组件</cite>
+                            <cite>兑换商城</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>

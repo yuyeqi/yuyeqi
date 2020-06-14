@@ -72,7 +72,12 @@
                         data: {username:data.field.username,password:data.field.password},
                         dataType: 'json',
                         success: function (data) {
-                            console.log(111111)
+                            if(data.code == 0){
+                                layer.msg('登陆成功',{icon:1,time:1000})
+                                window.location.href = "{{route('index')}}"
+                            }else{
+                                layer.msg(data.msg,{icon:5,time:1000})
+                            }
                         },
                         error: function (xhr,type) {
 

@@ -88,4 +88,28 @@ class AdminService
         $data['is_delete'] = 1;
         return $this->admin->updateAdmin($data);
     }
+
+    /**
+     * 修改用户状态
+     * @param $data
+     * @return bool
+     */
+    public function updateStatus($data){
+        $data['update_user_id'] = 2;
+        $data['update_user_name'] = '何怡鸣';
+        return $this->admin->updateAdmin($data);
+    }
+
+    /**
+     * 批量删除
+     * @param $ids
+     * @return mixed
+     */
+    public function deleteAll($ids){
+        $data = [];
+        $data['update_user_id'] = 2;
+        $data['update_user_name'] = '何怡鸣';
+        $data['is_delete'] = 1;
+        return $this->admin->deleteAll($ids,$data);
+    }
 }

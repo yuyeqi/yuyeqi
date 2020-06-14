@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
  * Class PublicController
  * @package App\Http\Controllers\Admin
  */
-class PublicController extends Controller
+class PublicController extends BaseController
 {
     /**
      * 登陆展示
@@ -39,16 +39,16 @@ class PublicController extends Controller
             $map = ['status'=>0,
                 'account'=>$post['username'],
                 'is_delete'=>0];
-            $field = ['id','username','account','password'];
-            $admin = Admin::where($map)->first($field);
+            $field = ['id','username','phone','account','email','sex'];
+            $admin = Admin::where($map)->first();
             if ($admin == null){
-                return Render::error("用户不存在");
+                return Render::error("用户不存在,请联系管理员");
             }
             if ($post['password'] !== Crypt::decrypt($admin->password)){
                 return Render::error("用户名或密码错误");
             }
             //存储登陆信息到session
-            session(['admin' => $admin]);
+            session(['admin' => $admin->toArray()]);
             //更新登陆信息
             $admin->is_login = 1;
             $admin->login_time = time();
@@ -59,5 +59,14 @@ class PublicController extends Controller
         }else{
             return  view('admin.public.login');
         }
+    }
+
+    /**
+     * 推出登陆
+     * @return \Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function loginOut(Request $request){
+        $request->session()->forget('admin');
+        return redirect('public/login')->with('msg','退出成功');
     }
 }
