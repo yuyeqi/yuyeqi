@@ -5,14 +5,11 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <label for="account" class="layui-form-label">
-                        <span class="x-red">*</span>账户
+                        <span class="x-red">*</span>商品编码
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="account" name="account" required="" lay-verify="required"
+                        <input type="text" id="goods_no" name="goods_no" required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span>将会成为您唯一的登入名
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -20,16 +17,13 @@
                         <span class="x-red">*</span>用户名
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="userename" name="username" required="" lay-verify="username"
+                        <input type="text" id="goods_name" name="goods_name" required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span>将会成为您唯一的用户名
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label for="phone" class="layui-form-label">
-                        <span class="x-red">*</span>手机
+                        <span class="x-red">*</span>商品主图
                     </label>
                     <div class="layui-input-inline">
                         <input type="text" id="phone" name="phone" required="" lay-verify="phone"
@@ -41,7 +35,7 @@
                 </div>
                 <div class="layui-form-item">
                     <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>邮箱
+                        <span class="x-red">*</span>轮播图
                     </label>
                     <div class="layui-input-inline">
                         <input type="text" id="L_email" name="email" required="" lay-verify="email"
@@ -52,40 +46,91 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">单选框</label>
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>商品价格
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="good_price" name="good_price" required="" lay-verify="good_price"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>商品订金
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="book_price" name="book_price" required="" lay-verify="book_price"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>赠送积分
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="score" name="score"  required="" lay-verify="score"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>初始销量
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="sales_initial" name="sales_initial"  required="" lay-verify="sales_initial"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>排序
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="sort" name="sort"  required="" lay-verify="sort"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="sex" value="1" title="男" checked="">
-                        <input type="radio" name="sex" value="2" title="女">
+                        <input type="radio" name="sex" value="10" title="上架" checked="">
+                        <input type="radio" name="sex" value="20" title="下架">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="L_pass" class="layui-form-label">
-                        <span class="x-red">*</span>密码
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="password" id="L_pass" name="password" required="" lay-verify="pass"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                        6到16个字符
+                    <label class="layui-form-label">新品</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="sex" value="0" title="正常" checked="">
+                        <input type="radio" name="sex" value="1" title="新品">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="L_repass" class="layui-form-label">
-                        <span class="x-red">*</span>确认密码
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="password" id="L_repass" name="repass" required="" lay-verify="repass"
-                               autocomplete="off" class="layui-input">
+                    <label class="layui-form-label">热门</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="sex" value="0" title="正常" checked="">
+                        <input type="radio" name="sex" value="1" title="热门">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">推荐</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="sex" value="0" title="正常" checked="">
+                        <input type="radio" name="sex" value="1" title="推荐">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">商品简介</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">编辑器</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
                     </div>
                 </div>
                 <form class="layui-form layui-form-pane" action="">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">备注</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="remark" autocomplete="off" placeholder="请输入标题" class="layui-input">
-                        </div>
-                    </div>
                     <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label">
                         </label>
@@ -100,12 +145,14 @@
 @endsection
 @section('js')
     <script>
-        layui.use(['form', 'layer','table'],
+        //创建一个编辑器
+        layui.use(['form', 'layer','table','layedit'],
             function() {
                 $ = layui.jquery;
                 table = layui.table;
                 var form = layui.form,
                     layer = layui.layer,
+                    layedit = layui.layedit,
                     $ = layui.$;
                 //自定义验证规则
                 form.verify({
@@ -157,7 +204,8 @@
                         })
                             return false;
                         });
-
+                //创建一个编辑器
+                var editIndex = layedit.build('LAY_demo_editor');
             });
     </script>
 @endsection

@@ -34,5 +34,6 @@ Route::middleware(['login'])->group(function () {
     //商品管理
     Route::get('goods/index','Admin\GoodsController@index')->name('goods_index');
     Route::get('goods/getGoodsLists','Admin\GoodsController@getGoodsLists')->name('goods_lists');
-    Route::get('goods/detail/{id}','Admin\GoodsController@detail')->name('goods_detail')->where('id', '[0-9]+');;
+    Route::get('goods/detail/{id}','Admin\GoodsController@detail')->name('goods_detail')->where('id', '[0-9]+');
+    Route::any('goods/addShow','Admin\GoodsController@addShow')->name('goods_add_show');
 });

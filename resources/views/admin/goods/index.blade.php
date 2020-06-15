@@ -22,7 +22,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('admin_add_show') }}',700,500)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('goods_add_show') }}',700,500,true)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -42,10 +42,10 @@
 <script>
     var table;
     layui.use(['laydate','form','table'], function(){
-        var laydate = layui.laydate;
-        var  form = layui.form;
-        table = layui.table;
-        var $ = layui.$;
+        var laydate = layui.laydate,
+        form = layui.form,
+        table = layui.table,
+        $ = layui.$;
         var username = $("input[name='username']").val();
         //表格展示
         table.render({
@@ -61,10 +61,18 @@
                 ,{field:'good_price', width:100, title: '价格'}
                 ,{field:'book_price', width:100, title: '定金'}
                 ,{field:'comment_num', width:80, title: '评价数'}
-                ,{field:'goods_status', width:80, title: '状态'}
-                ,{field:'is_news', title: '新品',type:'button', width: 80}
-                ,{field:'is_hot', width:80, title: '热门'}
-                ,{field:'is_recommend', title: '推荐', minWidth: 80}
+                ,{field:'goods_status', width:80, title: '状态',templet: function (d) {
+                        return d.is_news.status_name;
+                    }}
+                ,{field:'is_news', title: '新品', width: 80,templet: function (d) {
+                        return d.is_news.status_name;
+                    }}
+                ,{field:'is_hot->status', width:80, title: '热门',templet: function (d) {
+                        return d.is_news.status_name;
+                    }}
+                ,{field:'is_recommend', title: '推荐', minWidth: 80,templet: function (d) {
+                        return d.is_news.status_name;
+                    }}
                 ,{field:'score', title: '赠送积分', minWidth: 120}
                 ,{field:'sales_actual', width:120, title: '实际销量'}
                 ,{field:'update_user_name', width:100, title: '更新人'}
@@ -86,7 +94,7 @@
                     member_del(data.id);
                 })
             } else if(obj.event === 'edit'){
-                xadmin.open('编辑',"/admin/edit/"+data.id,600,650);
+                xadmin.open('编辑',"/goods/edit/"+data.id,600,650,true);
             }else if(obj.event === 'pwd'){
                 setPasword(data.id);
             }
@@ -129,49 +137,6 @@
             elem: '#end' //指定元素
         });
     });
-    /*用户-停用*/
-    function member_stop(id,status){
-        var status = status == 0 ? 1 : 0;
-        var msg = status ? '确认要停用吗？' : '确认要启用吗？';
-        layer.confirm(msg,function(index){
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'post',
-                url: "{{ route('admin_update_status') }}",
-                dataType: 'json',
-                data: {id:id,status:status},
-                success: function (data) {
-                    layer.msg(data.msg,{icon:1,time:1000});
-                    //刷新页面
-                    location.reload()
-                },
-                error: function (xhr,type) {
-
-                }
-            })
-        });
-    }
-    /*用户-删除*/
-    function member_del(id){
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'get',
-            url: '/admin/delete/'+id,
-            dataType: 'json',
-            success: function (data) {
-                layer.msg(data.msg,{icon:1,time:1000});
-                //刷新页面
-                location.reload()
-            },
-            error: function (xhr,type) {
-
-            }
-        })
-    }
     function delAll (argument) {
         var ids = [];
         var checkStatus = table.checkStatus('tableId').data;
@@ -199,35 +164,6 @@
 
             }
         })
-    }
-    //设置密码
-    function setPasword(id) {
-        //prompt层
-        layer.prompt({title: '请输入新密码，并确认', formType: 1}, function(pass, index){
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'post',
-                url: '{{route("admin_update_pwd")}}',
-                dataType: 'json',
-                data: {id: id,password: pass},
-                success: function (data) {
-                    if(data.code == 0){
-                        layer.msg(data.msg,{icon:1,time:1000});
-                    }else{
-                        layer.msg(data.msg,{icon:5,time:1000});
-                    }
-
-                    //刷新页面
-                    //window.parent.location.reload();
-                },
-                error: function (xhr,type) {
-
-                }
-            })
-            layer.close(index);
-        });
     }
 </script>
 @endsection

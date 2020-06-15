@@ -44,9 +44,9 @@
     var table;
     layui.use(['laydate','form','table'], function(){
         var laydate = layui.laydate;
-        var  form = layui.form;
-        table = layui.table;
-        var $ = layui.$;
+        var  form = layui.form,
+        table = layui.table,
+        $ = layui.$;
         var username = $("input[name='username']").val();
         //表格展示
         table.render({

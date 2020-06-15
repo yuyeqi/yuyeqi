@@ -26,11 +26,13 @@
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label"> 轮播图</label>
-                       {{-- <div class="layui-input-block">
-                            @foreach($pictures as $item)
+                        <div class="layui-input-block">
+                            @isset($picture)
+                            @foreach($picture as $item)
                                 <img style="width: 100px;height: 100px" src="{{ $item or '' }}" class="layui-upload-img">
                             @endforeach
-                        </div>--}}
+                            @endisset
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">

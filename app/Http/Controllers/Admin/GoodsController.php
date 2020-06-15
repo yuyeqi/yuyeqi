@@ -54,14 +54,21 @@ class GoodsController extends BaseController
      */
     public function detail($id){
         $detail = $this->goodsSerivce->getGoodsDetailById($id);
-        dd($detail->toArray());
         return view('admin.goods.show',['detail'=>$detail]);
+    }
+
+    /**
+     * 添加页面展示
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function addShow(){
+        return view('admin.goods.add');
     }
     /**
      * 添加商品
      * @param GoodsValidator $validator
      */
-    public function addGoods(GoodsValidator $validator){
+    public function add(GoodsValidator $validator){
         if ($validator->isMethod('get')){
             return view('admin.goods.add');
         }else{

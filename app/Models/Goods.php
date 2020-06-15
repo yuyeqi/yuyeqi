@@ -78,8 +78,15 @@ class Goods extends Model
         return $this->attributes['is_recommend'];
     }
 
-    public function Picture(){
-        return $this->belongsTo('Picture','pic_id','id')->where('pic_type',1);
+    /**
+     * 关联商品轮播图
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany/
+     */
+    public function picture(){
+        return $this->hasMany('App\Models\Picture','pic_id','id')
+            ->select(['id','pic_id','pic_url'])
+            ->where(['pic_type'=>1])
+            ->limit(6);
     }
     /**
      * 商品列表
@@ -100,7 +107,8 @@ class Goods extends Model
             ->whereIn('goods_status',[10,20])
             ->select($field)
             ->orderBy('id','desc')
-            ->paginate($limit)->picture();
+            ->with('picture')
+            ->paginate($limit);
         return $lists;
     }
 
@@ -111,6 +119,6 @@ class Goods extends Model
      */
     public function getGoodsDetailById($id){
         $map = ['is_delete'=>0];
-        return self::where($map)->first();
+        return self::where($map)->with('picture')->first();
     }
 }
