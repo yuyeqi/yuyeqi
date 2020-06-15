@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Library\Render;
 use App\Models\Admin;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 
@@ -39,7 +38,6 @@ class PublicController extends BaseController
             $map = ['status'=>0,
                 'account'=>$post['username'],
                 'is_delete'=>0];
-            $field = ['id','username','phone','account','email','sex'];
             $admin = Admin::where($map)->first();
             if ($admin == null){
                 return Render::error("用户不存在,请联系管理员");

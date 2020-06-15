@@ -12,9 +12,11 @@ class Admin extends Model
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    protected $dateFormat = 'int';
+    //时间格式
+    protected $dateFormat = 'U';
+
     //隐藏字段
-    protected $hidden = ['password','create_user_id','is_delete','create_user_id','update_user_id'];
+    protected $hidden = ['password','is_delete'];
 
     //登录时间获取器
     public function getLoginTimeAttribute(){

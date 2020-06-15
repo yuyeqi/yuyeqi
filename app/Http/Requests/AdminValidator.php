@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AdminPost extends FormRequest implements ValidatesWhenResolved
+class AdminValidator extends FormRequest implements ValidatesWhenResolved
 {
     use SceneValidator;
 

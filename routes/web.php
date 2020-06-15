@@ -31,4 +31,8 @@ Route::middleware(['login'])->group(function () {
     Route::post('admin/updatePwd','Admin\AdminController@updatePwd')->name('admin_update_pwd');
     Route::post('admin/updateStatus','Admin\AdminController@updateStatus')->name('admin_update_status');
     Route::post('admin/deleteAll','Admin\AdminController@deleteAll')->name('admin_delete_all');
+    //商品管理
+    Route::get('goods/index','Admin\GoodsController@index')->name('goods_index');
+    Route::get('goods/getGoodsLists','Admin\GoodsController@getGoodsLists')->name('goods_lists');
+    Route::get('goods/detail/{id}','Admin\GoodsController@detail')->name('goods_detail')->where('id', '[0-9]+');;
 });

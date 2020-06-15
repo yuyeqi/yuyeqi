@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Crypt;
  * Class AdminService
  * @package App\Http\Service
  */
-class AdminService
+class AdminService extends BaseSerivce
 {
     //用户模型对象
     private $admin;
@@ -20,6 +20,7 @@ class AdminService
      */
     public function __construct()
     {
+        parent::__construct();
         $this->admin = isset($this->admin) ?: new Admin();
     }
 
@@ -28,6 +29,7 @@ class AdminService
      * @param $search
      */
     public function getAdminLists($keyword,$limit){
+
         return $this->admin->getAdminLists($keyword,$limit);
     }
 
@@ -36,11 +38,12 @@ class AdminService
      * @param $data
      * @return bool
      */
-    public function addAdmin($data){
-        $data['create_user_id'] = 1;
-        $data['create_user_name'] = '朱永利';
-        $data['update_user_id'] = 1;
-        $data['update_user_name'] = '朱永利';
+    public function addAdmin($data,$loginInfo){
+        $data['create_user_id'] = $loginInfo['id'];
+        $data['create_user_name'] = $loginInfo['username'];;
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];;
+        $data['password'] = Crypt::encrypt($data['password']);
         return $this->admin->addAdmin($data);
     }
 
@@ -58,9 +61,9 @@ class AdminService
      * @param $data
      * @return mixed
      */
-    public function updateAdmin($data){
-        $data['update_user_id'] = 2;
-        $data['update_user_name'] = '何怡鸣';
+    public function updateAdmin($data,$loginInfo){
+        $data['update_user_id'] = $loginInfo['id'];
+        $data['update_user_name'] = $loginInfo['username'];
         return $this->admin->updateAdmin($data);
     }
 
@@ -69,9 +72,9 @@ class AdminService
      * @param $data
      * @return bool
      */
-    public function updatePwd($data){
-        $data['update_user_id'] = 2;
-        $data['update_user_name'] = '何怡鸣';
+    public function updatePwd($data,$loginInfo){
+        $data['update_user_id'] = $loginInfo['id'];
+        $data['update_user_name'] = $loginInfo['username'];
         $data['password'] = Crypt::encrypt($data['password']);
         return $this->admin->updateAdmin($data);
     }
@@ -81,10 +84,10 @@ class AdminService
      * @param $id
      * @return mixed
      */
-    public function deleteAdmin($id){
+    public function deleteAdmin($id,$loginInfo){
         $data['id'] = $id;
-        $data['update_user_id'] = 2;
-        $data['update_user_name'] = '何怡鸣';
+        $data['update_user_id'] = $loginInfo['id'];
+        $data['update_user_name'] = $loginInfo['username'];
         $data['is_delete'] = 1;
         return $this->admin->updateAdmin($data);
     }
@@ -94,9 +97,9 @@ class AdminService
      * @param $data
      * @return bool
      */
-    public function updateStatus($data){
-        $data['update_user_id'] = 2;
-        $data['update_user_name'] = '何怡鸣';
+    public function updateStatus($data,$loginInfo){
+        $data['update_user_id'] = $loginInfo['id'];
+        $data['update_user_name'] = $loginInfo['username'];
         return $this->admin->updateAdmin($data);
     }
 
@@ -105,10 +108,10 @@ class AdminService
      * @param $ids
      * @return mixed
      */
-    public function deleteAll($ids){
+    public function deleteAll($ids,$loginInfo){
         $data = [];
-        $data['update_user_id'] = 2;
-        $data['update_user_name'] = '何怡鸣';
+        $data['update_user_id'] = $loginInfo['id'];
+        $data['update_user_name'] = $loginInfo['username'];
         $data['is_delete'] = 1;
         return $this->admin->deleteAll($ids,$data);
     }

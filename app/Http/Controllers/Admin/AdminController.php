@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\AdminPost;
+use App\Http\Requests\AdminValidator;
 use App\Http\Service\AdminService;
 use App\Library\Render;
 use App\Models\Admin;
@@ -22,7 +22,11 @@ class AdminController extends BaseController
      * AdminController constructor.
      * @param Admin $admin
      */
-    public function __construct(){
+    public function __construct(Request $request){
+        $this->middleware(function ($request, $next) {
+            $this->loginInfo = $request->session()->get('admin');
+            return $next($request);
+        });
         $this->adminService = isset($this->adminService) ?: new AdminService();
     }
 
@@ -46,13 +50,6 @@ class AdminController extends BaseController
         $lists = $this->adminService->getAdminLists($keyword,$limit);
         return Render::table($lists->items(),$lists->total());
     }
-    /**
-     * 展示登陆页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
-     */
-    public function showLogin(){
-        return view('admin.admin.login');
-    }
 
     /**
      * 展示添加页面
@@ -66,10 +63,10 @@ class AdminController extends BaseController
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function add(AdminPost $request){
+    public function add(AdminValidator $request){
         $data = $request->only('username','account','phone','password','sex','email','remark');
         //添加数据
-        if ($this->adminService->addAdmin($data)){
+        if ($this->adminService->addAdmin($data,$this->loginInfo)){
             return  Render::success('添加成功');
         }
         return Render::error('添加失败');
@@ -97,13 +94,13 @@ class AdminController extends BaseController
 
     /**
      * 更新用户信息
-     * @param AdminPost $adminPost
+     * @param AdminValidator $adminPost
      * @return \Illuminate\Http\JsonResponse
      */
-    public function editPost(AdminPost $adminPost,$id){
+    public function editPost(AdminValidator $adminPost, $id){
         $data = $adminPost->only('id','username','account','phone','password','sex','email','remark');
         //修改
-        if ($this->adminService->updateAdmin($data)){
+        if ($this->adminService->updateAdmin($data,$this->loginInfo)){
             return  Render::success('修改成功');
         }
         return Render::error('修改失败');
@@ -130,7 +127,7 @@ class AdminController extends BaseController
             return Render::error($validator->errors()->first());
         }
         //修改密码
-        if($this->adminService->updatePwd($data)){
+        if($this->adminService->updatePwd($data,$this->loginInfo)){
             return Render::success('设置成功');
         }
         return Render::error('设置失败');
@@ -142,7 +139,7 @@ class AdminController extends BaseController
      * @return mixed
      */
     public function delete($id){
-        if ($this->adminService->deleteAdmin($id)){
+        if ($this->adminService->deleteAdmin($id,$this->loginInfo)){
             return  Render::success('删除成功');
         }
         return  Render::error('删除失败');
@@ -161,7 +158,7 @@ class AdminController extends BaseController
             'status' => 'required|integer',
         ]);
         //更新状态
-        if ($this->adminService->updateStatus($data)){
+        if ($this->adminService->updateStatus($data,$this->loginInfo)){
             return Render::success('设置成功');
         }
         return  Render::error('设置失败');
@@ -174,7 +171,7 @@ class AdminController extends BaseController
      */
     public function deleteAll(Request $request){
         $ids = $request->input('ids');
-        if($this->adminService->deleteAll($ids)){
+        if($this->adminService->deleteAll($ids,$this->loginInfo)){
             return Render::success('删除成功');
         }
         return  Render::error('删除失败');

@@ -54,6 +54,12 @@
             <div id="side-nav">
                 <ul id="nav">
                     <li>
+                        <a href="javascript:;" onclick="xadmin.add_tab('首页','{{ route("welcome") }}')" >
+                            <i class="iconfont left-nav-li" lay-tips="首页">&#xe726;</i>
+                            <cite>首页</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                    </li>
+                    <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe726;</i>
                             <cite>管理员管理</cite>
@@ -137,9 +143,9 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('多级分类','cate.html')">
+                                <a onclick="xadmin.add_tab('商品列表','{{ route('goods_index') }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>多级分类</cite></a>
+                                    <cite>商品列表</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -326,7 +332,7 @@
             <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
                 <ul class="layui-tab-title">
                     <li class="home">
-                        <i class="layui-icon">&#xe68e;</i>我的桌面</li></ul>
+                        <i class="layui-icon">&#xe68e;</i>首页</li></ul>
                 <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
                     <dl>
                         <dd data-type="this">关闭当前</dd>

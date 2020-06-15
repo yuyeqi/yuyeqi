@@ -15,8 +15,8 @@ class AdminLogin
      */
     public function handle($request, Closure $next)
     {
-        $admin = session('admin');
-        if ($admin == null){
+        $this->loginInfo = session('admin');
+        if ( $this->loginInfo == null){
             return redirect('public/login');
         }
         return $next($request);
