@@ -68,13 +68,11 @@ class GoodsController extends BaseController
      * 添加商品
      * @param GoodsValidator $validator
      */
-    public function add(GoodsValidator $validator){
-        if ($validator->isMethod('get')){
-            return view('admin.goods.add');
-        }else{
-            //添加数据
-        }
-
+    public function add(Request $validator){
+        //接收数据
+        $data = $validator->only(['goods_no','goods_name','good_price','book_price','score','sales_initial','sort'
+        ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic']);
+        
     }
 
     /**

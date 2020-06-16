@@ -6,6 +6,8 @@ use App\Library\Render;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -66,5 +68,39 @@ class PublicController extends BaseController
     public function loginOut(Request $request){
         $request->session()->forget('admin');
         return redirect('public/login')->with('msg','退出成功');
+    }
+
+    /**
+     * 后台上传图片
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function upload(Request $request){
+        $file = $request->file('file');
+        if ($file && $file->isValid()) {
+            // 获取文件相关信息
+            $originalName = $file->getClientOriginalName(); //文件原名
+            $ext = $file->getClientOriginalExtension();     // 扩展名
+            $realPath = $file->getRealPath();   //临时文件的绝对路径
+            $type = $file->getClientMimeType();     // image/jpeg
+            $size =$file->getSize();
+            if($size > 4*1024*1024){
+                return Render::error('文件大小超过4M');
+            }
+            $extArr = array('jpg','jpeg','png','gif');
+            if(!in_array($ext,$extArr)){
+                return Render::error('文件格式不正确');
+            }
+            // 拼接文件名称
+            $filename = date('YmdHis') . uniqid() . '.' . $ext;
+            $bool = Storage::disk('admin')->put($filename, file_get_contents($realPath));
+            if ($bool){
+                $url = $request->server()['HTTP_ORIGIN'].'/storage/upload/admin/'.date('Ymd',time()).'/'.$filename;
+                return Render::success('上传成功',$url);
+            }else{
+                return  Render::error('上传失败');
+            }
+        }
+        return  Render::error('上传失败');
     }
 }

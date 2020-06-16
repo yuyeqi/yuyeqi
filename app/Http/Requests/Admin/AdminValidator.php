@@ -41,12 +41,7 @@ class AdminValidator extends FormRequest implements ValidatesWhenResolved
     {
         $id = $this->route('id');
         return [
-            'username' => 'required|max:32|unique:hp_admin,username,'.$id,
-            'account' => 'required|max:20|unique:hp_admin,account,'.$id,
-            'phone' => 'required|size:11|unique:hp_admin,phone,'.$id,
-            'email' => 'required|email',
-            'sex' => 'required',
-            'password' => 'required|between:6,18'
+
         ];
     }
     /**
@@ -57,17 +52,7 @@ class AdminValidator extends FormRequest implements ValidatesWhenResolved
      */
     public function messages(){
         return [
-            'username.required' => '用户名不能为空',
-            'username.max'  => '用户名限制长度32',
-            'username.unique' => '用户名已存在',
-            'account.required' => '账户不能为空',
-            'account.max'  => '账户限制长度20',
-            'account.unique' => '账户已存在',
-            'phone.required' => '电话不能为空',
-            'phone.max'  => '电话号码格式错误',
-            'phone.unique' => '电话号码已存在',
-            'password.required' => '密码不能为空',
-            'password.between' => '密码长度必须在6-12'
+
         ];
     }
 
@@ -79,20 +64,11 @@ class AdminValidator extends FormRequest implements ValidatesWhenResolved
         return [
             //add 场景
             'add' => [
-                'username' ,       //复用 rules() 下 name 规则
-                'account',
-                'phone',
-                'email',
-                'sex',
-                'password'
+
             ],
             //edit场景
             'edit' => [
-                'username' ,       //复用 rules() 下 name 规则
-                'account',
-                'phone',
-                'email',
-                'sex',
+
             ],
         ];
     }

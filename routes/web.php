@@ -14,6 +14,7 @@
 Route::get('public/login','Admin\PublicController@login')->name('login');
 Route::post('public/login','Admin\PublicController@login')->name('login');
 Route::get('public/loginOut','Admin\PublicController@loginOut')->name('loginOut');
+Route::post('public/upload','Admin\PublicController@upload')->name('upload');
 Route::middleware(['login'])->group(function () {
     //后台首页
     Route::get('index/index','Admin\IndexController@index')->name('index');
@@ -35,5 +36,6 @@ Route::middleware(['login'])->group(function () {
     Route::get('goods/index','Admin\GoodsController@index')->name('goods_index');
     Route::get('goods/getGoodsLists','Admin\GoodsController@getGoodsLists')->name('goods_lists');
     Route::get('goods/detail/{id}','Admin\GoodsController@detail')->name('goods_detail')->where('id', '[0-9]+');
-    Route::any('goods/addShow','Admin\GoodsController@addShow')->name('goods_add_show');
+    Route::get('goods/addShow','Admin\GoodsController@addShow')->name('goods_add_show');
+    Route::post('goods/add','Admin\GoodsController@add')->name('goods_add');
 });
