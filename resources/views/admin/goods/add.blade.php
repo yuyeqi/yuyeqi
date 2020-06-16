@@ -29,8 +29,10 @@
                         <div class="layui-upload">
                             <button type="button" class="layui-btn" id="test1">上传图片</button>
                             <div class="layui-upload-list">
-                                <img class="layui-upload-img" id="demo1"  width="100px" height="100px">
-                                <p id="demoText"></p>
+                                <div id="" class="file-iteme">
+                                    <div class="handle" id="handle"><i class="layui-icon layui-icon-delete"></i></div>
+                                    <img style="width: 100px;height: 100px;" alt="" id="uploadPic">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -41,10 +43,12 @@
                     </label>
                     <div class="layui-input-block">
                         <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="test2">多图片上传</button>
-                            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
-                                预览图：
-                                <div class="layui-upload-list" id="demo2"></div>
+                                <button type="button" class="layui-btn" id="test2">多图片上传</button>
+                            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 88%">
+                                    预览图：
+                                    <div class="layui-upload-list uploader-list" style="overflow: auto;" id="uploader-list">
+
+                                        </div>
                             </blockquote>
                         </div>
                     </div>
@@ -125,7 +129,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">商品简介</label>
                     <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <textarea placeholder="请输入内容" name="goods_desc" class="layui-textarea"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
@@ -160,13 +164,34 @@
                     layedit = layui.layedit,
                     upload = layui.upload,
                     $ = layui.$;
+                //
+                $(document).on("mouseenter mouseleave", ".file-iteme", function(event){
+                    if(event.type === "mouseenter"){
+                        //鼠标悬浮
+                        $(this).children(".info").fadeIn("fast");
+                        $(this).children(".handle").fadeIn("fast");
+                    }else if(event.type === "mouseleave") {
+                        //鼠标离开
+                        $(this).children(".info").hide();
+                        $(this).children(".handle").hide();
+                    }
+                });
+                // 删除图片
+                $(document).on("click", ".file-iteme .pic", function(event){
+                    $(this).parent().remove();
+                });
+                // 删除单图图片
+                $(document).on("click", "#handle", function(event){
+                    $('#uploadPic').attr('src',null);//图片链接（base64）
+                });
                 //监听提交
                 form.on('submit(add)', function(data) {
                     var fields = data.field;
-                    var coverPic = $("#demo1").attr('src');
+                    var coverPic = $("#demo1").attr('value');
                     var data = {goods_no:fields.goods_no,goods_name:fields.goods_name,good_price:fields.good_price,book_price:fields.book_price,
                         score:fields.score,sales_initial:fields.sales_initial,sort:fields.sort,is_new:fields.is_new, goods_status:fields.goods_status,
-                        is_hot:fields.is_hot,is_recommend:fields.is_recommend,goods_cover:coverPic,mulPic:mulPic};
+                        is_hot:fields.is_hot,is_recommend:fields.is_recommend,goods_cover:coverPic,mulPic:mulPic,goods_desc:fields.goods_desc,
+                        goods_content:fields.goods_content};
                         $.ajax({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -206,12 +231,15 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                     ,url: "{{ route('upload') }}" //改成您自己的上传接口
-                    ,accept:'file'
+                    ,accept:'images'
+                    ,exts: 'jpg|png|gif|bmp|jpeg'
+                    ,size: 4*1024*1024
                     ,before: function(obj){
-                        //预读本地文件示例，不支持ie8
-                        obj.preview(function(index, file, result){
-                            $('#demo1').attr('src', result); //图片链接（base64）
-                        });
+                        layer.msg('图片上传中...', {
+                            icon: 16,
+                            shade: 0.01,
+                            time: 0
+                        })
                     }
                     ,done: function(res){
                         //如果上传失败
@@ -219,16 +247,8 @@
                             return layer.msg('上传失败');
                         }
                         //上传成功
-                        $('#demo1').attr('src', res.data); //图片链接（base64）
+                        $('#uploadPic').attr('src', res.data); //图片链接（base64）
                         return layer.msg('上传成功');
-                    }
-                    ,error: function(){
-                        //演示失败状态，并实现重传
-                        var demoText = $('#demoText');
-                        demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                        demoText.find('.demo-reload').on('click', function(){
-                            uploadInst.upload();
-                        });
                     }
                 });
                 //多图片上传
@@ -240,19 +260,29 @@
                     ,url: "{{ route('upload') }}" //改成您自己的上传接口
                     ,multiple: true
                     ,accept:'file'
+                    ,bindAction:"#btn"
                     ,before: function(obj){
-                        //预读本地文件示例，不支持ie8
-                        obj.preview(function(index, file, result){
-                            $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img" width="100px" height="100px">')
-                        });
+                        layer.msg('图片上传中...', {
+                            icon: 16,
+                            shade: 0.01,
+                            time: 0
+                        })
                     }
                     ,done: function(res){
                         //上传完毕
                         if(res.code > 0){
-                            return layer.msg('上传失败');
+                            return layer.msg(res.msg);
                         }
                         //上传成功
                         mulPic.push(res.data);
+                        //上传完毕
+                        $('#uploader-list').append(
+                            '<div id="" class="file-iteme">' +
+                            '<div class="handle pic"><i class="layui-icon layui-icon-delete"></i></div>' +
+                            '<img style="width: 100px;height: 100px;" src='+ res.data +'>' +
+                            '<div class="info">' + res.data + '</div>' +
+                            '</div>'
+                        );
                         return layer.msg('上传成功');
                     }
                 });

@@ -23,6 +23,10 @@ class GoodsController extends BaseController
      */
     public function __construct()
     {
+        $this->middleware(function ($request, $next) {
+            $this->loginInfo = $request->session()->get('admin');
+            return $next($request);
+        });
         $this->goodsSerivce = isset($this->goodsSerivce) ?: new GoodsService();
     }
 
@@ -72,7 +76,11 @@ class GoodsController extends BaseController
         //接收数据
         $data = $validator->only(['goods_no','goods_name','good_price','book_price','score','sales_initial','sort'
         ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic']);
-        
+        //添加数据
+        if($this->goodsSerivce->addGoods($data,$this->loginInfo)){
+            return Render::success('添加成功');
+        }
+        return Render::error($this->goodsSerivce->getErrorMsg());
     }
 
     /**

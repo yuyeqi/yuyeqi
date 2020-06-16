@@ -5,6 +5,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 
 class Goods extends Model
 {
@@ -13,9 +14,12 @@ class Goods extends Model
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-
+    //时间格式
+    protected $dateFormat = 'U';
     //隐藏字段
     protected $hidden = ['is_delete'];
+    //设置保存字段
+    protected $guarded  = ['mulPic'];
 
     //状态获取器
     public function getGoodsStatusAttribute($value){
@@ -85,7 +89,7 @@ class Goods extends Model
     public function picture(){
         return $this->hasMany('App\Models\Picture','pic_id','id')
             ->select(['id','pic_id','pic_url'])
-            ->where(['pic_type'=>1])
+            ->where(['pic_type'=>Config::get('PIC_GOODS_TYPE')])
             ->limit(6);
     }
     /**
@@ -120,5 +124,14 @@ class Goods extends Model
     public function getGoodsDetailById($id){
         $map = ['is_delete'=>0];
         return self::where($map)->with('picture')->first();
+    }
+
+    /**
+     * 添加商品
+     * @param $data
+     * @return mixed
+     */
+    public function addGoods($data){
+        return self::create($data);
     }
 }
