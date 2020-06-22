@@ -6,6 +6,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 图片模型
+ * Class Picture
+ * @package App\Models
+ */
 class Picture extends Model
 {
     //定义模型关联表

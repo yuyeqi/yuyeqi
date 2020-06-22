@@ -53,5 +53,16 @@ class BaseSerivce
 
     }
 
-
+    /**
+     * 处理分页数据
+     * @param $pageData
+     * @return array
+     */
+    public function getPageData($pageData){
+        //dd($pageData);
+        $data = [];
+        $data['data'] = $pageData->items();
+        $data['total'] = $pageData->total();
+        return $data;
+    }
 }

@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
+/**
+ * 轮播图模型
+ * Class Slideshow
+ * @package App\Models
+ */
 class Slideshow extends Model
 {
     //定义模型关联表

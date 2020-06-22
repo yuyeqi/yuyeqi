@@ -77,4 +77,13 @@ class GoodsService extends BaseSerivce
             return false;
         }
     }
+/*----------------------------------------小程序------------------------------------------------------*/
+    /**
+     * 小程序首页新品推荐
+     * @return mixed
+     */
+    public function getNesGoods()
+    {
+        return $this->goods->getNewsGoods();
+    }
 }

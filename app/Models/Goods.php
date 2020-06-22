@@ -7,6 +7,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * 商品模型
+ * Class Goods
+ * @package App\Models
+ */
 class Goods extends Model
 {
     //定义模型关联表
@@ -134,4 +139,16 @@ class Goods extends Model
     public function addGoods($data){
         return self::create($data);
     }
+
+    /**
+     * 首页新品推荐
+     * @return mixed
+     */
+    public function getNewsGoods(){
+        $map = ['is_new'=>0,'goods_status'=>10,'is_delete'=>0];
+        $field = ['id','goods_name','goods_cover','good_price'];
+        return self::select($field)->where($map)->orderBy('sort')->take(4)->get();
+    }
+
+
 }

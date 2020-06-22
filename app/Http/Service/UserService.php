@@ -27,8 +27,8 @@ class UserService extends BaseSerivce
      * 小程序用户信息
      * @return mixed
      */
-    public function getUserInfo(){
-        return $this->user->getUserInfo();
+    public function getUserInfo($id){
+        return $this->user->getUserInfo($id);
     }
 
 }

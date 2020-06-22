@@ -4,7 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 
+/**
+ * 后台用户模型
+ * Class Admin
+ * @package App\Models
+ */
 class Admin extends Model
 {
     //定义模型关联表
@@ -61,7 +67,7 @@ class Admin extends Model
      * @return mixed
      */
     public function getAdminDetail($id){
-        $map = ['id'=>$id,'is_delete'=>0];
+        $map = ['id'=>$id,'is_delete'=>Config::get('constants.IS_DELETE')];
         return self::where($map)->first();
     }
 

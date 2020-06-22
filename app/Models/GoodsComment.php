@@ -6,6 +6,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 商品评论模型
+ * Class Goods
+ * @package App\Models
+ */
 class Goods extends Model
 {
     //定义模型关联表
