@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
-    //首页控制器
+    //首页
     Route::prefix('index')->group(function (){
         Route::get('slideshow','V1\IndexController@getSlideShowLists');
         Route::get('getUserInfo','V1\IndexController@getUserInfo');
@@ -22,9 +22,14 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
         Route::get('getCaseLists','V1\IndexController@getCaseLists');
         Route::get('getCasesDetail/{id}','V1\IndexController@getCasesDetail');
     });
-    //首页控制器
+    //新闻
     Route::prefix('news')->group(function (){
         Route::get('getNewsPageLists','V1\NewsController@getNewsPageLists');
         Route::get('getNewsDetail/{id}','V1\NewsController@getNewsDetail');
+    });
+    //私人定制
+    Route::prefix('person')->group(function (){
+        Route::get('getPersonCateLists','V1\PersonController@getPersonCateLists');
+        Route::post('addPerson','V1\PersonController@addPerson');
     });
 });

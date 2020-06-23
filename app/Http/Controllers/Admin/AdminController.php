@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\AdminValidator;
+use App\Http\Requests\PersonValidator;
 use App\Http\Service\AdminService;
 use App\Library\Render;
 use App\Models\Admin;
@@ -63,7 +63,7 @@ class AdminController extends BaseController
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function add(AdminValidator $request){
+    public function add(PersonValidator $request){
         $data = $request->only('username','account','phone','password','sex','email','remark');
         //添加数据
         if ($this->adminService->addAdmin($data,$this->loginInfo)){
@@ -94,10 +94,10 @@ class AdminController extends BaseController
 
     /**
      * 更新用户信息
-     * @param AdminValidator $adminPost
+     * @param PersonValidator $adminPost
      * @return \Illuminate\Http\JsonResponse
      */
-    public function editPost(AdminValidator $adminPost, $id){
+    public function editPost(PersonValidator $adminPost, $id){
         $data = $adminPost->only('id','username','account','phone','password','sex','email','remark');
         //修改
         if ($this->adminService->updateAdmin($data,$this->loginInfo)){

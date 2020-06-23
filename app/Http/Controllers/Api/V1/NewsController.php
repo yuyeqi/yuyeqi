@@ -4,17 +4,13 @@
 namespace App\Http\Controllers\Api\V1;
 
 
-use App\Http\Service\CasesService;
-use App\Http\Service\GoodsService;
 use App\Http\Service\NewsService;
-use App\Http\Service\SlideshowService;
-use App\Http\Service\UserService;
 use App\Library\Render;
 use Illuminate\Http\Request;
 
 /**
  * 新闻控制器
- * Class IndexController
+ * Class NewsController
  * @package App\Http\Controllers\Api
  */
 class NewsController extends BaseController

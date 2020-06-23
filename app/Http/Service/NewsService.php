@@ -5,7 +5,6 @@ namespace App\Http\Service;
 
 
 use App\Models\News;
-use App\Models\User;
 
 /**
  * 新闻服务层
