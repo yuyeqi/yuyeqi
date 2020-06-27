@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 /**
  * 用户模型
  * Class User
  * @package App\Models
  */
-class User extends Model
+class User extends Base
 {    //定义模型关联表
     protected $table = 'hp_user';
     //时间转换

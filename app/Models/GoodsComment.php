@@ -4,14 +4,12 @@
 namespace App\Models;
 
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * 商品评论模型
  * Class Goods
  * @package App\Models
  */
-class Goods extends Model
+class Goods extends Base
 {
     //定义模型关联表
     protected $table = 'hp_goods_comment';

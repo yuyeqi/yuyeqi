@@ -113,7 +113,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '/admin/editPost/'+id,
+                        url: '/hp/admin/editPost/'+id,
                         data: data,
                         dataType: 'json',
                         success: function (data) {

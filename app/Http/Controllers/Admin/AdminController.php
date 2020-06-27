@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\PersonValidator;
+use App\Http\Requests\Admin\AdminValidator;
 use App\Http\Service\AdminService;
 use App\Library\Render;
 use App\Models\Admin;
@@ -22,11 +22,8 @@ class AdminController extends BaseController
      * AdminController constructor.
      * @param Admin $admin
      */
-    public function __construct(Request $request){
-        $this->middleware(function ($request, $next) {
-            $this->loginInfo = $request->session()->get('admin');
-            return $next($request);
-        });
+    public function __construct(){
+        parent:: __construct();
         $this->adminService = isset($this->adminService) ?: new AdminService();
     }
 
@@ -63,7 +60,7 @@ class AdminController extends BaseController
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function add(PersonValidator $request){
+    public function add(AdminValidator $request){
         $data = $request->only('username','account','phone','password','sex','email','remark');
         //添加数据
         if ($this->adminService->addAdmin($data,$this->loginInfo)){
@@ -97,7 +94,7 @@ class AdminController extends BaseController
      * @param PersonValidator $adminPost
      * @return \Illuminate\Http\JsonResponse
      */
-    public function editPost(PersonValidator $adminPost, $id){
+    public function editPost(AdminValidator $adminPost, $id){
         $data = $adminPost->only('id','username','account','phone','password','sex','email','remark');
         //修改
         if ($this->adminService->updateAdmin($data,$this->loginInfo)){

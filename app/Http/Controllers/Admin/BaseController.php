@@ -16,8 +16,10 @@ class BaseController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->loginInfo = $request->session()->get('admin');
+            $this->loginInfo = $request->get('admin');
             return $next($request);
         });
     }
+
+
 }

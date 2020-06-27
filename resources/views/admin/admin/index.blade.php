@@ -89,13 +89,13 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'detail'){
-                xadmin.open('查看',"/admin/showInfo/"+data.id,600,650);
+                xadmin.open('查看',"/hp/admin/showInfo/"+data.id,600,650);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);
                 })
             } else if(obj.event === 'edit'){
-                xadmin.open('编辑',"/admin/edit/"+data.id,600,650);
+                xadmin.open('编辑',"/hp/admin/edit/"+data.id,600,650);
             }else if(obj.event === 'pwd'){
                 setPasword(data.id);
             }
@@ -169,7 +169,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'get',
-            url: '/admin/delete/'+id,
+            url: '/hp/admin/delete/'+id,
             dataType: 'json',
             success: function (data) {
                 layer.msg(data.msg,{icon:1,time:1000});

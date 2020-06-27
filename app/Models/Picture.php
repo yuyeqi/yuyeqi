@@ -4,14 +4,12 @@
 namespace App\Models;
 
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * 图片模型
  * Class Picture
  * @package App\Models
  */
-class Picture extends Model
+class Picture extends Base
 {
     //定义模型关联表
     protected $table = 'hp_picture';

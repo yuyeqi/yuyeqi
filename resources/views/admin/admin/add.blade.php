@@ -132,7 +132,7 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             type: 'POST',
-                            url: '{{route('goods_add')}}',
+                            url: '{{route('admin_add')}}',
                             data: data,
                             dataType: 'json',
                             success: function (data) {

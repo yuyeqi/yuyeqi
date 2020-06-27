@@ -42,19 +42,19 @@ class Goods extends Model
         return $this->attributes['goods_status'];
     }
     //新品获取器
-    public function getIsNewsAttribute($value){
+    public function getIsNewAttribute($value){
         if ($value == 0){
-            $this->attributes['is_news'] = [
+            $this->attributes['is_new'] = [
                 'status' => $value,
                 'status_name' => '正常'
             ];
         }else{
-            $this->attributes['is_news'] = [
+            $this->attributes['is_new'] = [
                 'status' => $value,
                 'status_name' => '新品'
             ];
         }
-        return $this->attributes['is_news'];
+        return $this->attributes['is_new'];
     }
     //热门获取器
     public function getIsHotAttribute($value){
@@ -95,7 +95,8 @@ class Goods extends Model
         return $this->hasMany('App\Models\Picture','pic_id','id')
             ->select(['id','pic_id','pic_url'])
             ->where(['pic_type'=>Config::get('PIC_GOODS_TYPE')])
-            ->limit(6);
+            ->limit(6)
+            ->withDefault();
     }
     /**
      * 商品列表
@@ -106,7 +107,7 @@ class Goods extends Model
     public function getGoodsLists($keyword,$limit){
         //查询
         $field = ['id','goods_no','goods_name','goods_cover','good_price','score','book_price','sales_actual',
-            'cate_id','is_news','is_hot','is_recommend','sort','goods_status','comment_num','update_user_name',
+            'cate_id','is_new','is_hot','is_recommend','sort','goods_status','comment_num','update_user_name',
             'create_user_name','update_time','create_time'];
         $lists = self::where(['is_delete'=>0])
             ->when(!empty($keyword),function ($query) use ($keyword){

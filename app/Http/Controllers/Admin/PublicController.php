@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Service\AdminService;
 use App\Library\Render;
-use App\Models\Admin;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -15,21 +15,33 @@ use Illuminate\Support\Facades\Validator;
  * Class PublicController
  * @package App\Http\Controllers\Admin
  */
-class PublicController extends BaseController
+class PublicController extends Controller
 {
+    private $adminService;
+
+    /**
+     * PublicController constructor.
+     * @param $adminService
+     */
+    public function __construct()
+    {
+        $this->adminService = isset($this->adminService) ?: new AdminService();
+    }
+
+
     /**
      * 登陆展示
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function login(Request $request){
         if ($request->isMethod("post")){
-            $post =$request->only(['username','password']);
+            $data =$request->only(['account','password']);
             //验证数据
-            $validator =Validator::make($post,[
-                'username' => 'required|max:32',
-                'password' => 'required|min:6|max:16',
+            $validator =Validator::make($data,[
+                'account' => 'required|max:32',
+                'account' => 'required|min:6|max:16',
             ],[
-                'username.max' => '用户名或密码错误',
+                'account.max' => '用户名或密码错误',
                 'password.min' => '用户名或密码错误',
                 'password.max' => '用户名或密码错误'
             ]);
@@ -37,23 +49,18 @@ class PublicController extends BaseController
                 return Render::error($validator->errors()->first());
             }
             //验证信息
-            $map = ['status'=>0,
-                'account'=>$post['username'],
-                'is_delete'=>0];
-            $admin = Admin::where($map)->first();
-            if ($admin == null){
-                return Render::error("用户不存在,请联系管理员");
-            }
-            if ($post['password'] !== Crypt::decrypt($admin->password)){
+            $data['status'] = 0;
+            $loginStatus = Auth::guard('admin')->attempt($data);
+            if (!$loginStatus){
                 return Render::error("用户名或密码错误");
             }
-            //存储登陆信息到session
-            session(['admin' => $admin->toArray()]);
             //更新登陆信息
+            $admin = $this->adminService->getAdminByAcount($data['account']);
             $admin->is_login = 1;
             $admin->login_time = time();
+            //生成登陆token
             if($admin->save()){
-                return Render::success('success',$admin);
+                return Render::success('success');
             }
             return Render::error('登陆失败');
         }else{

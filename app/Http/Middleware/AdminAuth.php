@@ -3,8 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
-class AdminLogin
+class AdminAuth
 {
     /**
      * Handle an incoming request.
@@ -15,10 +16,12 @@ class AdminLogin
      */
     public function handle($request, Closure $next)
     {
-        $this->loginInfo = session('admin');
-        if ( $this->loginInfo == null){
-            return redirect('public/login');
+        //未登录的，登录
+        if (!Auth::guard('admin')->check()) {
+            return redirect(route('login'));
         }
+        $user = Auth::guard('admin')->user()->toArray();
+        $request->attributes->add(['admin'=>$user]);
         return $next($request);
     }
 }

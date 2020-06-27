@@ -3,7 +3,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\GoodsValidator;
+use App\Http\Requests\Admin\GoodsValidator;
 use App\Http\Service\GoodsService;
 use App\Library\Render;
 use Illuminate\Http\Request;
@@ -23,10 +23,7 @@ class GoodsController extends BaseController
      */
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
-            $this->loginInfo = $request->session()->get('admin');
-            return $next($request);
-        });
+        parent:: __construct();
         $this->goodsSerivce = isset($this->goodsSerivce) ?: new GoodsService();
     }
 

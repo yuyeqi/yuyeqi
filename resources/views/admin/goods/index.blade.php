@@ -62,16 +62,16 @@
                 ,{field:'book_price', width:100, title: '定金'}
                 ,{field:'comment_num', width:80, title: '评价数'}
                 ,{field:'goods_status', width:80, title: '状态',templet: function (d) {
-                        return d.is_news.status_name;
+                        return d.goods_status.status_name;
                     }}
-                ,{field:'is_news', title: '新品', width: 80,templet: function (d) {
-                        return d.is_news.status_name;
+                ,{field:'is_new', title: '新品', width: 80,templet: function (d) {
+                        return d.is_new.status_name;
                     }}
                 ,{field:'is_hot->status', width:80, title: '热门',templet: function (d) {
-                        return d.is_news.status_name;
+                        return d.is_hot.status_name;
                     }}
                 ,{field:'is_recommend', title: '推荐', minWidth: 80,templet: function (d) {
-                        return d.is_news.status_name;
+                        return d.is_recommend.status_name;
                     }}
                 ,{field:'score', title: '赠送积分', minWidth: 120}
                 ,{field:'sales_actual', width:120, title: '实际销量'}

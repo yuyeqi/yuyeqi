@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Config;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * 后台用户模型
  * Class Admin
  * @package App\Models
  */
-class Admin extends Model
+class Admin extends Authenticatable implements JWTSubject
 {
+    use Notifiable;
     //定义模型关联表
     protected $table = 'hp_admin';
     //时间转换
@@ -20,6 +22,22 @@ class Admin extends Model
     const UPDATED_AT = 'update_time';
     //时间格式
     protected $dateFormat = 'U';
+
+    /**
+     * 创建时间
+     * @return false|string
+     */
+    public function getCreateTimeAttribute(){
+        return date('Y-m-d H:i:s', $this->attributes['create_time']);
+    }
+
+    /**
+     * 更新时间
+     * @return false|string
+     */
+    public function getUpdateTimeAttribute(){
+        return date('Y-m-d H:i:s', $this->attributes['update_time']);
+    }
 
     //隐藏字段
     protected $hidden = ['password','is_delete'];
@@ -30,8 +48,8 @@ class Admin extends Model
     }
 
     //设置保存字段
-    protected $fillable = [
-        'username','phone','email','account','password','sex','create_user_id','create_user_name','update_user_id','update_user_name'
+    protected $guarded = [
+
     ];
 
     //后台用户列表
@@ -88,5 +106,33 @@ class Admin extends Model
      */
     public function deleteAll($ids,$data){
         return self::whereIn('id',$ids)->update($data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getJWTIdentifier()
+    {
+        // TODO: Implement getJWTIdentifier() method.
+        return $this->getKey();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getJWTCustomClaims()
+    {
+        // TODO: Implement getJWTCustomClaims() method.
+        return [];
+    }
+
+    /**
+     * 根据账号获取用户信息
+     * @param $account
+     */
+    public function getAdminByAcount($account)
+    {
+        $map = ['account'=>$account,'status'=>0,'is_delete'=>0];
+        return self::select(['id'])->where($map)->first();
     }
 }

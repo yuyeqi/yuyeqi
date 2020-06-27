@@ -169,44 +169,9 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('拆线图','echarts1.html')">
+                                <a onclick="xadmin.add_tab('报备列表','{{ route("book_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>拆线图</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('拆线图','echarts2.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>拆线图</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('地图','echarts3.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>地图</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('饼图','echarts4.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>饼图</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('雷达图','echarts5.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>雷达图</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('k线图','echarts6.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>k线图</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('热力图','echarts7.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>热力图</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('仪表图','echarts8.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>仪表图</cite></a>
+                                    <cite>报备列表</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -217,9 +182,27 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('图标对应字体','unicode.html')">
+                                <a onclick="xadmin.add_tab('私人定制','{{ route('person_index') }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>图标对应字体</cite></a>
+                                    <cite>私人定制</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('分类列表','{{ route('personCate_index') }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>分类列表</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="其它页面">&#xe6b4;</i>
+                            <cite>轮播管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('轮播列表','{{ route("slideshow_index") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>轮播列表</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -230,24 +213,9 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="login.html" target="_blank">
+                                <a onclick="xadmin.add_tab('案例列表','{{ route("cases_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>登录页面</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('错误页面','error.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>错误页面</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('示例页面','demo.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>示例页面</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('更新日志','log.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>更新日志</cite></a>
+                                    <cite>案例列表</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -258,24 +226,9 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="login.html" target="_blank">
+                                <a onclick="xadmin.add_tab('新闻列表','{{ route("news_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>登录页面</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('错误页面','error.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>错误页面</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('示例页面','demo.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>示例页面</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('更新日志','log.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>更新日志</cite></a>
+                                    <cite>新闻列表</cite></a>
                             </li>
                         </ul>
                     </li>

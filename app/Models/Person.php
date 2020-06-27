@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * 私人定制模型
  * Class Cases
  * @package App\Models
  */
-class Person extends Model
+class Person extends Base
 {    //定义模型关联表
     protected $table = 'hp_person';
     //时间转换
@@ -18,6 +17,31 @@ class Person extends Model
 
     //设置保存字段
     protected $guarded  = ['is_audit','is_delete',];
+
+    /**
+     * 状态
+     * @param $value
+     * @return mixed
+     */
+    public function getIsAuditAttribute($value){
+        if ($value == 10){
+            $this->attributes['is_audit'] = [
+                'status' => $value,
+                'status_name' => '审核中'
+            ];
+        }else if ($value == 20){
+            $this->attributes['is_audit'] = [
+                'status' => $value,
+                'status_name' => '通过'
+            ];
+        }else{
+            $this->attributes['is_audit'] = [
+                'status' => $value,
+                'status_name' => '拒绝'
+            ];
+        }
+        return $this->attributes['is_audit'];
+    }
 
     /*--------------------------------小程序----------------------------------*/
     /**
@@ -40,6 +64,83 @@ class Person extends Model
      */
     public function addPerson($data){
         return self::create($data);
+    }
+
+    /*------------------------------------后端私人定制--------------------------------*/
+
+    /**
+     * 后端私人定制
+     * @param String $keywords
+     * @param String $userinfo
+     * @param int $cateId
+     * @param int $limit
+     * @return mixed
+     */
+    public function getPersonLists($keywords, $cateId,$startTime,$endTime,$limit)
+    {
+        //设置搜索条件
+        $map = ['is_delete'=>0];
+        return self::select("*")
+            ->when(!empty($keywords),function ($query) use ($keywords){
+                return $query->where('person_name','like','%'.$keywords.'%')
+                    ->orWhere('phone','like','%'.$keywords.'%')
+                    ->orWhere('company','like','%'.$keywords.'%');
+            })
+            ->when($cateId > 0,function ($query) use ($cateId){
+                return $query->where('cate_id',$cateId);
+            })
+            ->when(!empty($startTime),function ($query) use ($startTime){
+                return $query->whereDate('create_time','>',$startTime);
+            })
+            ->when(!empty($endTime),function ($query) use ($endTime){
+                return $query->whereDate('create_time','<',$endTime);
+            })
+            ->where($map)
+            ->orderBy('id','desc')
+            ->paginate($limit);
+    }
+
+    /**
+     * 私人定制详情
+     * @param $id
+     * @return mixed
+     */
+    public function getAdminPersonById($id)
+    {
+        $map = ['id'=>$id,'is_delete'=>0];
+        $field = ['id','person_name','phone','company','person_price','sales_price','ocupation','person_remark'];
+        return self::select($field)->where($map)->first();
+    }
+
+    /**
+     * 编辑
+     * @param array $data
+     * @return mixed
+     */
+    public function editPerson(array $data)
+    {
+        return self::where('id',$data['id'])->update($data);
+    }
+
+    /**
+     * 批量删除
+     * @param $data
+     * @param string|null $ids
+     * @return mixed
+     */
+    public function delBatch($data, $ids)
+    {
+        return self::whereIn('id',$ids)->update($data);
+    }
+
+    /**
+     * 修改状态
+     * @param array $data
+     * @return mixed
+     */
+    public function updateStatus(array $data)
+    {
+        return self::where('id',$data['id'])->update($data);
     }
 
 }

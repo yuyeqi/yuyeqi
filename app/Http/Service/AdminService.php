@@ -40,10 +40,10 @@ class AdminService extends BaseSerivce
      */
     public function addAdmin($data,$loginInfo){
         $data['create_user_id'] = $loginInfo['id'];
-        $data['create_user_name'] = $loginInfo['username'];;
+        $data['create_user_name'] = $loginInfo['username'];
         $data['update_user_id'] = $loginInfo['id'];;
-        $data['update_user_name'] = $loginInfo['username'];;
-        $data['password'] = Crypt::encrypt($data['password']);
+        $data['update_user_name'] = $loginInfo['username'];
+        $data['password'] = bcrypt($data['password']);
         return $this->admin->addAdmin($data);
     }
 
@@ -75,7 +75,7 @@ class AdminService extends BaseSerivce
     public function updatePwd($data,$loginInfo){
         $data['update_user_id'] = $loginInfo['id'];
         $data['update_user_name'] = $loginInfo['username'];
-        $data['password'] = Crypt::encrypt($data['password']);
+        $data['password'] = bcrypt($data['password']);
         return $this->admin->updateAdmin($data);
     }
 
@@ -114,5 +114,14 @@ class AdminService extends BaseSerivce
         $data['update_user_name'] = $loginInfo['username'];
         $data['is_delete'] = 1;
         return $this->admin->deleteAll($ids,$data);
+    }
+
+    /**
+     * 通过账户获取用户信息
+     * @param array $data
+     */
+    public function getAdminByAcount($account)
+    {
+        return $this->admin->getAdminByAcount($account);
     }
 }

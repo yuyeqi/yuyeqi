@@ -5,6 +5,7 @@ namespace App\Http\Service;
 
 
 use App\Models\Person;
+use Psy\Util\Str;
 
 /**
  * 私人定制服务层
@@ -38,6 +39,71 @@ class PersonService extends BaseSerivce
             return false;
         }
         return $this->person->addPerson($data);
+    }
+
+    /**
+     * 私人定制列表
+     * @param $keywords
+     * @param $userinfo
+     * @param $cateId
+     * @param $startTime
+     * @param $endTime
+     * @param int $limit
+     * @return mixed
+     */
+    public function getPersonLists($keywords, $cateId, $startTime, $endTime, int $limit)
+    {
+        return $this->person->getPersonLists( $keywords, $cateId,$startTime,$endTime,$limit);
+    }
+
+    /**
+     * 定制详情
+     * @param $id
+     * @return mixed
+     */
+    public function getAdminPersonById($id)
+    {
+        return $this->person->getAdminPersonById($id);
+    }
+
+    /**
+     * 编辑
+     * @param array $data
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function editPerson(array $data, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        return $this->person->editPerson($data);
+    }
+
+    /**
+     * 批量删除
+     * @param string|null $ids
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function delBatch($ids, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        $data['is_delete'] = 1;
+        return  $this->person->delBatch($data,$ids);
+    }
+
+    /**
+     * 修改状态
+     * @param array $data
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function updateStatus(array $data, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        return $this->person->updateStatus($data);
     }
 
 
