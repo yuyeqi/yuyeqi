@@ -94,9 +94,7 @@ class Goods extends Model
     public function picture(){
         return $this->hasMany('App\Models\Picture','pic_id','id')
             ->select(['id','pic_id','pic_url'])
-            ->where(['pic_type'=>Config::get('PIC_GOODS_TYPE')])
-            ->limit(6)
-            ->withDefault();
+            ->where(['pic_type'=>Config::get('constants.PIC_GOODS_TYPE')]);
     }
     /**
      * 商品列表
@@ -117,7 +115,6 @@ class Goods extends Model
             ->whereIn('goods_status',[10,20])
             ->select($field)
             ->orderBy('id','desc')
-            ->with('picture')
             ->paginate($limit);
         return $lists;
     }
@@ -128,7 +125,7 @@ class Goods extends Model
      * @return mixed
      */
     public function getGoodsDetailById($id){
-        $map = ['is_delete'=>0];
+        $map = ['is_delete'=>0,'id'=>$id];
         return self::where($map)->with('picture')->first();
     }
 

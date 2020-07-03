@@ -40,6 +40,7 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
     Route::prefix('goods')->group(function (){
         Route::get('index','GoodsController@index')->name('goods_index');
         Route::get('getGoodsLists','GoodsController@getGoodsLists')->name('goods_lists');
+        Route::get('edit/{id}','GoodsController@edit')->name('editShow')->where('id', '[0-9]+');
         Route::get('detail/{id}','GoodsController@detail')->name('goods_detail')->where('id', '[0-9]+');
         Route::get('addShow','GoodsController@addShow')->name('goods_add_show');
         Route::post('add','GoodsController@add')->name('goods_add');

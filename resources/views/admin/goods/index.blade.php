@@ -36,7 +36,7 @@
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">查看评论</a>
+    <a class="layui-btn layui-btn-xs" lay-event="comment">查看评论</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
@@ -58,6 +58,9 @@
                 ,{field:'goods_name', width:120, title: '商品名称'}
                 ,{field:'cate_id', title: '商品类别', minWidth: 120}
                 ,{field:'goods_cover', width:80, title: '封面图'}
+                ,{field:'goods_cover',align: "center", title: '封面图',templet: function(d){
+                        return  "<span id='pic_" + d.id + "'><img src='" + d.goods_cover + "'  style='width: 40px' lay-event='showPic' ></span>";
+                    } }
                 ,{field:'good_price', width:100, title: '价格'}
                 ,{field:'book_price', width:100, title: '定金'}
                 ,{field:'comment_num', width:80, title: '评价数'}
@@ -94,9 +97,15 @@
                     member_del(data.id);
                 })
             } else if(obj.event === 'edit'){
-                xadmin.open('编辑',"/goods/edit/"+data.id,600,650,true);
+                xadmin.open('编辑',"/hp/goods/edit/"+data.id,600,650,true);
             }else if(obj.event === 'pwd'){
                 setPasword(data.id);
+            }else if(obj.event === 'showPic'){
+                layer.photos({
+                    photos: '#pic_' + data.id,
+                    //0-6的选择，指定弹出图片动画类型，默认随机
+                    anim: 5
+                })
             }
         });
         //执行重载

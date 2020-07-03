@@ -14,7 +14,7 @@
                 </div>
                 <div class="layui-form-item">
                     <label for="username" class="layui-form-label">
-                        <span class="x-red">*</span>用户名
+                        <span class="x-red">*</span>商品名称
                     </label>
                     <div class="layui-input-inline">
                         <input type="text" id="goods_name" name="goods_name" required="" lay-verify="required"

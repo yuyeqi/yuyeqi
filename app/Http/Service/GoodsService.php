@@ -54,6 +54,7 @@ class GoodsService extends BaseSerivce
         $data['create_user_name'] = $loginInfo['username'];
         $data['update_id'] = $loginInfo['id'];
         $data['update_user_name'] = $loginInfo['username'];
+
         //保存商品数据
         //开启事务
         DB::beginTransaction();
@@ -65,6 +66,7 @@ class GoodsService extends BaseSerivce
                     $img[$key]['pic_id'] = $res->id;
                     $img[$key]['pic_type'] = Config::get('constants.PIC_GOODS_TYPE');
                     $img[$key]['pic_url'] = $item;
+                    $img[$key]['create_time'] = time();
                 }
                 $this->picture->addPicture($img);
             }
@@ -73,7 +75,7 @@ class GoodsService extends BaseSerivce
         } catch (\Exception $e) {
             DB::rollBack();
             $this->setErrorCode(0);
-            $this->setErrorMsg($e.$this->getErrorMsg());
+            $this->setErrorMsg($e);
             return false;
         }
     }

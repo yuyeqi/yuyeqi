@@ -32,6 +32,6 @@ class Picture extends Base
      * @return mixed
      */
     public function addPicture($data){
-        return self::create($data);
+        return self::insert($data);
     }
 }

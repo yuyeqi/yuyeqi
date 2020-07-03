@@ -81,6 +81,15 @@ class GoodsController extends BaseController
     }
 
     /**
+     * 编辑数据
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($id){
+        $detail = $this->goodsSerivce->getGoodsDetailById($id);
+        return view("admin.goods.edit",['detail'=>$detail]);
+    }
+    /**
      * 修改商品
      * @param GoodsValidator $validator
      */
