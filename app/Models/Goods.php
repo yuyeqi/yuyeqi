@@ -28,63 +28,35 @@ class Goods extends Model
 
     //状态获取器
     public function getGoodsStatusAttribute($value){
-        if ($value == 10){
-            $this->attributes['goods_status'] = [
-                'status' => $value,
-                'status_name' => '正常'
-            ];
-        }else{
-            $this->attributes['goods_status'] = [
-                'status' => $value,
-                'status_name' => '下架'
-            ];
-        }
-        return $this->attributes['goods_status'];
+        $data = [
+            10=>['status'=>10,'status_name'=>"正常"],
+            20=>['status'=>20,'status_name'=>"下架"]
+        ];
+        return $data[$value];
     }
     //新品获取器
     public function getIsNewAttribute($value){
-        if ($value == 0){
-            $this->attributes['is_new'] = [
-                'status' => $value,
-                'status_name' => '正常'
-            ];
-        }else{
-            $this->attributes['is_new'] = [
-                'status' => $value,
-                'status_name' => '新品'
-            ];
-        }
-        return $this->attributes['is_new'];
+        $data = [
+            0=>['status'=>0,'status_name'=>"正常"],
+            1=>['status'=>1,'status_name'=>"新品"]
+        ];
+        return $data[$value];
     }
     //热门获取器
     public function getIsHotAttribute($value){
-        if ($value == 0){
-            $this->attributes['is_hot'] = [
-                'status' => $value,
-                'status_name' => '正常'
-            ];
-        }else{
-            $this->attributes['is_hot'] = [
-                'status' => $value,
-                'status_name' => '热门'
-            ];
-        }
-        return $this->attributes['is_hot'];
+        $data = [
+            0=>['status'=>0,'status_name'=>"正常"],
+            1=>['status'=>1,'status_name'=>"热门"]
+        ];
+        return $data[$value];
     }
     //推荐获取器
     public function getIsRecommendAttribute($value){
-        if ($value == 0){
-            $this->attributes['is_recommend'] = [
-                'status' => $value,
-                'status_name' => '正常'
-            ];
-        }else{
-            $this->attributes['is_recommend'] = [
-                'status' => $value,
-                'status_name' => '推荐'
-            ];
-        }
-        return $this->attributes['is_recommend'];
+        $data = [
+            0=>['status'=>0,'status_name'=>"正常"],
+            1=>['status'=>1,'status_name'=>"推荐"]
+        ];
+        return $data[$value];
     }
 
     /**
@@ -148,5 +120,13 @@ class Goods extends Model
         return self::select($field)->where($map)->orderBy('sort')->take(4)->get();
     }
 
-
+    /**
+     * 批量删除数据
+     * @param $ids
+     * @param $data
+     * @return mixed
+     */
+    public function delBatch($ids,$data){
+        return self::whereIn("id",$ids)->update($data);
+    }
 }

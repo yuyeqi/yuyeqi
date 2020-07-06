@@ -44,6 +44,7 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::get('detail/{id}','GoodsController@detail')->name('goods_detail')->where('id', '[0-9]+');
         Route::get('addShow','GoodsController@addShow')->name('goods_add_show');
         Route::post('add','GoodsController@add')->name('goods_add');
+        Route::post('delBatch','GoodsController@delBatch')->name('goods_delete_all');
     });
     //新闻管理
     Route::prefix('news')->group(function (){

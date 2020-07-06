@@ -94,7 +94,7 @@
                 xadmin.open('商品信息',"/goods/detail/"+data.id,800,600,true);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
-                    member_del(data.id);
+                    del_goods(data.id);
                 })
             } else if(obj.event === 'edit'){
                 xadmin.open('编辑',"/hp/goods/edit/"+data.id,600,650,true);
@@ -146,32 +146,55 @@
             elem: '#end' //指定元素
         });
     });
-    function delAll (argument) {
-        var ids = [];
-        var checkStatus = table.checkStatus('tableId').data;
-        $.each(checkStatus,function (index,val) {
-            ids.push(val['id'])
-        })
+    function del_goods(id) {
+        var ids = [id];
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: '{{route("admin_delete_all")}}',
+            url: "{{ route('goods_delete_all') }}",
             dataType: 'json',
-            data: {ids: ids},
+            data: {ids:ids},
             success: function (data) {
-                if(data.code == 0){
-                    layer.msg(data.msg,{icon:1,time:1000});
-                }else{
-                    layer.msg(data.msg,{icon:5,time:1000});
-                }
+                layer.msg(data.msg,{icon:1,time:1000});
                 //刷新页面
-                location.reload();
+                location.reload()
             },
             error: function (xhr,type) {
 
             }
+        })
+    }
+    function delAll (argument) {
+        layui.use(['table'],function () {
+            var table = layui.table;
+            var ids = [];
+            var checkStatus = table.checkStatus('tableId').data
+            $.each(checkStatus,function (index,val) {
+                ids.push(val['id'])
+            })
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '{{route("goods_delete_all")}}',
+                dataType: 'json',
+                data: {ids: ids},
+                success: function (data) {
+                    if(data.code == 0){
+                        layer.msg(data.msg,{icon:1,time:1000});
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                    }
+                    //刷新页面
+                    location.reload();
+                },
+                error: function (xhr,type) {
+
+                }
+            })
         })
     }
 </script>

@@ -147,6 +147,11 @@
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>商品列表</cite></a>
                             </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('商品分类','{{ route('goods_index') }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>商品分类</cite></a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -242,36 +247,6 @@
                                 <a onclick="xadmin.add_tab('滑块验证','https://fly.layui.com/extend/sliderVerify/')" target="">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>滑块验证</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('富文本编辑器','https://fly.layui.com/extend/layedit/')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>富文本编辑器</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('eleTree 树组件','https://fly.layui.com/extend/eleTree/')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>eleTree 树组件</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('图片截取','https://fly.layui.com/extend/croppers/')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>图片截取</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('formSelects 4.x 多选框','https://fly.layui.com/extend/formSelects/')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>formSelects 4.x 多选框</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('Magnifier 放大镜','https://fly.layui.com/extend/Magnifier/')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>Magnifier 放大镜</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('notice 通知控件','https://fly.layui.com/extend/notice/')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>notice 通知控件</cite></a>
                             </li>
                         </ul>
                     </li>

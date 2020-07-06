@@ -74,10 +74,16 @@ class GoodsController extends BaseController
         $data = $validator->only(['goods_no','goods_name','good_price','book_price','score','sales_initial','sort'
         ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic']);
         //添加数据
-        if($this->goodsSerivce->addGoods($data,$this->loginInfo)){
-            return Render::success('添加成功');
+        try {
+            $res = $this->goodsSerivce->addGoods($data, $this->loginInfo);
+            if ($res > 0) {
+                return Render::success('添加成功');
+            } else {
+                return Render::error("添加失败");
+            }
+        } catch (\Exception $e) {
+            return Render::error($e->getMessage());
         }
-        return Render::error($this->goodsSerivce->getErrorMsg());
     }
 
     /**
@@ -94,19 +100,35 @@ class GoodsController extends BaseController
      * @param GoodsValidator $validator
      */
     public function updateGoods(GoodsValidator $validator){
-        if ($validator->isMethod('get')){
-            return view('admin.goods.edit');
-        }else{
-            //修改数据
+        //接收数据
+        $data = $validator->only(['id','goods_no','goods_name','good_price','book_price','score','sales_initial','sort'
+            ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic']);
+        //修改数据
+        try {
+            $res = $this->goodsSerivce->updateGoods($data, $this->loginInfo);
+            if ($res > 0) {
+                return Render::success('修改成功');
+            } else {
+                return Render::error("修改失败");
+            }
+        } catch (\Exception $e) {
+            return Render::error($e->getMessage());
         }
     }
 
     /**
      * 删除商品
-     * @param $ids
+     * @param $request
      */
-    public function delete($ids){
-
+    public function delBatch(Request $request){
+        $ids = $request->input("ids");
+        if (empty($ids)){
+            return Render::error("参数错误");
+        }
+        if ($this->goodsSerivce->delBatch($ids,$this->loginInfo)){
+            return Render::success("删除成功");
+        }
+        return Render::error("删除失败");
     }
 
     /**
