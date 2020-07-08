@@ -4,28 +4,12 @@
         <div class="layui-row">
             <form class="layui-form">
                 <div class="layui-form-item">
-                    <label for="case_name" class="layui-form-label">
-                        <span class="x-red">*</span>案例名称
+                    <label for="cate_name" class="layui-form-label">
+                        <span class="x-red">*</span>名称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="case_name" name="case_name" required="" lay-verify="required"
+                        <input type="text" id="cate_name" name="cate_name" required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="case_cover" class="layui-form-label">
-                        <span class="x-red">*</span>案例主图
-                    </label>
-                    <div class="layui-input-inline">
-                        <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="test1">上传图片</button>
-                            <div class="layui-upload-list">
-                                <div id="" class="file-iteme">
-                                    <div class="handle" id="handle"><i class="layui-icon layui-icon-delete"></i></div>
-                                    <img style="width: 100px;height: 100px;" alt="" id="uploadPic">
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -35,18 +19,6 @@
                     <div class="layui-input-inline">
                         <input type="number" id="sort" name="sort"  required="" lay-verify="sort"
                                autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">简介</label>
-                    <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" name="case_desc" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">编辑器</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
                     </div>
                 </div>
                 <form class="layui-form layui-form-pane" action="">
@@ -75,45 +47,17 @@
                     upload = layui.upload,
                     $ = layui.$;
                 //
-                $(document).on("mouseenter mouseleave", ".file-iteme", function(event){
-                    if(event.type === "mouseenter"){
-                        //鼠标悬浮
-                        $(this).children(".info").fadeIn("fast");
-                        $(this).children(".handle").fadeIn("fast");
-                    }else if(event.type === "mouseleave") {
-                        //鼠标离开
-                        $(this).children(".info").hide();
-                        $(this).children(".handle").hide();
-                    }
-                });
-                // 删除图片
-                $(document).on("click", ".file-iteme .pic", function(event){
-                    $(this).parent().remove();
-                });
-                // 删除单图图片
-                $(document).on("click", "#handle", function(event){
-                    $('#uploadPic').attr('src',null);//图片链接（base64）
-                });
-                form.verify({
-                    article_desc: function(value){
-                        layedit.sync(editIndex);
-                    }
-                });
-                //创建一个编辑器
-                var editIndex = layedit.build('LAY_demo_editor');
+
                 //监听提交
                 form.on('submit(add)', function(data) {
-                    data.field.content = layedit.getContent(editIndex);//获取编辑器内容并赋值给保存对象内
                     var fields = data.field;
-                    var coverPic = $("#uploadPic").attr('src');
-                    var content = $("#LAY_demo_editor").text();
-                    var data = {case_name:fields.case_name,case_desc:fields.case_desc, sort:fields.sort,case_cover:coverPic,content:fields.content};
+                    var data = {cate_name:fields.cate_name,sort:fields.sort};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '{{route('cases_add')}}',
+                        url: '{{route('goodsCate_add')}}',
                         data: data,
                         dataType: 'json',
                         success: function (data) {
@@ -137,33 +81,6 @@
                         }
                     })
                     return false;
-                });
-                //普通图片上传
-                var uploadInst = upload.render({
-                    elem: '#test1',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                    ,url: "{{ route('upload') }}" //改成您自己的上传接口
-                    ,accept:'images'
-                    ,exts: 'jpg|png|gif|bmp|jpeg'
-                    ,size: 4*1024*1024
-                    ,before: function(obj){
-                        layer.msg('图片上传中...', {
-                            icon: 16,
-                            shade: 0.01,
-                            time: 0
-                        })
-                    }
-                    ,done: function(res){
-                        //如果上传失败
-                        if(res.code > 0){
-                            return layer.msg('上传失败');
-                        }
-                        //上传成功
-                        $('#uploadPic').attr('src', res.data); //图片链接（base64）
-                        return layer.msg('上传成功');
-                    }
                 });
             });
     </script>

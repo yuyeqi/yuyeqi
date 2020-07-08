@@ -148,7 +148,7 @@
                                     <cite>商品列表</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('商品分类','{{ route('goods_index') }}')">
+                                <a onclick="xadmin.add_tab('商品分类','{{ route('goodsCate_index') }}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>商品分类</cite></a>
                             </li>

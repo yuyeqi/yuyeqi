@@ -35,7 +35,7 @@ class Cases extends Base
      */
     public static function getCasesDetail($id)
     {
-        $map = ['status'=>10,'is_delete'=>0,'id'=>$id];
+        $map = ['is_delete'=>0,'id'=>$id];
         $field = ['id','case_name','case_desc','sort','case_cover','content','create_time'];
         return self::select($field)->where($map)->first();
     }

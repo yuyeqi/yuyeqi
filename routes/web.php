@@ -111,4 +111,15 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('delBatch','BookController@delBatch')->name('book_del');
         Route::post('updateStatus','BookController@updateStatus')->name('book_update_status');
     });
+    //商品分离管理
+    Route::prefix('goodsCate')->group(function (){
+        Route::get('index','GoodsCateController@index')->name('goodsCate_index');
+        Route::get('getLists','GoodsCateController@getLists')->name('goodsCate_lists');
+        Route::get('addShow','GoodsCateController@addShow')->name('goodsCate_add_show');
+        Route::post('add','GoodsCateController@add')->name('goodsCate_add');
+        Route::get('editShow/{id}','GoodsCateController@editShow')->name('gooodsCate_edit_show')->where('id', '[0-9]+');
+        Route::post('edit','GoodsCateController@edit')->name('goodsCate_edit');
+        Route::post('delBatch','GoodsCateController@delBatch')->name('gooodsCate_del');
+        Route::post('updateStatus','GoodsCateController@updateStatus')->name('gooodsCate_update_status');
+    });
 });

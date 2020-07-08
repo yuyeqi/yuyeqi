@@ -66,7 +66,7 @@ class PersonCateController extends BaseController
             }
             return Render::error('添加失败');
         } catch (\Exception $e) {
-            return Render::error($e->getMessage());
+            return Render::error("系统异常，请稍后再试！");
         }
     }
 
@@ -95,7 +95,7 @@ class PersonCateController extends BaseController
             }
             return Render::error('修改失败');
         } catch (\Exception $e) {
-            return Render::error($e->getMessage());
+            return Render::error("系统异常，请稍后再试！");
         }
 
     }
@@ -118,7 +118,7 @@ class PersonCateController extends BaseController
             }
             return Render::error('删除失败');
         } catch (\Exception $e) {
-            return Render::error($e->getMessage());
+            return Render::error("系统异常，请稍后再试！");
         }
     }
 
@@ -136,7 +136,7 @@ class PersonCateController extends BaseController
             }
             return  Render::error('操作失败');
         } catch (\Exception $e) {
-            return  Render::error($e->getMessage());
+            return Render::error("系统异常，请稍后再试！");
         }
 
     }

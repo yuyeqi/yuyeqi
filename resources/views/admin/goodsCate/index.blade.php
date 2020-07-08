@@ -24,7 +24,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加案例','{{ route('cases_add_show') }}',700,500)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加分类','{{ route('goodsCate_add_show') }}',500,300)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -49,15 +49,12 @@
         //表格展示
         table.render({
             elem: '#table'
-            ,url: "{{ route('cases_lists') }}"
+            ,url: "{{ route('goodsCate_lists') }}"
             ,cols: [[
                 {type: 'checkbox',field: 'left'}
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
                 ,{field:'sort', width:80, title: '排序', sort: true,align:"center"}
-                ,{field:'case_name', width:150, title: '标题',align: "center"}
-                ,{field:'case_cover',align: "center", title: '主图',templet: function(d){
-                       return  "<span id='pic_" + d.id + "'><img src='" + d.case_cover + "'  style='width: 40px' lay-event='showPic' ></span>";
-                    } }
+                ,{field:'cate_name', width:150, title: '标题',align: "center"}
                 ,{field:'status', title: '状态',align: "center", width:120,templet: function(d){
                         if(d.status == 10){
                             return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
@@ -78,16 +75,10 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'edit'){
-                xadmin.open('编辑',"/hp/cases/editShow/"+data.id,600,650);
+                xadmin.open('编辑',"/hp/goodsCate/editShow/"+data.id,500,300);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);
-                })
-            } else if(obj.event === 'showPic'){
-                layer.photos({
-                    photos: '#pic_' + data.id,
-                    //0-6的选择，指定弹出图片动画类型，默认随机
-                    anim: 5
                 })
             }
         });
@@ -139,7 +130,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: "{{ route('cases_update_status') }}",
+                url: "{{ route('gooodsCate_update_status') }}",
                 dataType: 'json',
                 data: {id:id,status:status},
                 success: function (data) {
@@ -162,7 +153,7 @@
             },
             type: 'post',
             data: {ids:data},
-            url: "{{ route('cases_del') }}",
+            url: "{{ route('gooodsCate_del') }}",
             dataType: 'json',
             success: function (data) {
                 layer.msg(data.msg,{icon:1,time:1000});
@@ -187,7 +178,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '{{route("cases_del")}}',
+                url: '{{route("gooodsCate_del")}}',
                 dataType: 'json',
                 data: {ids: ids},
                 success: function (data) {

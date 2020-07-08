@@ -4,80 +4,61 @@
 namespace App\Http\Service;
 
 use App\Models\Book;
+use App\Models\GoodsCate;
 use PhpParser\Node\Scalar\String_;
 
 /**
- * 报备服务层
- * Class SlideshowService
+ * 商品分类服务层
+ * Class GoodsCateService
  * @package App\Http\Service
  */
-class BookService extends BaseSerivce
+class GoodsCateService extends BaseSerivce
 {
-    private $book;
+    private $goodsCate;
 
     /**
-     * SlideshowService constructor.
+     * GoodsCateService constructor.
      */
     public function __construct()
     {
-        $this->book = isset($this->book) ?: new Book();
+        $this->goodsCate = isset($this->goodsCate) ?: new GoodsCate();
     }
 
     /**
-     * 报备列表
+     * 商品分类列表
      * @return int
      */
-    public function getBookList(){
-        return $this->book->getBookList();
+    public function getLists($keywords,$limit){
+        return $this->goodsCate->getLists($keywords,$limit);
     }
 
     /**
-     * 后台轮播图列表
-     * @param int $limit
-     */
-    public function getSlideshowAdminLists(String $keyword,int $limit)
-    {
-        return $this->book->getBookAdminLists($keyword,$limit);
-    }
-
-    /**
-     * 添加轮播图
+     * 添加
      * @param array $data
      * @param $loginInfo
      * @return mixed
      */
-    public function addSlideshow(array $data, $loginInfo)
+    public function add(array $data, $loginInfo)
     {
         $data['create_user_id'] = $loginInfo['id'];
         $data['create_user_name'] = $loginInfo['username'];
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
-        return $this->slideshow->addSlideshow($data);
+        return $this->goodsCate->add($data);
     }
 
     /**
-     * 后台轮播详情
-     * @param $id
-     * @return mixed
-     */
-    public function getAdminSlideshowById($id)
-    {
-        return $this->slideshow->getAdminSlideshowById($id);
-    }
-
-    /**
-     * 修改轮播图
+     * 编辑
      * @param array $data
      * @param $loginInfo
      * @return mixed
      */
-    public function editSlideshow(array $data, $loginInfo)
+    public function edit(array $data, $loginInfo)
     {
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
-        return $this->slideshow->editSlideshow($data);
+        return $this->goodsCate->edit($data);
     }
-
     /**
      * 批量删除
      * @param string|null $ids
@@ -89,11 +70,22 @@ class BookService extends BaseSerivce
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
         $data['is_delete'] = 1;
-        return  $this->slideshow->delBatch($data,$ids);
+        return  $this->goodsCate->delBatch($data,$ids);
+    }
+
+
+    /**
+     * 详情
+     * @param $id
+     * @return mixed
+     */
+    public function getDetailById($id)
+    {
+        return $this->goodsCate->getDetailById($id);
     }
 
     /**
-     * 修改新闻状态
+     * 修改状态
      * @param array $data
      * @param $loginInfo
      * @return mixed
@@ -102,17 +94,6 @@ class BookService extends BaseSerivce
     {
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
-        return $this->slideshow->updateStatus($data);
-    }
-
-    /**
-     * 预约列表
-     * @param array $data
-     * @param int $limit
-     * @return mixed
-     */
-    public function getBookAdminLists(array $data, int $limit)
-    {
-        return $this->book->getBookAdminLists($data,$limit);
+        return $this->goodsCate->updateStatus($data);
     }
 }
