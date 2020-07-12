@@ -11,14 +11,90 @@
                         <input type="text" id="goods_no" name="goods_no" required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
                     </div>
-                </div>
-                <div class="layui-form-item">
                     <label for="username" class="layui-form-label">
                         <span class="x-red">*</span>商品名称
                     </label>
                     <div class="layui-input-inline">
                         <input type="text" id="goods_name" name="goods_name" required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>商品价格
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="number" id="good_price" name="good_price" required="" lay-verify="good_price"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>商品订金
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="number" id="book_price" name="book_price" required="" lay-verify="book_price"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>赠送积分
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="number" id="score" name="score"  required="" lay-verify="score"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>初始销量
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="number" id="sales_initial" name="sales_initial"  required="" lay-verify="sales_initial"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>商品分类
+                    </label>
+                    <div class="layui-input-inline">
+                        <select name="cate_id" id="cate_id">
+                            <option value="0">请选择</option>
+                            @isset($lists)
+                                @foreach($lists as $item)
+                                <option value="{{$item->id}}">{{$item->cate_name}}</option>
+                                @endforeach
+                            @endisset
+                        </select>
+                    </div>
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>排序
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="number" id="sort" name="sort"  required="" lay-verify="sort"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="goods_status" value="10" title="上架" checked="">
+                        <input type="radio" name="goods_status" value="20" title="下架">
+                    </div>
+                    <label class="layui-form-label">新品</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="is_new" value="0" title="正常" checked="">
+                        <input type="radio" name="is_new" value="1" title="新品">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">热门</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="is_hot" value="0" title="正常" checked="">
+                        <input type="radio" name="is_hot" value="1" title="热门">
+                    </div>
+                    <label class="layui-form-label">推荐</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="is_recommend" value="0" title="正常" checked="">
+                        <input type="radio" name="is_recommend" value="1" title="推荐">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -51,79 +127,6 @@
                                         </div>
                             </blockquote>
                         </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>商品价格
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="good_price" name="good_price" required="" lay-verify="good_price"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>商品订金
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="book_price" name="book_price" required="" lay-verify="book_price"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>赠送积分
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="score" name="score"  required="" lay-verify="score"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>初始销量
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="sales_initial" name="sales_initial"  required="" lay-verify="sales_initial"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>排序
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="sort" name="sort"  required="" lay-verify="sort"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="goods_status" value="10" title="上架" checked="">
-                        <input type="radio" name="goods_status" value="20" title="下架">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">新品</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="is_new" value="0" title="正常" checked="">
-                        <input type="radio" name="is_new" value="1" title="新品">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">热门</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="is_hot" value="0" title="正常" checked="">
-                        <input type="radio" name="is_hot" value="1" title="热门">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">推荐</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="is_recommend" value="0" title="正常" checked="">
-                        <input type="radio" name="is_recommend" value="1" title="推荐">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -184,14 +187,17 @@
                 $(document).on("click", "#handle", function(event){
                     $('#uploadPic').attr('src',null);//图片链接（base64）
                 });
+                //创建一个编辑器
+                var editIndex = layedit.build('LAY_demo_editor');
                 //监听提交
                 form.on('submit(add)', function(data) {
+                    data.field.content = layedit.getContent(editIndex);//获取编辑器内容并赋值给保存对象内
                     var fields = data.field;
-                    var coverPic = $("#demo1").attr('value');
+                    var coverPic = $("#uploadPic").attr('src');
                     var data = {goods_no:fields.goods_no,goods_name:fields.goods_name,good_price:fields.good_price,book_price:fields.book_price,
                         score:fields.score,sales_initial:fields.sales_initial,sort:fields.sort,is_new:fields.is_new, goods_status:fields.goods_status,
                         is_hot:fields.is_hot,is_recommend:fields.is_recommend,goods_cover:coverPic,mulPic:mulPic,goods_desc:fields.goods_desc,
-                        goods_content:fields.goods_content};
+                        goods_content:fields.content,cate_id:fields.cate_id};
                         $.ajax({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -203,8 +209,7 @@
                             success: function (data) {
                                 if (data.code == 1){
                                     //发异步，把数据提交给php
-                                    layer.alert(data.msg, {icon: 6});
-                                    return false
+                                    layer.msg(data.msg,{icon:5,time:1000});
                                 }else {
                                     //发异步，把数据提交给php
                                     layer.alert(data.msg, {icon: 6},function () {
@@ -222,8 +227,6 @@
                         })
                             return false;
                         });
-                //创建一个编辑器
-                var editIndex = layedit.build('LAY_demo_editor');
                 //普通图片上传
                 var uploadInst = upload.render({
                     elem: '#test1',

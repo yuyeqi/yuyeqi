@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\GoodsValidator;
+use App\Http\Service\GoodsCateService;
 use App\Http\Service\GoodsService;
 use App\Library\Render;
 use Illuminate\Http\Request;
@@ -16,7 +17,10 @@ use Illuminate\Http\Request;
 class GoodsController extends BaseController
 {
     //商品service
-    private $goodsSerivce = null;
+    private $goodsSerivce;
+
+    //商品分类
+    private $goodsCateService;
 
     /**
      * GoodsController constructor.
@@ -25,6 +29,7 @@ class GoodsController extends BaseController
     {
         parent:: __construct();
         $this->goodsSerivce = isset($this->goodsSerivce) ?: new GoodsService();
+        $this->goodsCateService = isset($this->goodsCateService) ?: new GoodsCateService();
     }
 
     /**
@@ -63,7 +68,9 @@ class GoodsController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function addShow(){
-        return view('admin.goods.add');
+        //商品类别列表
+        $lists = $this->goodsCateService->getCateList();
+        return view('admin.goods.add',compact('lists'));
     }
     /**
      * 添加商品
@@ -72,11 +79,11 @@ class GoodsController extends BaseController
     public function add(Request $validator){
         //接收数据
         $data = $validator->only(['goods_no','goods_name','good_price','book_price','score','sales_initial','sort'
-        ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic']);
+        ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic','cate_id','goods_desc','goods_content']);
         //添加数据
         try {
             $res = $this->goodsSerivce->addGoods($data, $this->loginInfo);
-            if ($res > 0) {
+            if ($res) {
                 return Render::success('添加成功');
             } else {
                 return Render::error("添加失败");
@@ -93,25 +100,29 @@ class GoodsController extends BaseController
      */
     public function edit($id){
         $detail = $this->goodsSerivce->getGoodsDetailById($id);
-        return view("admin.goods.edit",['detail'=>$detail]);
+        //商品类别列表
+        $lists = $this->goodsCateService->getCateList();
+        return view("admin.goods.edit",compact('detail','lists'));
     }
     /**
      * 修改商品
      * @param GoodsValidator $validator
      */
-    public function updateGoods(GoodsValidator $validator){
+    public function updateGoods(Request $validator){
         //接收数据
         $data = $validator->only(['id','goods_no','goods_name','good_price','book_price','score','sales_initial','sort'
-            ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic']);
+            ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic','cate_id','goods_desc','goods_content']);
         //修改数据
         try {
             $res = $this->goodsSerivce->updateGoods($data, $this->loginInfo);
-            if ($res > 0) {
+            if ($res) {
                 return Render::success('修改成功');
             } else {
+                dd($this->goodsSerivce->getErrorMsg());
                 return Render::error("修改失败");
             }
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return Render::error("系统异常，请稍后再试！");
         }
     }

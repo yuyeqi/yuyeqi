@@ -107,12 +107,12 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('用户列表','{{ route("admin_index") }}')">
+                                <a onclick="xadmin.add_tab('用户列表','{{ route("user_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>用户列表</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('用户列表','{{ route("admin_index") }}')">
+                                <a onclick="xadmin.add_tab('用户分类','{{ route("userCate_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>用户分类</cite></a>
                             </li>
@@ -125,7 +125,7 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('订单列表','order-list.html')">
+                                <a onclick="xadmin.add_tab('订单列表','{{route('order_index')}}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>订单列表</cite></a>
                             </li>

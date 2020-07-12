@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\CasesValidator;
-use App\Http\Service\CasesService;
 use App\Http\Service\GoodsCateService;
 use App\Library\Render;
 use Illuminate\Http\Request;

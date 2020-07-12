@@ -75,5 +75,12 @@
         padding: 1px;
         float: left;
     }
+    .layui-form-label{
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+        min-height: 36px
+    }
 </style>
 </html>

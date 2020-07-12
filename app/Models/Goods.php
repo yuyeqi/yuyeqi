@@ -66,6 +66,7 @@ class Goods extends Model
     public function picture(){
         return $this->hasMany('App\Models\Picture','pic_id','id')
             ->select(['id','pic_id','pic_url'])
+            ->where(['is_delete'=>0])
             ->where(['pic_type'=>Config::get('constants.PIC_GOODS_TYPE')]);
     }
     /**
@@ -128,5 +129,14 @@ class Goods extends Model
      */
     public function delBatch($ids,$data){
         return self::whereIn("id",$ids)->update($data);
+    }
+
+    /**
+     * 更新商品
+     * @param $data
+     * @return mixed
+     */
+    public function updateGoods($data){
+        return self::where(['id'=>$data['id']])->update($data);
     }
 }

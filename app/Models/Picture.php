@@ -34,4 +34,13 @@ class Picture extends Base
     public function addPicture($data){
         return self::insert($data);
     }
+
+    /**
+     * 删除图片
+     * @param $id
+     * @return mixed
+     */
+    public function deletePic($id){
+        return self::where(['pic_id'=>$id])->update(['is_delete'=>1]);
+    }
 }

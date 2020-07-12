@@ -143,9 +143,13 @@
                 dataType: 'json',
                 data: {id:id,status:status},
                 success: function (data) {
-                    layer.msg(data.msg,{icon:1,time:1000});
+                    if(data.code == 0){
+                        layer.msg(data.msg,{icon:1,time:1000});
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                    }
                     //刷新页面
-                    location.reload()
+                    location.reload();
                 },
                 error: function (xhr,type) {
 
@@ -165,9 +169,13 @@
             url: "{{ route('cases_del') }}",
             dataType: 'json',
             success: function (data) {
-                layer.msg(data.msg,{icon:1,time:1000});
+                if(data.code == 0){
+                    layer.msg(data.msg,{icon:1,time:1000});
+                }else{
+                    layer.msg(data.msg,{icon:5,time:1000});
+                }
                 //刷新页面
-                location.reload()
+                location.reload();
             },
             error: function (xhr,type) {
 

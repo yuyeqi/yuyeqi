@@ -22,7 +22,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('goods_add_show') }}',700,500,true)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('goods_add_show') }}',850,600,true)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -157,9 +157,13 @@
             dataType: 'json',
             data: {ids:ids},
             success: function (data) {
-                layer.msg(data.msg,{icon:1,time:1000});
+                if(data.code == 0){
+                    layer.msg(data.msg,{icon:1,time:1000});
+                }else{
+                    layer.msg(data.msg,{icon:5,time:1000});
+                }
                 //刷新页面
-                location.reload()
+                location.reload();
             },
             error: function (xhr,type) {
 

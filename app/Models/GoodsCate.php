@@ -90,4 +90,14 @@ class GoodsCate extends Base
         return self::where(['id'=>$data['id']])->update($data);
     }
 
+    /**
+     * 商品分类列表
+     * @return mixed
+     */
+    public function getCateLists()
+    {
+        $map = ['status'=>10,'is_delete'=>0];
+        return self::where($map)->get();
+    }
+
 }

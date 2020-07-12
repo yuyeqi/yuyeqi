@@ -50,6 +50,7 @@ class PublicController extends Controller
             }
             //验证信息
             $data['status'] = 0;
+            $data['is_delete'] = 0;
             $loginStatus = Auth::guard('admin')->attempt($data);
             if (!$loginStatus){
                 return Render::error("用户名或密码错误");

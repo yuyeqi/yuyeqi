@@ -121,8 +121,7 @@
                         success: function (data) {
                             if (data.code == 1){
                                 //发异步，把数据提交给php
-                                layer.alert(data.msg, {icon: 6});
-                                return false
+                                layer.msg(data.msg,{icon:5,time:1000});
                             }else {
                                 //发异步，把数据提交给php
                                 layer.alert(data.msg, {icon: 6},function () {

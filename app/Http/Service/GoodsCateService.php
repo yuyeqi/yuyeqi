@@ -3,9 +3,7 @@
 
 namespace App\Http\Service;
 
-use App\Models\Book;
 use App\Models\GoodsCate;
-use PhpParser\Node\Scalar\String_;
 
 /**
  * 商品分类服务层
@@ -95,5 +93,14 @@ class GoodsCateService extends BaseSerivce
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
         return $this->goodsCate->updateStatus($data);
+    }
+
+    /**
+     * 商品分类列表
+     * @return mixed
+     */
+    public function getCateList()
+    {
+        return $this->goodsCate->getCateLists();
     }
 }
