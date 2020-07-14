@@ -63,7 +63,7 @@
                         </label>
                         <input type="hidden" id="hiddenId" value="{{ $detail->id or '' }}">
                         <button  class="layui-btn" lay-filter="add" lay-submit="">
-                            增加
+                            保存
                         </button>
                     </div>
                 </form>

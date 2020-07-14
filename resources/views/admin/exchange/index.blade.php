@@ -50,7 +50,7 @@
         //表格展示
         table.render({
             elem: '#table'
-            ,url: "{{ route('goods_lists') }}"
+            ,url: "{{ route('exchange_lists') }}"
             ,cellMinWidth: 100
             ,cols: [[
                 {type: 'checkbox',field: 'left',width: 30}
@@ -60,23 +60,12 @@
                 ,{field:'goods_cover',align: "center", title: '封面图',templet: function(d){
                         return  "<span id='pic_" + d.id + "'><img src='" + d.goods_cover + "'  style='width: 40px' lay-event='showPic' ></span>";
                     } }
-                ,{field:'good_price', width:100, title: '价格'}
-                ,{field:'book_price', width:100, title: '定金'}
-                ,{field:'comment_num', width:80, title: '评价数'}
-                ,{field:'goods_status', width:80, title: '状态',templet: function (d) {
-                        return d.goods_status.status_name;
+                ,{field:'sales_score', width:100, title: '兑换积分'}
+                ,{field:'line_score', width:100, title: '兑换数量'}
+                ,{field:'sales_num', width:80, title: '评价数'}
+                ,{field:'status', width:80, title: '状态',templet: function (d) {
+                        return d.status.status_name;
                     }}
-                ,{field:'is_new', title: '新品', width: 80,templet: function (d) {
-                        return d.is_new.status_name;
-                    }}
-                ,{field:'is_hot->status', width:80, title: '热门',templet: function (d) {
-                        return d.is_hot.status_name;
-                    }}
-                ,{field:'is_recommend', title: '推荐', minWidth: 80,templet: function (d) {
-                        return d.is_recommend.status_name;
-                    }}
-                ,{field:'score', title: '赠送积分', minWidth: 120}
-                ,{field:'sales_actual', width:120, title: '实际销量'}
                 ,{field:'update_user_name', width:100, title: '更新人'}
                 ,{field:'update_time', title: '更新时间',width: 200}
                 ,{field:'create_time', title: '创建时间',width: 200}

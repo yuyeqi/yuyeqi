@@ -129,11 +129,6 @@
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>订单列表</cite></a>
                             </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('订单列表1','order-list1.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>订单列表1</cite></a>
-                            </li>
                         </ul>
                     </li>
                     <li>
@@ -244,9 +239,14 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('滑块验证','https://fly.layui.com/extend/sliderVerify/')" target="">
+                                <a onclick="xadmin.add_tab('商品分类','{{ route("exchangeCate_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>滑块验证</cite></a>
+                                    <cite>商品分类</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('商品列表','{{ route("exchange_index") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>商品列表</cite></a>
                             </li>
                         </ul>
                     </li>

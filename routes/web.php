@@ -112,7 +112,7 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('delBatch','BookController@delBatch')->name('book_del');
         Route::post('updateStatus','BookController@updateStatus')->name('book_update_status');
     });
-    //商品分离管理
+    //商品分类管理
     Route::prefix('goodsCate')->group(function (){
         Route::get('index','GoodsCateController@index')->name('goodsCate_index');
         Route::get('getLists','GoodsCateController@getLists')->name('goodsCate_lists');
@@ -153,14 +153,31 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
     Route::prefix('order')->group(function (){
         Route::get('index','OrderController@index')->name('order_index');
         Route::get('getLists','OrderController@getLists')->name('order_list');
-        Route::get('editShow/{id}','UserController@editShow')->name('user_edit_show')->where('id', '[0-9]+');
-        Route::get('auditShow/{id}','UserController@auditShow')->name('userCate_audit_show');
-        Route::post('audit/','UserController@audit')->name('user_audit');
-        Route::get('show/{id}','UserController@show')->name('user_show');
-        Route::get('account/{id}','UserController@account')->name('user_show');
-        Route::post('add','UserController@add')->name('userCate_add');
-        Route::post('edit','UserController@edit')->name('user_edit');
-        Route::post('delBatch','UserController@delBatch')->name('user_del');
-        Route::post('updateStatus','UserController@updateStatus')->name('user_update_status');
+        Route::get('editShow/{id}','OrderController@editShow')->name('order_edit_show')->where('id', '[0-9]+');
+        Route::get('show/{id}','OrderController@show')->name('order_show');
+        Route::post('edit','OrderController@edit')->name('order_edit');
+        Route::post('delBatch','OrderController@delBatch')->name('order_del');
+    });
+    //兑换商品分类管理
+    Route::prefix('exchangeCate')->group(function (){
+        Route::get('index','ExchangeCateController@index')->name('exchangeCate_index');
+        Route::get('getLists','ExchangeCateController@getLists')->name('exchangeCate_lists');
+        Route::get('addShow','ExchangeCateController@addShow')->name('exchangeCate_add_show');
+        Route::post('add','ExchangeCateController@add')->name('exchangeCate_add');
+        Route::get('editShow/{id}','ExchangeCateController@editShow')->name('exchangeCate_edit_show')->where('id', '[0-9]+');
+        Route::post('edit','ExchangeCateController@edit')->name('exchangeCate_edit');
+        Route::post('delBatch','ExchangeCateController@delBatch')->name('exchangeCate_del');
+        Route::post('updateStatus','ExchangeCateController@updateStatus')->name('exchangeCate_update_status');
+    });
+    //商品管理
+    Route::prefix('exchange')->group(function (){
+        Route::get('index','ExchangeController@index')->name('exchange_index');
+        Route::get('getLists','ExchangeController@getLists')->name('exchange_lists');
+        Route::get('edit/{id}','GoodsController@edit')->name('editShow')->where('id', '[0-9]+');
+        Route::get('detail/{id}','GoodsController@detail')->name('goods_detail')->where('id', '[0-9]+');
+        Route::get('addShow','GoodsController@addShow')->name('goods_add_show');
+        Route::post('add','GoodsController@add')->name('goods_add');
+        Route::post('updateGoods','GoodsController@updateGoods')->name('goods_edit');
+        Route::post('delBatch','GoodsController@delBatch')->name('goods_delete_all');
     });
 });

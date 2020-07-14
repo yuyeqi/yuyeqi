@@ -77,7 +77,7 @@ class Order extends Base
      * @param $data
      * @return mixed
      */
-    public function updateUserInfoById($data)
+    public function updateOrderInfoById($data)
     {
         return self::where(['id' => $data['id']])->update($data);
     }
@@ -103,14 +103,14 @@ class Order extends Base
     }
 
     /**
-     * 用户详情
+     * 订单详情
      * @param $id
      * @return mixed
      */
-    public static function getUserDetail($id)
+    public static function getOrderDetail($id)
     {
         $map = ['is_delete' => 0, 'id' => $id];
-        return self::where($map)->with('users')->first();
+        return self::where($map)->first();
     }
 
     /**

@@ -90,7 +90,7 @@
                 ,{field:'update_user_name',align: "center", title: '更新人'}
                 ,{field:'update_time', align: "center",title: '更新时间'}
                 ,{field:'create_time',align: "center", title: '创建时间'}
-                ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:220}
+                ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:200}
             ]]
             ,page: true
             ,id: 'tableId'
@@ -100,17 +100,15 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'edit'){
-                xadmin.open('编辑',"/hp/user/editShow/"+data.id,800,650);
+                xadmin.open('编辑',"/hp/order/editShow/"+data.id,500,400);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);
                 })
-            }else if(obj.event === 'account'){
-                xadmin.open('账户信息',"/hp/user/account/"+data.id,850,600);
             }else if(obj.event === 'audit'){
                 xadmin.open('审核',"/hp/user/auditShow/"+data.id,500,400);
             }else if(obj.event === 'show'){
-                xadmin.open('查看',"/hp/user/show/"+data.id,800,600);
+                xadmin.open('查看',"/hp/order/show/"+data.id,850,650);
             }
         });
         //执行重载
@@ -194,7 +192,7 @@
             },
             type: 'post',
             data: {ids:data},
-            url: "{{ route('user_del') }}",
+            url: "{{ route('order_del') }}",
             dataType: 'json',
             success: function (data) {
                 if(data.code == 0){

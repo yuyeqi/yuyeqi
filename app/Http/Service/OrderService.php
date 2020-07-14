@@ -48,33 +48,16 @@ class OrderService extends BaseSerivce
      * @return bool
      */
     public function edit($data,$loginInfo){
-        //用户账户数据
-        $userStatistic = [
-            'user_name'=>$data['user_name'],
-            'id'=>$data['id'],
-            'phone' => $data['phone'],
-            'update_user_id' => $loginInfo['update_user_id'],
-            'update_user_name' => $loginInfo['update_user_name'],
-        ];
-        //用户数据
-        $data['update_user_id'] = $loginInfo['id'];;
-        $data['update_user_name'] = $loginInfo['username'];
-        //开启事务
-        DB::beginTransaction();
-        try {
-            //更新用户信息
-            $this->user->updateUserInfoById($data);
-            //更新用户账户信息
-            $this->userStatistic->updateAccout($userStatistic);
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->setErrorCode(0);
-            $this->setErrorMsg($e->getMessage());
+        //订单详情
+        $detail = Order::getOrderDetail($data['id']);
+        if ($detail->pay_status != 10){
+            $this->setErrorMsg("只能修改未支付的订单");
             return false;
         }
-
+        //订单数据
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        return  $this->order->updateOrderInfoById($data);
     }
 
     /**
@@ -99,7 +82,7 @@ class OrderService extends BaseSerivce
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
         $data['is_delete'] = 1;
-        return  $this->user->delBatch($data,$ids);
+        return  $this->order->delBatch($data,$ids);
     }
     /**
      * 后端详情
