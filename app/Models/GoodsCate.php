@@ -25,15 +25,17 @@ class GoodsCate extends Base
     protected $hidden = ['is_delete'];
 
     //设置保存字段
-    protected $guarded  = [];
+    protected $guarded = [];
+
     /**
      * 商品分类列表
      * @param $keywords
      * @param $limit
      * @return mixed
      */
-    public function getLists($keywords,$limit){
-        return self::where(['is_delete'=>0])
+    public function getLists($keywords, $limit)
+    {
+        return self::where(['is_delete' => 0])
             ->orderBy('sort')
             ->orderBy('id')
             ->paginate($limit);
@@ -44,7 +46,8 @@ class GoodsCate extends Base
      * @param $data
      * @return mixed
      */
-    public function add($data){
+    public function add($data)
+    {
         return self::create($data);
     }
 
@@ -55,8 +58,8 @@ class GoodsCate extends Base
      */
     public function getDetailById($id)
     {
-        $map = ['is_delete'=>0,'id'=>$id];
-        $field = ['id','cate_name','sort','create_time','create_time'];
+        $map = ['is_delete' => 0, 'id' => $id];
+        $field = ['id', 'cate_name', 'sort', 'create_time', 'create_time'];
         return self::select($field)->where($map)->first();
     }
 
@@ -67,7 +70,7 @@ class GoodsCate extends Base
      */
     public function edit(array $data)
     {
-        return self::where(["id"=>$data['id']])->update($data);
+        return self::where(["id" => $data['id']])->update($data);
     }
 
     /**
@@ -78,8 +81,9 @@ class GoodsCate extends Base
      */
     public function delBatch($data, array $ids)
     {
-        return self::whereIn('id',$ids)->update($data);
+        return self::whereIn('id', $ids)->update($data);
     }
+
     /**
      * 修改状态
      * @param array $data
@@ -87,7 +91,7 @@ class GoodsCate extends Base
      */
     public function updateStatus(array $data)
     {
-        return self::where(['id'=>$data['id']])->update($data);
+        return self::where(['id' => $data['id']])->update($data);
     }
 
     /**
@@ -96,8 +100,20 @@ class GoodsCate extends Base
      */
     public function getCateLists()
     {
-        $map = ['status'=>10,'is_delete'=>0];
+        $map = ['status' => 10, 'is_delete' => 0];
         return self::where($map)->get();
+    }
+
+    /**
+     * 商品分类列表
+     */
+    public function getApiCateLists()
+    {
+        return self::select(['id','cate_name'])
+            ->where(['is_delete' => 0, 'status' => 10])
+            ->orderBy('sort', 'desc')
+            ->orderBy('id')
+            ->get();
     }
 
 }

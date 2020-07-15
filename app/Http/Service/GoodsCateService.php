@@ -103,4 +103,15 @@ class GoodsCateService extends BaseSerivce
     {
         return $this->goodsCate->getCateLists();
     }
+
+    /**
+     * 商品分类列表
+     * @param string|null $page
+     * @param string|null $limit
+     * @return mixed
+     */
+    public function getApiCateLists()
+    {
+        return $this->goodsCate->getApiCateLists();
+    }
 }

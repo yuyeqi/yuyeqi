@@ -116,7 +116,7 @@ class News extends Base
     public function getNewsPageLists($limit)
     {
         $map = ['status'=>10,'is_delete'=>0];
-        $field = ['id','news_title','news_desc','news_cover','content','create_time'];
+        $field = ['id','news_title','news_desc','sort','news_cover','content','create_time'];
         return self::select($field)->where($map)->orderBy('sort','desc')->paginate($limit);
     }
 
