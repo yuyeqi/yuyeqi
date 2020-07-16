@@ -46,8 +46,8 @@ class UserStatistic extends Base
      * @param $id
      * @return mixed
      */
-    public static function getDetail($id){
-        $map = ['is_delete'=>0,'id'=>$id];
+    public static function getAccountDetail($id){
+        $map = ['status'=>10,'user_id'=>$id];
         return self::where($map)->first();
     }
 }

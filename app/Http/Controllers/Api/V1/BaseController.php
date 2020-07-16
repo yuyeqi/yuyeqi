@@ -10,5 +10,9 @@ class BaseController extends Controller
 {
 
     //登陆人id
-    protected $userId = 1;
+    protected $userInfo = [
+        "id" => 1,
+        "user_name" => "何怡鸣",
+        "phone" => '123456789'
+    ];
 }

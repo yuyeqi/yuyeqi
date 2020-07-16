@@ -198,12 +198,27 @@ class Goods extends Model
      */
     public function getApiGoodsDetail($id){
         //输出字段
-        $field = ['id','goods_no','goods_name','goods_cover','good_price','score','book_price','sales_actual','goods_desc','comment_num','goods_content'];
+        $field = ['id','goods_no','goods_cover','goods_name','goods_cover','good_price','score','book_price','sales_actual','goods_desc','comment_num','goods_content'];
         //where条件
         $map = ['id'=>$id,'is_delete'=>0,'goods_status'=>10];
         return self::select($field)
             ->where($map)
             ->with(['picture','comment.user'])
+            ->first();
+    }
+
+    /**
+     * 商品详情不带评论
+     * @param $id
+     * @return mixed
+     */
+    public function getApiGoodsDetailById($id){
+        //输出字段
+        $field = ['id','goods_no','goods_cover','goods_name','goods_cover','good_price','score','book_price','sales_actual','is_delete','goods_status'];
+        //where条件
+        $map = ['id'=>$id,'is_delete'=>0,'goods_status'=>10];
+        return self::select($field)
+            ->where($map)
             ->first();
     }
 }

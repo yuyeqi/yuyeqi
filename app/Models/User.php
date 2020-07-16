@@ -67,7 +67,7 @@ class User extends Base
     public function userStatistic()
     {
         return $this->hasOne('App\Models\UserStatistic', 'user_id', 'id')
-            ->select(['id', 'user_id', 'amount', 'score']);
+            ->select(['id', 'user_id', 'amount', 'withdraw_amount','frozen_amount', 'score', 'withdraw_score', 'frozen_score']);
     }
 
     /**
@@ -76,7 +76,12 @@ class User extends Base
      */
     public function users()
     {
-        return $this->hasOne('App\Models\User', 'parent_id', 'id');
+        return $this->hasOne('App\Models\User', 'parent_id', 'id')
+            ->select(['id','user_name'])
+            ->withDefault([
+                'id' => 0,
+                'user_name' => '平台'
+            ]);
     }
 
     /*------------------------------------------后端---------------------------------------------------*/
@@ -173,9 +178,26 @@ class User extends Base
      */
     public function getUserInfo($id)
     {
-        $map = ['status' => 0, 'is_delete' => 0, 'id' => $id];
+        $map = ['status' => 10, 'is_delete' => 0, 'id' => $id];
         $field = ['id', 'nick_name', 'avatar_url', 'user_type'];
         return self::select($field)->where($map)->with('userStatistic')->first();
+    }
+
+
+    /**
+     * 用户账户信息
+     * @param $id
+     * @return mixed
+     */
+    public function getUserAccount($id)
+    {
+        $map = ['status' => 10, 'is_delete' => 0, 'id' => $id,'audit_status'=>2];
+        $field = ['id', 'parent_name'];
+        return self::select($field)->with('userStatistic')->where($map)->first();
+    }
+
+    public function exchangeCash($id){
+
     }
 
 }

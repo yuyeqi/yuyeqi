@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Service\GoodsCateService;
 use App\Http\Service\GoodsService;
+use App\Http\Service\OrderService;
 use App\Library\Render;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,7 @@ class ShopController extends BaseController
 {
     private $goodsService;   //商品服务层
     private $goodsCateService; //商品分类服务层
+    private $orderSerice;   //订单服务层
 
     /**
      * ShopController constructor.
@@ -27,6 +29,7 @@ class ShopController extends BaseController
     {
         $this->goodsService = isset($this->goodsService) ?: new GoodsService();
         $this->goodsCateService = isset($this->goodsCateService) ?: new GoodsCateService();
+        $this->orderSerice = isset($this->orderSerice) ?: new OrderService();
     }
 
     /**
@@ -56,6 +59,7 @@ class ShopController extends BaseController
     }
 
     /**
+     * 商品详情
      * @param $id
      * @return \Illuminate\Http\JsonResponse商品详情
      */
@@ -63,4 +67,23 @@ class ShopController extends BaseController
         $detail = $this->goodsService->getApiGoodsDetail($id);
         return Render::success("获取成功",$detail);
     }
+
+    /**
+     * 创建订单
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createOrder(Request $request){
+        $data = $request->only(['goods_id','buyer_remark']);
+        try {
+            if ($this->orderSerice->createOrder($data,$this->userInfo)){
+                return Render::success("创建成功");
+            }
+            return Render::error($this->orderSerice->getErrorMsg() ?: "创建订单失败");
+        } catch (\Exception $e) {
+            dd($e);
+            return Render::error("创建失败");
+        }
+    }
+
 }

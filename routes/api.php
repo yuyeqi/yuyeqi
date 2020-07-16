@@ -38,5 +38,13 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
         Route::get('getLists','V1\ShopController@getLists');
         Route::get('getCateLists','V1\ShopController@getCateLists');
         Route::get('getShopDetail/{id}','V1\ShopController@getShopDetail');
+        Route::post('createOrder','V1\ShopController@createOrder');
+    });
+    //个人中心
+    Route::prefix('user')->group(function (){
+        Route::get('getUserAccount','V1\UserController@getUserAccount');
+        Route::get('getCateLists','V1\ShopController@getCateLists');
+        Route::get('getShopDetail/{id}','V1\ShopController@getShopDetail');
+        Route::post('createOrder','V1\ShopController@createOrder');
     });
 });

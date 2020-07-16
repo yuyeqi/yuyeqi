@@ -15,6 +15,7 @@ class Order extends Base
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
 
+    protected $guarded = [];
     //支付状态
     public function getPayStatusAttribute($value){
         $data = [
@@ -142,6 +143,17 @@ class Order extends Base
         $map = ['status' => 0, 'is_delete' => 0, 'id' => $id];
         $field = ['id', 'nick_name', 'avatar_url', 'user_type'];
         return self::select($field)->where($map)->with('userStatistic')->first();
+    }
+
+
+    /**
+     * 创建订单
+     * @param array $data
+     * @return mixed
+     */
+    public function createOrder(array $data)
+    {
+        return self::create($data);
     }
 
 }

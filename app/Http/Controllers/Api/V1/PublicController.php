@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 
 
 use App\Library\Render;
+use App\Models\Config;
 use EasyWeChat\Factory;
 use EasyWeChatComposer\EasyWeChat;
 use http\Env\Request;
@@ -46,5 +47,16 @@ class PublicController
             //用户不存在新增用户
             $user = [];
         }
+    }
+
+
+    /**
+     * 获取配置信息
+     * @param $configNo
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getConfigInfo($configNo){
+        $detail = Config::getConfigByNo($configNo);
+        return Render::success("获取成功",$detail);
     }
 }
