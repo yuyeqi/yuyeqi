@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 
 
 use App\Library\Render;
+use EasyWeChat\Factory;
+use EasyWeChatComposer\EasyWeChat;
 use http\Env\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,7 +19,10 @@ class PublicController
      * @param $code
      * @return int
      */
-    public function getWxInfo($code){
+    public function wxLogin($code){
+        $config = config('wechat.official_account.default');
+        $app = Factory::miniProgram($config);
+        dd($app);
         return 1;
     }
     public function login(Request $request){

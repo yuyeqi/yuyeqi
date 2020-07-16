@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
+    Route::get('/wx/wxLogin/{code}',"V1\PublicController@wxLogin");
     //首页
     Route::prefix('index')->group(function (){
         Route::get('slideshow','V1\IndexController@getSlideShowLists');
