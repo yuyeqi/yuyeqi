@@ -33,6 +33,7 @@ class NewsController extends BaseController
      */
    public function getNewsPageLists(Request $request){
         $limit = $request->input('limit',10);
+        $page = $request->input('page',1);
         $data = $this->newsService->getNewsPageLists($limit);
         return Render::success('获取成功',$data);
    }

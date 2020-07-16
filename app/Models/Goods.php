@@ -69,6 +69,19 @@ class Goods extends Model
             ->where(['is_delete'=>0])
             ->where(['pic_type'=>Config::get('constants.PIC_GOODS_TYPE')]);
     }
+
+    /**关联评论
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comment(){
+        return $this->hasMany('App\Models\GoodsComment','goods_id','id')
+                ->select(['id','user_id','goods_id','comment_content','create_time'])
+                ->orderBy("is_top",'desc')
+                ->orderBy("sort",'desc')
+                ->orderBy("id",'desc')
+                ->where(['is_delete'=>0,'status'=>10])
+                ->take(2);
+    }
     /**
      * 商品列表
      * @param $keyword
@@ -118,7 +131,7 @@ class Goods extends Model
     public function getNewsGoods(){
         $map = ['is_new'=>0,'goods_status'=>10,'is_delete'=>0];
         $field = ['id','goods_name','goods_cover','good_price'];
-        return self::select($field)->where($map)->orderBy('sort')->take(4)->get();
+        return self::select($field)->where($map)->orderBy('sort','desc')->take(4)->get();
     }
 
     /**
@@ -138,5 +151,59 @@ class Goods extends Model
      */
     public function updateGoods($data){
         return self::where(['id'=>$data['id']])->update($data);
+    }
+
+    /*--------------------------------------小程序----------------------------------------*/
+    /**
+     * 小程序商城列表
+     * @param $keywords
+     * @param $cateId
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getShopLists($keywords,$cateId,$sort,$page,$limit){
+        //输出字段
+        $field = ['id','goods_no','goods_name','goods_cover','good_price','score','book_price','sales_actual',
+            'cate_id','sort','comment_num'];
+        //设置查询条件
+        $map = ['is_delete'=>0,'goods_status'=>10];
+        $cateId>0 && $map['cate_id'] = $cateId;
+        //设置排序
+        $sortField = "sort";
+        if ($sort == "hot"){
+            $sortField = "is_hot";
+        }else if ($sort == "sales"){
+            $sortField = "sales_actual";
+        }else if ($sort == "price"){
+            $sortField = "good_price";
+        }else if ($sort == "news"){
+            $sortField = "is_new";
+        }
+        $lists = self::where($map)
+            ->when(!empty($keywords),function ($query) use ($keywords){
+                return $query->where('goods_name','like','%'.$keywords.'%');
+            })
+            ->select($field)
+            ->orderBy($sortField,'desc')
+            ->paginate($limit);
+        return $lists;
+    }
+
+
+    /**
+     * 商品详情页
+     * @param $id
+     * @return mixed
+     */
+    public function getApiGoodsDetail($id){
+        //输出字段
+        $field = ['id','goods_no','goods_name','goods_cover','good_price','score','book_price','sales_actual','goods_desc','comment_num','goods_content'];
+        //where条件
+        $map = ['id'=>$id,'is_delete'=>0,'goods_status'=>10];
+        return self::select($field)
+            ->where($map)
+            ->with(['picture','comment.user'])
+            ->first();
     }
 }

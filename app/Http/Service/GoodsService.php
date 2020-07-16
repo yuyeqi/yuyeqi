@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\DB;
 class GoodsService extends BaseSerivce
 {
     //商品模型
-    protected $goods = null;
+    protected $goods;
 
     //图片模型
-    protected $picture = null;
+    protected $picture;
     /**
      * GoodsService constructor.
      */
@@ -147,5 +147,29 @@ class GoodsService extends BaseSerivce
     public function getNesGoods()
     {
         return $this->goods->getNewsGoods();
+    }
+
+    /**
+     * 小程序商城列表
+     * @param $keywords
+     * @param $cateId
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getLists($keywords, $cateId, $sort, $page, $limit)
+    {
+        $pageData = $this->goods->getShopLists($keywords,$cateId,$sort,$page,$limit);
+        return $this->getPageData($pageData);
+    }
+
+    /**
+     * 商城商品详情
+     * @param $id
+     * @return mixed
+     */
+    public function getApiGoodsDetail($id)
+    {
+        return $this->goods->getApiGoodsDetail($id);
     }
 }

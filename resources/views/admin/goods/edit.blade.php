@@ -81,7 +81,7 @@
                         <input type="radio" name="goods_status" value="20" title="下架" @if($detail->goods_status['status'] == 20 )checked=""@endif>
                     </div>
                     <label class="layui-form-label">新品</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <input type="radio" name="is_new" value="0" title="正常"  @if($detail->is_new['status'] == 0) checked @endif >
                         <input type="radio" name="is_new" value="1" title="新品" @if($detail->is_new['status'] == 1) checked @endif >
                     </div>

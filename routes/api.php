@@ -33,4 +33,10 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
         Route::get('getPersonCateLists','V1\PersonController@getPersonCateLists');
         Route::post('addPerson','V1\PersonController@addPerson');
     });
+    //商城
+    Route::prefix('shop')->group(function (){
+        Route::get('getLists','V1\ShopController@getLists');
+        Route::get('getCateLists','V1\ShopController@getCateLists');
+        Route::get('getShopDetail/{id}','V1\ShopController@getShopDetail');
+    });
 });

@@ -86,7 +86,8 @@ class IndexController extends BaseController
      * @param Request $request
      */
     public function getCaseLists(Request $request){
-        $limit =  $request->input('limit','10');
+        $limit =  $request->input('limit',10);
+        $page =  $request->input('page',1);
         $caseLists = $this->casesService->getCasesLists($limit);
         return Render::success('获取成功',$caseLists);
     }

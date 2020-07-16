@@ -41,7 +41,13 @@ class PersonValidator extends FormRequest implements ValidatesWhenResolved
     public function rules()
     {
         return [
-
+            'cate_id' => 'required',
+            'person_name' => 'required',
+            'phone' => 'required',
+            'company' => 'required|email',
+            'ocupation' => 'required',
+            'sales_price' => 'required',
+            'person_price' => 'required'
         ];
     }
     /**
@@ -52,7 +58,13 @@ class PersonValidator extends FormRequest implements ValidatesWhenResolved
      */
     public function messages(){
         return [
-
+            'cate_id.required' => '定制分类名称必选',
+            'person_name.required' => '请输入姓名',
+            'phone.required'  => '请输入电话',
+            'company.required'  => '请输入单位',
+            'ocupation.required' => '请输入职业',
+            'sales_price.required' => '请输入私人定制预算',
+            'person_price.required' => '请输入专属销售额'
         ];
     }
 
