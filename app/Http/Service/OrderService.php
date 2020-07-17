@@ -129,7 +129,7 @@ class OrderService extends BaseSerivce
         $data['user_id'] = $userInfo['id'];
         $data['user_name'] = $userInfo['user_name'];
         $data['phone'] = $userInfo['phone'];
-        $data['order_no'] = $this->getOrderNo();
+        $data['order_no'] = $this->getOrderNo("DD");
         $data['total_price'] = $userInfo['user_name'];
         $data['total_price'] = $goodsDetail['book_price'];
         $data['goods_id'] = $goodsDetail['id'];
@@ -140,13 +140,6 @@ class OrderService extends BaseSerivce
         $data['goods_cover'] = $goodsDetail['goods_cover'];
         $data['create_time'] = time();
         return $this->order->createOrder($data);
-    }
-
-    /**
-     * @return string生成订单号
-     */
-    private function getOrderNo(){
-        return date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
     }
 
 

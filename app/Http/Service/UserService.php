@@ -165,11 +165,34 @@ class UserService extends BaseSerivce
         }
         //2.获取兑换比例
         $exchageRate = Config::getConfigByNo("scoreToCash");
-        //3.计算兑换的现金
-        $cash = bcdiv($score, $exchageRate);
+        //3.计算用户金额账户
+        $cash = bcdiv($score, $exchageRate);    //提现金额
+        $newCash = bcadd($cash,$accountInfo["amount"]); //剩余金额
+        //积分交易记录数据
+        $scoreLog = [
+            'deal_no' => $this->getOrderNo("sl"),
+            'user_id' => $userInfo['id'],
+            'user_name' => $userInfo['user_name'],
+            'deal_score' => $score,
+            'surplus_score' => $diffScore,
+            'deal_type' => 4,
+            'create_time' => time()
+        ];
+        //现金记录交易数据
+        $cashLog = [
+            'deal_no' => $this->getOrderNo("xj"),
+            'user_id' => $userInfo['id'],
+            'user_name' => $userInfo['user_name'],
+            'amount' => $cash,
+            'surplus_amount' => $newCash,
+            'deal_type' => 2
+        ];
         //开启事务
         DB::beginTransaction();
         try {
+            //1.更新用户账户
+            //2.记录积分交易
+            //3.记录现金交易
             DB::commit();
             return true;
         } catch (\Exception $e) {

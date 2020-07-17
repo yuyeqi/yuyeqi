@@ -65,4 +65,12 @@ class BaseSerivce
         $data['total'] = $pageData->total();
         return $data;
     }
+
+    /**
+     * @return string生成订单号
+     */
+    protected function getOrderNo($prifix){
+        $orderNo = date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+        return $prifix.$orderNo;
+    }
 }
