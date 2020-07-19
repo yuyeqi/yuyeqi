@@ -17,4 +17,22 @@ class Promoter extends Base
     //设置保存字段
     protected $guarded = [];
 
+    /**
+     * 推广用户列表
+     * @param $userInfo
+     * @param $field
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public static function getPromoterLists($userInfo, $field, $page, $limit)
+    {
+        $map = ['promoter_id'=>$userInfo['id'],'is_delete'=>0];
+        return self::select($field)
+            ->where($map)
+            ->orderBy('id','desc')
+            ->paginate($limit);
+    }
+
+
 }

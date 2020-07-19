@@ -92,7 +92,7 @@ class SlideshowService extends BaseSerivce
     }
 
     /**
-     * 修改新闻状态
+     * 修改轮播图状态
      * @param array $data
      * @param $loginInfo
      * @return mixed

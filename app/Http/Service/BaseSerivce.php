@@ -59,7 +59,6 @@ class BaseSerivce
      * @return array
      */
     public function getPageData($pageData){
-        //dd($pageData);
         $data = [];
         $data['data'] = $pageData->items();
         $data['total'] = $pageData->total();

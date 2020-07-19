@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use phpDocumentor\Reflection\Types\Self_;
+
 /**
  * 用户模型
  * Class User
@@ -196,8 +198,14 @@ class User extends Base
         return self::select($field)->with('userStatistic')->where($map)->first();
     }
 
-    public function exchangeCash($id){
-
-    }
+    /**
+     * 更新用户默认地址
+     * @param $userId
+     * @param $addressId
+     * @return mixed
+     */
+   public function updateUserAddress($userId,$addressId){
+        return self::where(['id'=>$userId])->update(['deliver_id'=>$addressId]);
+   }
 
 }

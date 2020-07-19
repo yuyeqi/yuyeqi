@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use phpDocumentor\Reflection\Types\Self_;
+
 /**
  * 用户数据统计模型
  * Class UserStatistic
@@ -49,5 +51,24 @@ class UserStatistic extends Base
     public static function getAccountDetail($id){
         $map = ['status'=>10,'user_id'=>$id];
         return self::where($map)->first();
+    }
+
+    /**
+     * 根据用户id,更新统计数量
+     * @param $userId
+     * @param $field
+     * @return mixed
+     */
+    public function updateUserCount($userId,$field){
+        return self::where(['user_id'=>$userId])->increment($field);
+    }
+
+    /**
+     * 兑换商品更新用户账户信息
+     * @param $data
+     * @return mixed
+     */
+    public function updateExchangeNum($data){
+        return self::where(['user_id'=>$data['id']])->update($data);
     }
 }

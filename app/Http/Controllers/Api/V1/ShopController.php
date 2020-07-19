@@ -9,7 +9,9 @@ use App\Http\Service\GoodsCateService;
 use App\Http\Service\GoodsService;
 use App\Http\Service\OrderService;
 use App\Library\Render;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /**
  * 商城API控制器
@@ -81,9 +83,52 @@ class ShopController extends BaseController
             }
             return Render::error($this->orderSerice->getErrorMsg() ?: "创建订单失败");
         } catch (\Exception $e) {
-            dd($e);
             return Render::error("创建失败");
         }
     }
 
+    /**
+     * 订单列表
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getOrderLists(Request $request){
+        $page = $request->input('page',1);
+        $limit = $request->input('limit',10);
+        $lists = $this->orderSerice->getOrderLists($this->userInfo,$page,$limit);
+        return Render::success("获取成功",$lists);
+    }
+
+    /**
+     * 订单详情
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getOrderDetail(Request $request){
+        $id = $request->input("id",0);
+        if ($id <= 0){
+            return Render::error("参数错误，请重试!");
+        }
+        $detail = Order::getOrderDetail($id);
+        return  Render::success("获取成功",$detail);
+    }
+
+    /**
+     * 订单评价
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function comment(Request $request){
+        $goods_id = $request->input('goods_id',0);
+        $content = $request->input('content');
+        $pictures = $request->input('pictures','[]');
+        if ($goods_id <= 0){
+            Log::error('【订单评价】----参数错误，id:'.$goods_id);
+            return Render::error("参数错误，请重试");
+        }
+        if ($this->orderSerice->addComment($this->userInfo, $goods_id, $content, $pictures)) {
+            return Render::success("添加成功");
+        }
+        return Render::error($this->orderSerice->getErrorMsg() ?: '添加失败');
+    }
 }

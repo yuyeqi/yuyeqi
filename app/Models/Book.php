@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+
 /**
  * 报备模型
  * Class Slideshow
@@ -131,7 +133,61 @@ class Book extends Base
             ->when(!empty($dealEndTime),function ($query) use ($dealEndTime){
                 return $query->whereDate('deal_finished_time','<=',$dealEndTime);
             })
-            ->orderBy('id','desc')
+            ->orderBy('create_time','desc')
             ->paginate($limit);
+    }
+
+
+    /*--------------------------------------------------小程序----------------------------*/
+    /**
+     * 预约列表
+     * @param $userInfo
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getApiBookLists($userInfo,$page,$limit){
+        $map = ['user_id'=>$userInfo['id'],'is_delete'=>0];
+        $field = ['id','book_no','client_name','client_phone','status','create_time'];
+        return self::select($field)
+            ->where($map)
+            ->orderBy('create_time','desc')
+            ->paginate($limit);
+    }
+
+    /**
+     * 客户预约
+     * @param $data
+     * @return mixed
+     */
+    public function addBook($data){
+        return self::create($data);
+    }
+
+    /**
+     * 获取当天的最大的预约号
+     * @return mixed
+     */
+    public static function getBookNum()
+    {
+        return self::whereDay ('create_time',date('d'))
+            ->where(['is_delete'=>0])
+            ->orderBy('create_time','desc')
+            ->value('book_no');
+    }
+
+    /**
+     *客户预约详情
+     * @param $id
+     * @return mixed
+     */
+    public static function getApiBookDetail($id){
+        $map = ['id'=>$id,'is_delete'=>0];
+        $field = ['id','book_no','client_name','client_phone','province','city', 'district',
+            'community','house_name','sex','arrive_time','status','book_score','store_score',
+            'actual_arrive_time','deal_finished_time','create_time'];
+        return self::select($field)
+            ->where($map)
+            ->first();
     }
 }

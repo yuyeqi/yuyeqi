@@ -13,6 +13,7 @@ class BaseController extends Controller
     protected $userInfo = [
         "id" => 1,
         "user_name" => "何怡鸣",
-        "phone" => '123456789'
+        "phone" => '123456789',
+        "user_type" => 1
     ];
 }

@@ -14,7 +14,26 @@ class WalletDeal extends Base
     //定义模型关联表
     protected $table = 'hp_wallet_deal';
 
+    //禁用自动更新时间
+    public $timestamps = false;
+
     //设置保存字段
     protected $guarded = [];
 
+    /**
+     * 钱包交易记录
+     * @param $userInfo
+     * @param string $field
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public static function getWalletList($userInfo, $field="*", $dealType, $page, $limit){
+        $map = ['user_id'=>$userInfo['id'],'is_delete'=>0];
+        $dealType > 0 && $map['deal_type'] = $dealType;
+        return self::select($field)
+            ->where($map)
+            ->orderBy('id','desc')
+            ->paginate($limit);
+    }
 }

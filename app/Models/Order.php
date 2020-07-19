@@ -156,4 +156,30 @@ class Order extends Base
         return self::create($data);
     }
 
+    /**
+     * 订单列表
+     * @param $userInfo
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getOrderLists($userInfo,$page,$limit){
+        //输出字段
+        $field = ['id','goods_cover','goods_name','total_price','goods_price','pay_status'];
+        //where条件
+        $map = ['id'=>$userInfo['id'],'is_delete'=>0];
+        return self::select($field)
+            ->where($map)
+            ->orderBy('create_time','desc')
+            ->paginate($limit);
+    }
+
+    /**
+     * 修改订单的评论状态
+     * @param $id
+     * @return mixed
+     */
+    public function updateOrder($id){
+        return self::where('id',$id)->update(['is_comment'=>1]);
+    }
 }

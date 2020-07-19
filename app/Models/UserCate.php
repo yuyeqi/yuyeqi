@@ -98,4 +98,18 @@ class UserCate extends Base
         return self::select($field)->where($map)->with('userStatistic')->first();
     }
 
+    /**
+     * 根据用户分类获取用户分类的信息
+     * @param $userType
+     * @return mixed
+     */
+    public static function getUserCateInfoByUserType($userType){
+        $map = ['status'=>0,'is_delete'=>0,'id'=>$userType];
+        $field = ['id','cate_name','status','register_account','tg_account','book_score',
+            'store_score','order_score'];
+        return self::select($field)
+            ->where($map)
+            ->first();
+    }
+
 }

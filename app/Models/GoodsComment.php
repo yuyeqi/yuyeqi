@@ -4,6 +4,8 @@
 namespace App\Models;
 
 
+use phpDocumentor\Reflection\Types\Self_;
+
 /**
  * 商品评论模型
  * Class Goods
@@ -28,5 +30,14 @@ class GoodsComment extends Base
         return $this->hasOne('App\Models\User','id','user_id')
             ->select(['id','nick_name','avatar_url'])
             ->where(['is_delete'=>0]);
+    }
+
+    /**
+     * 添加评论
+     * @param $data
+     * @return mixed
+     */
+    public function addComment($data){
+        return self::create($data);
     }
 }

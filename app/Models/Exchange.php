@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
+use phpDocumentor\Reflection\Types\Self_;
 
 /**
  * 兑换商品模型
@@ -19,14 +20,12 @@ class Exchange extends Model
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    //时间格式
-    protected $dateFormat = 'U';
+
     //隐藏字段
     protected $hidden = ['is_delete'];
     //设置保存字段
     protected $guarded  = ['mulPic'];
 
-    //状态获取器
     public function getGoodsStatusAttribute($value){
         $data = [
             10=>['status'=>10,'status_name'=>"正常"],
@@ -138,4 +137,51 @@ class Exchange extends Model
     public function updateGoods($data){
         return self::where(['id'=>$data['id']])->update($data);
     }
+
+    /**
+     * 兑换商品分类
+     * @return mixed
+     */
+    public function getApiCateLists(){
+        $field = ['id','goods_no','goods_name','goods_cover','cate_id','sales_score','line_score',
+            'sales_num'];
+        $map = ['is_delete'=>0,'status'=>10];
+        return self::select($field)
+            ->where($map)
+            ->orderBy('sort')
+            ->orderBy('create_time','desc')
+            ->get();
+    }
+
+    /**
+     * 兑换商品详情
+     * @param array|null $id
+     * @return mixed
+     */
+    public static function getApiGoodsDetail(?array $id)
+    {
+        $field = ['id','goods_no','goods_name','goods_cover','cate_id','sales_score','line_score',
+            'sales_num','content','stock_num'];
+        $map = ['is_delete'=>0,'status'=>10];
+        return self::select($field)->where($map)->first();
+    }
+
+    /**
+     * 更新商品兑换数量
+     * @param $goodsId
+     * @return mixed
+     */
+    public function updateExchangeNum($goodsId){
+        return self::where(['id' => $goodsId])->increment('sales_num');
+    }
+
+    /**
+     * 减少库存
+     * @param $goodsId
+     * @return mixed
+     */
+    public function updateExchangeStock($goodsId){
+        return self::where(['id' => $goodsId])->decrement('stock_num');
+    }
+
 }

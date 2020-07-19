@@ -221,4 +221,5 @@ class Goods extends Model
             ->where($map)
             ->first();
     }
+
 }

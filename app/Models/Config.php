@@ -21,7 +21,8 @@ class Config extends Base
      */
     public static function getConfigByNo($configNo){
         $field = ['config_no','config_name',"config_content"];
-        return self::select($field)->where(['config_no'=>$configNo])->first();
+        $config = self::select($field)->where(['config_no'=>$configNo])->first();
+        return $config['config_content'];
     }
 
 }
