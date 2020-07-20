@@ -140,11 +140,10 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::get('index','UserController@index')->name('user_index');
         Route::get('getLists','UserController@getLists')->name('user_lists');
         Route::get('editShow/{id}','UserController@editShow')->name('user_edit_show')->where('id', '[0-9]+');
-        Route::get('auditShow/{id}','UserController@auditShow')->name('userCate_audit_show');
+        Route::get('auditShow/{id}','UserController@auditShow')->name('user_audit_show');
         Route::post('audit/','UserController@audit')->name('user_audit');
         Route::get('show/{id}','UserController@show')->name('user_show');
         Route::get('account/{id}','UserController@account')->name('user_show');
-        Route::post('add','UserController@add')->name('userCate_add');
         Route::post('edit','UserController@edit')->name('user_edit');
         Route::post('delBatch','UserController@delBatch')->name('user_del');
         Route::post('updateStatus','UserController@updateStatus')->name('user_update_status');

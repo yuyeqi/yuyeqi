@@ -4,7 +4,7 @@
 namespace App\Models;
 
 
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Admin\BaseController;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -12,15 +12,14 @@ use Illuminate\Support\Facades\Config;
  * Class Goods
  * @package App\Models
  */
-class Goods extends Model
+class Goods extends BaseController
 {
     //定义模型关联表
     protected $table = 'hp_goods';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    //时间格式
-    protected $dateFormat = 'U';
+
     //隐藏字段
     protected $hidden = ['is_delete'];
     //设置保存字段

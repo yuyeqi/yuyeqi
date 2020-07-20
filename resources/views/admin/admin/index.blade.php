@@ -89,7 +89,7 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'detail'){
-                xadmin.open('查看',"/hp/admin/showInfo/"+data.id,600,650);
+                xadmin.open('查看',"/hp/admin/showInfo/"+data.id,800,500);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);

@@ -58,7 +58,7 @@ class PublicController extends Controller
             //更新登陆信息
             $admin = $this->adminService->getAdminByAcount($data['account']);
             $admin->is_login = 1;
-            $admin->login_time = time();
+            $admin->login_time = date('Y-m-d H:m:s');
             //生成登陆token
             if($admin->save()){
                 return Render::success('success');

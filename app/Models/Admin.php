@@ -20,32 +20,9 @@ class Admin extends Authenticatable implements JWTSubject
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    //时间格式
-    protected $dateFormat = 'U';
-
-    /**
-     * 创建时间
-     * @return false|string
-     */
-    public function getCreateTimeAttribute(){
-        return date('Y-m-d H:i:s', $this->attributes['create_time']);
-    }
-
-    /**
-     * 更新时间
-     * @return false|string
-     */
-    public function getUpdateTimeAttribute(){
-        return date('Y-m-d H:i:s', $this->attributes['update_time']);
-    }
 
     //隐藏字段
     protected $hidden = ['password','is_delete'];
-
-    //登录时间获取器
-    public function getLoginTimeAttribute(){
-        return date('Y-m-d H:i:s', $this->attributes['login_time']);
-    }
 
     //设置保存字段
     protected $guarded = [

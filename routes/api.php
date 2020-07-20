@@ -34,7 +34,6 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
 });
 //需要登陆
 Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
-    Route::get('/wx/wxLogin/{code}',"V1\PublicController@wxLogin");
     //首页
     Route::prefix('index')->group(function (){
         Route::get('slideshow','V1\IndexController@getSlideShowLists');

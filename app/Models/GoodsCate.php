@@ -19,8 +19,7 @@ class GoodsCate extends Base
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    //时间格式
-    protected $dateFormat = 'U';
+
     //隐藏字段
     protected $hidden = ['is_delete'];
 
