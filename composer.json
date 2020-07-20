@@ -9,6 +9,7 @@
         "barryvdh/laravel-debugbar": "^3.3",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.6.*",
+        "laravel/passport": "^7.5",
         "laravel/tinker": "^1.0",
         "overtrue/laravel-wechat": "~4.0",
         "tymon/jwt-auth": "1.*@rc"

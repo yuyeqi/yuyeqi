@@ -208,4 +208,14 @@ class User extends Base
         return self::where(['id'=>$userId])->update(['deliver_id'=>$addressId]);
    }
 
+    /**
+     * 用户注册
+     * @param $data
+     * @return mixed
+     */
+    public function register($data)
+    {
+        return self::wehre(['id'=>$data['id']])->update($data);
+    }
+
 }

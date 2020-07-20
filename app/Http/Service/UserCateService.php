@@ -91,4 +91,14 @@ class UserCateService extends BaseSerivce
         return $this->userCate->updateStatus($data);
     }
 
+
+    /**
+     * 用户分类
+     * @return mixed
+     */
+    public function getUserCateLists()
+    {
+        return $this->userCate->getUserCateLists();
+    }
+
 }

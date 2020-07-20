@@ -4,10 +4,13 @@
 namespace App\Http\Controllers\Api\V1;
 
 
+use App\Http\Service\UserCateService;
+use App\Http\Service\UserService;
 use App\Library\Render;
 use App\Models\Config;
 use EasyWeChat\Factory;
 use http\Env\Request;
+use Illuminate\Support\Facades\Log;
 
 
 /**
@@ -17,6 +20,17 @@ use http\Env\Request;
  */
 class PublicController
 {
+    private $userService;  //用户服务层
+    private $userCateService;   //用户分类服务层
+
+    /**
+     * UserController constructor.
+     */
+    public function __construct()
+    {
+        $this->userService = isset($this->userService) ?: new UserService();
+        $this->userCateService = isset($this->userCateService) ?: new UserCateService();
+    }
 
     /**
      * 上传图片
@@ -57,5 +71,33 @@ class PublicController
         Factory::miniProgram();
         $detail = Config::getConfigByNo($configNo);
         return Render::success("获取成功",$detail);
+    }
+
+    /**用户分类
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserCateLists(){
+        $lists = $this->userCateService->getUserCateLists();
+        return Render::success("获取成功",$lists);
+    }
+
+    /**
+     * 用户注册
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(Request $request){
+        $data = $request->get(['id','userType','user_name','phone','sex','position_name','org_name','birthday','user_brand',
+            'province','city','area','address']);
+        try {
+            if ($this->userService->register($this->userInfo, $data)) {
+                Log::info('【用户注册】----注册成功');
+                return Render::success("注册成功，待审核");
+            }
+            return Render::error($this->userService->getErrorMsg() ?: "注册失败，请重试");
+        } catch (\Exception $e) {
+            Log::error('【用户注册】----注册失败，e='.json_encode($e->getMessage()));
+            return Render::error('系统异常，请稍后再试！');
+        }
     }
 }

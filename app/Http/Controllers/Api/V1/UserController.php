@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Api\AddressValidator;
+use App\Http\Service\UserCateService;
 use App\Http\Service\UserService;
 use App\Library\Render;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 class UserController extends BaseController
 {
     private $userService;  //用户服务层
+    private $userCateService;   //用户分类服务层
 
     /**
      * UserController constructor.
@@ -24,6 +26,7 @@ class UserController extends BaseController
     public function __construct()
     {
         $this->userService = isset($this->userService) ?: new UserService();
+        $this->userCateService = isset($this->userCateService) ?: new UserCateService();
     }
 
     /**

@@ -112,4 +112,15 @@ class UserCate extends Base
             ->first();
     }
 
+    /**
+     * 用户列表
+     * @return mixed
+     */
+    public function getUserCateLists()
+    {
+        $map = ['is_delete'=>0, 'status'=>0];
+        $field = ['id','cate_name'];
+        return self::select($field)->where($map)->orderBy('id')->get();
+    }
+
 }

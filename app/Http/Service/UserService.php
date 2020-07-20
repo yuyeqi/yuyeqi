@@ -170,7 +170,7 @@ class UserService extends BaseSerivce
         //1.查询用的账户信息,校验积分
         $accountInfo = UserStatistic::getAccountDetail($userInfo["id"]);
         Log::info('[积分兑换,用户信息为：' . json_encode($accountInfo));
-        if (!$accountInfo || $accountInfo['status'] != 10) {
+        if (!$accountInfo || $accountInfo['status'] != 10 || $accountInfo['audit_status'] != 2) {
             Log::error("积分兑换现金-用户不存在");
             $this->setErrorMsg("用户不存在！");
             return false;
@@ -255,7 +255,7 @@ class UserService extends BaseSerivce
     {
         //1.查询用的账户信息,校验余额
         $accountInfo = UserStatistic::getAccountDetail($userInfo["id"]);
-        if (!$accountInfo || $accountInfo['status'] != 10) {
+        if (!$accountInfo || $accountInfo['status'] != 10 || $accountInfo['audit_status'] != 2) {
             Log::error("[用户提现]-用户信息不存在");
             $this->setErrorMsg("用户不存在！");
             return false;
@@ -482,5 +482,25 @@ class UserService extends BaseSerivce
             DB::rollBack();
             return false;
         }
+    }
+
+
+    /**
+     * 用户注册
+     * @param $userInfo
+     * @param $data
+     * @return bool
+     */
+    public function register($userInfo,$data)
+    {
+        Log::info('【用户注册】----注册开始，用户数据：userInfo='.json_encode($userInfo).',注册数据：data='.json_encode($data));
+        //1.检测用户是否微信登录授权
+        if (empty($userInfo)){
+            Log::error('【用户注册】----注册失败，注册要先微信授权，成功后才能注册');
+            $this->setErrorMsg("请先微信授权");
+            return false;
+        }
+        //2.用户注册
+        return $this->user->register($data);
     }
 }
