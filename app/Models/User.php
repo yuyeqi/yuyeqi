@@ -160,7 +160,7 @@ class User extends Base
      * @return mixed
      */
    public function updateUserAddress($userId,$addressId){
-        return self::where(['id'=>$userId])->update(['deliver_id'=>$addressId]);
+        return self::where(['id'=>$userId,'is_delete'=>0])->update(['delivery_id'=>$addressId]);
    }
 
     /**

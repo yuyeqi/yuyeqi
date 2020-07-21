@@ -57,8 +57,9 @@ class BookController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getBookDetail($id){
-        if ($id < 0){
+    public function getBookDetail(Request $request){
+        $id = $request->input('id',0);
+        if ($id <= 0){
             return  Render::error("参数错误,请重试!");
         }
         $detail = Book::getApiBookDetail($id);

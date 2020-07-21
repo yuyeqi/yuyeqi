@@ -45,8 +45,11 @@ class BookValidator extends FormRequest implements ValidatesWhenResolved
             'client_phone' => 'regex:/^1[345789][0-9]{9}$/',     //正则验证
             'province' => 'required',     //正则验证
             'city' => 'required',
-            'area' => 'required',
-            'address' => 'required'
+            'district' => 'required',
+            'community' => 'required',
+            'house_name' => 'required',
+            'arrive_time' => 'required',
+            'sex' => 'required'
         ];
     }
     /**

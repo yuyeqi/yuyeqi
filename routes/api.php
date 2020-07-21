@@ -16,6 +16,11 @@ use Illuminate\Http\Request;
 
 //不需要登陆
 Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
+    //注册
+    Route::prefix('public')->group(function (){
+        Route::get('getUserCateLists','V1\PublicController@getUserCateLists');
+        Route::post('register','V1\PublicController@register');
+    });
     //首页
     Route::prefix('index')->group(function (){
         Route::get('slideshow','V1\IndexController@getSlideShowLists');
@@ -31,6 +36,11 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
         Route::get('getCateLists','V1\ShopController@getCateLists');
         Route::get('getShopDetail','V1\ShopController@getShopDetail');
     });
+    //新闻
+    Route::prefix('news')->group(function (){
+        Route::get('getNewsPageLists','V1\NewsController@getNewsPageLists');
+        Route::get('getNewsDetail','V1\NewsController@getNewsDetail');
+    });
     //微信
     Route::prefix('wechat')->group(function (){
         Route::get('auth','V1\WxController@auth');
@@ -41,11 +51,6 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
 });
 //需要登陆
 Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
-    //新闻
-    Route::prefix('news')->group(function (){
-        Route::get('getNewsPageLists','V1\NewsController@getNewsPageLists');
-        Route::get('getNewsDetail/{id}','V1\NewsController@getNewsDetail');
-    });
     //私人定制
     Route::prefix('person')->group(function (){
         Route::get('getPersonCateLists','V1\PersonController@getPersonCateLists');
@@ -82,7 +87,7 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
     Route::prefix('book')->group(function (){
         Route::get('getBookLists','V1\BookController@getApiBookLists');
         Route::post('addBook','V1\BookController@addBook');
-        Route::get('getBookDetail/{id}','V1\BookController@getBookDetail');
+        Route::get('getBookDetail','V1\BookController@getBookDetail');
     });
     //商品兑换
     Route::prefix('exchange')->group(function (){

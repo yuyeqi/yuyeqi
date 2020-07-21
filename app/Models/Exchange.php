@@ -35,7 +35,7 @@ class Exchange extends Model
         return $this->hasMany('App\Models\Picture','pic_id','id')
             ->select(['id','pic_id','pic_url'])
             ->where(['is_delete'=>0])
-            ->where(['pic_type'=>Config::get('constants.PIC_GOODS_TYPE')]);
+            ->where(['pic_type'=>3]);
     }
     /**
      * 商品列表
@@ -127,12 +127,12 @@ class Exchange extends Model
      * @param array|null $id
      * @return mixed
      */
-    public static function getApiGoodsDetail(?array $id)
+    public static function getApiGoodsDetail($id)
     {
         $field = ['id','goods_no','goods_name','goods_cover','cate_id','sales_score','line_score',
             'sales_num','content','stock_num'];
         $map = ['is_delete'=>0,'status'=>10];
-        return self::select($field)->where($map)->first();
+        return self::select($field)->with('picture')->where($map)->first();
     }
 
     /**

@@ -58,7 +58,7 @@ class UserAddress extends Base
      * @return mixed
      */
     public function setDefaultUserAddress($id){
-        return self::where(['id'=>$id])->update(['default_status'=>1]);
+        return self::where(['id'=>$id,'delete_status'=>0])->update(['default_status'=>1]);
     }
 
     /**
@@ -67,7 +67,7 @@ class UserAddress extends Base
      * @return mixed
      */
     public function rebackDefaultUserAddress($userId){
-        return self::where(['user_id'=>$userId])->update(['default_status'=>0]);
+        return self::where(['user_id'=>$userId,'delete_status'=>0])->update(['default_status'=>0]);
     }
 
     /**

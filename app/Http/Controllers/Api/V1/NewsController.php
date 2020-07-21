@@ -40,10 +40,14 @@ class NewsController extends BaseController
 
     /**
      * 新闻详情
-     * @param $id
+     * @param $request
      * @return \Illuminate\Http\JsonResponse
      */
-   public function getNewsDetail($id){
+   public function getNewsDetail(Request $request){
+       $id = $request->input('id',0);
+       if ($id <= 0){
+           return  Render::error('参数错误');
+       }
        $detail = $this->newsService->getNewsDetail($id);
        return Render::success('获取成功',$detail);
    }

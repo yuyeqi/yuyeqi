@@ -389,7 +389,8 @@ class UserService extends BaseSerivce
      */
     public function getApiUserAddressLists($userInfo, $page, $limit)
     {
-        return $this->userAddress->getApiUserAddressLists($userInfo, $page, $limit);
+        $pageData = $this->userAddress->getApiUserAddressLists($userInfo, $page, $limit);
+        return $this->getPageData($pageData);
     }
 
     /**
@@ -489,6 +490,7 @@ class UserService extends BaseSerivce
             DB::commit();
             return true;
         } catch (\Exception $e) {
+            dd($e);
             Log::error('【设置用户默认地址】----错误信息：e:' . json_encode($e->getMessage()));
             $this->setErrorMsg("系统异常，请稍后再试！");
             DB::rollBack();

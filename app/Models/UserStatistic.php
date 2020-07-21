@@ -69,6 +69,6 @@ class UserStatistic extends Base
      * @return mixed
      */
     public function updateExchangeNum($data){
-        return self::where(['user_id'=>$data['id']])->update($data);
+        return self::where(['user_id'=>$data['user_id']])->update($data);
     }
 }

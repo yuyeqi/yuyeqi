@@ -7,9 +7,9 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Service\UserCateService;
 use App\Http\Service\UserService;
 use App\Library\Render;
+use App\Models\Base;
 use App\Models\Config;
-use EasyWeChat\Factory;
-use http\Env\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
  * Class PublicController
  * @package App\Http\Controllers\Api\V1
  */
-class PublicController
+class PublicController extends Base
 {
     private $userService;  //用户服务层
     private $userCateService;   //用户分类服务层
@@ -68,7 +68,6 @@ class PublicController
      * @return \Illuminate\Http\JsonResponse
      */
     public function getConfigInfo($configNo){
-        Factory::miniProgram();
         $detail = Config::getConfigByNo($configNo);
         return Render::success("获取成功",$detail);
     }
@@ -87,7 +86,7 @@ class PublicController
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request){
-        $data = $request->get(['id','userType','user_name','phone','sex','position_name','org_name','birthday','user_brand',
+            $data = $request->only(['userType','user_name','phone','sex','position_name','org_name','birthday','user_brand',
             'province','city','area','address']);
         try {
             if ($this->userService->register($this->userInfo, $data)) {

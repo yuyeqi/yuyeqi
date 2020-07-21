@@ -57,6 +57,9 @@ class ExchangeController extends BaseController
      */
    public function getApiGoodsDetail(Request $request){
        $id = $request->input('id',0);
+       if ($id <= 0){
+           return  Render::error('参数错误');
+       }
        $detail = Exchange::getApiGoodsDetail($id);
        return Render::success('获取成功',$detail);
    }

@@ -17,6 +17,9 @@ class ExchangeRecord extends Base
     //设置保存字段
     protected $guarded = [];
 
+    //时间转换
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = null;
 
     /**
      * 商品兑换记录

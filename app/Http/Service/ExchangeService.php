@@ -9,6 +9,7 @@ use App\Models\Goods;
 use App\Models\Picture;
 use App\Models\ScoreDeal;
 use App\Models\User;
+use App\Models\UserAddress;
 use App\Models\UserStatistic;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -176,25 +177,39 @@ class ExchangeService extends BaseSerivce
         Log::info('【商品兑换】---用户信息：userInfo='.json_encode($userInfo).',商品id='.$goods_id);
         //1.用户账户信息,检测用户账户积分
         $userAccount = UserStatistic::getAccountDetail($userInfo['id']);
-        if ($userAccount->isEmpty()) {
+        if (!$userAccount) {
             Log::error('【商品兑换】---用户不存在');
             $this->setErrorMsg('用户不存在，请联系管理员');
             return false;
         }
-        //2.获取商品详情
+        //2.检测用户是否有收货地址
+        $user = User::getUserDetail($userInfo['id']);
+        if ($user->delivery_id <= 0){
+            Log::error('【商品兑换】----用户没有默认收货地址，userInfo='.json_encode($user));
+            $this->setErrorMsg('请设置默认收货地址');
+            return  false;
+        }
+        //3.检测收货地址是否存在
+        $userDefaultAddress = UserAddress::getDefaultUserAddress($user->delivery_id);
+        if (!$userDefaultAddress){
+            Log::error('【商品兑换】----默认收货地址不存在');
+            $this->setErrorMsg('默认地址不存在');
+            return  false;
+        }
+        //4.获取商品详情
         $goodsDetail = Exchange::getApiGoodsDetail($goods_id);
-        if ($goodsDetail->isEmpty()){
+        if (!$goodsDetail){
             Log::error('【商品兑换】---商品不存在：id='.$goods_id);
             $this->setErrorMsg('商品不存在或已下架');
             return false;
         }
-        //检测商品库存
+        //5检测商品库存
         if ($goodsDetail->stock_num <= 0){
             Log::error('【商品兑换】---商品库存不足：id='.$goods_id);
             $this->setErrorMsg('商品库存不足');
             return false;
         }
-        //3.检测用户积分是足够
+        //6.检测用户积分是足够
         $userScore = $userAccount->score;   //用户积分
         $goodsScore = $goodsDetail->sales_score;    //兑换商品积分需要的积分
         $diffScore = bcsub($userScore,$goodsScore);
@@ -204,36 +219,36 @@ class ExchangeService extends BaseSerivce
             return  false;
         }
         Log::error('【积分兑换】----用户积分：userScore='.$userScore.',商品积分:goodsScore='.$goodsScore.',用户剩余积分；socre='.$diffScore);
-        //4.生成兑换订单数据
+        //7.生成兑换订单数据
         $orderNo = $this->getOrderNo('DH');
         $exchangeData = [
             'deal_no' => $orderNo,
             'user_id' => $userInfo['id'],
-            'address_id' => $userInfo['id'],
-            'user_name' => $userInfo['id'],
-            'goods_id' => $userInfo['id'],
-            'goods_name' => $userInfo['id'],
-            'deal_score' => $userInfo['id'],
-            'surplus_score' => $userInfo['id']
+            'address_id' => $user['delivery_id'],
+            'user_name' => $userInfo['user_name'],
+            'goods_id' => $goodsDetail['id'],
+            'goods_name' => $goodsDetail['goods_name'],
+            'deal_score' => $goodsDetail['sales_score'],
+            'surplus_score' => $diffScore
         ];
         Log::info('【商品兑换】----兑换订单数据：exchangeData='.json_encode($exchangeData));
         //开启事务
         DB::beginTransaction();
         try {
-            //5.创建兑换订单
+            //8.创建兑换订单
             ExchangeRecord::create($exchangeData);
-            //6.修改兑换的兑换数量
+            //9.修改兑换的兑换数量
             $this->exchange->updateExchangeNum($goods_id);
             //7.修改用户的兑换的数量和积分
             $accountData = [
-                'userId' => $userInfo['id'],
+                'user_id' => $userInfo['id'],
                 'score' => $diffScore,
                 'withdraw_score' => bcadd($userAccount['withdraw_score'],$goodsScore),
                 'present_score' => bcadd($userAccount['present_score'],$goodsScore)
             ];
             Log::info('【商品兑换】----更新的账户信息:account='.json_encode($accountData));
             $this->userStatistic->updateExchangeNum($accountData);
-            //8.生成积分兑换记录
+            //10.生成积分兑换记录
             $scoreLog = [
                 'deal_no' => $orderNo,
                 'user_id' => $userInfo['id'],
@@ -245,12 +260,13 @@ class ExchangeService extends BaseSerivce
             ];
             ScoreDeal::create($scoreLog);
             Log::info('【商品兑换】----兑换成功');
-            //9.减少库存
+            //11.减少库存
             $this->exchange->updateExchangeStock($goods_id);
             //提交事务
             DB::commit();
             return  true;
         } catch (\Exception $e) {
+            dd($e);
             Log::error('【商品兑换】----系统异常：e='.json_encode($e->getMessage()));
             $this->setErrorMsg('系统异常，请稍后再试！');
             return  false;

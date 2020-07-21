@@ -74,7 +74,7 @@ class BookService extends BaseSerivce
         $data['book_no'] = $this->createBookNum();
         //根据预约人的用户类型获取预约的赠送积分
         $userCateInfo = UserCate::getUserCateInfoByUserType($userInfo['user_type']);
-        if (!$userInfo){
+        if (!$userCateInfo){
             Log::error('[用户预约]------用户缺少类型，无法预约--------------用户id：'.$userInfo['id'].'，用户姓名：'.$userInfo['user_name']);
             $this->setErrorMsg('缺少用户类型，请联系管理员,');
             return false;
