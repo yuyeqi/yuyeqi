@@ -14,8 +14,9 @@ class WalletDeal extends Base
     //定义模型关联表
     protected $table = 'hp_wallet_deal';
 
-    //禁用自动更新时间
-    public $timestamps = false;
+    //时间转换
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = null;
 
     //设置保存字段
     protected $guarded = [];

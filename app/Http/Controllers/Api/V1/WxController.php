@@ -88,6 +88,11 @@ class WxController extends Controller
         return Render::success('获取token成功',compact('token'));
     }
 
+    /**
+     * 微信登录
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function wxLogin(Request $request){
         $data = $request->only(['iv','encryptedData']);
         //1.验证数据

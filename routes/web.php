@@ -172,11 +172,11 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
     Route::prefix('exchange')->group(function (){
         Route::get('index','ExchangeController@index')->name('exchange_index');
         Route::get('getLists','ExchangeController@getLists')->name('exchange_lists');
-        Route::get('edit/{id}','GoodsController@edit')->name('editShow')->where('id', '[0-9]+');
-        Route::get('detail/{id}','GoodsController@detail')->name('goods_detail')->where('id', '[0-9]+');
-        Route::get('addShow','GoodsController@addShow')->name('goods_add_show');
-        Route::post('add','GoodsController@add')->name('goods_add');
-        Route::post('updateGoods','GoodsController@updateGoods')->name('goods_edit');
-        Route::post('delBatch','GoodsController@delBatch')->name('goods_delete_all');
+        Route::get('edit/{id}','ExchangeController@edit')->name('editShow')->where('id', '[0-9]+');
+        Route::get('detail/{id}','ExchangeController@detail')->name('exchange_detail')->where('id', '[0-9]+');
+        Route::get('addShow','ExchangeController@addShow')->name('exchange_add_show');
+        Route::post('add','ExchangeController@add')->name('exchange_add');
+        Route::post('updateGoods','ExchangeController@updateGoods')->name('exchange_edit');
+        Route::post('delBatch','ExchangeController@delBatch')->name('exchange_delete_all');
     });
 });

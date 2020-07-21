@@ -106,7 +106,7 @@
                             <button type="button" class="layui-btn" id="test1">上传图片</button>
                             <div class="layui-upload-list">
                                 <div id="" class="file-iteme">
-                                    <div class="handle" id="handle"><i class="layui-icon layui-icon-delete"></i></div>
+                                    <div class="handle" id="handle"></div>
                                     <img style="width: 100px;height: 100px;" alt="" id="uploadPic">
                                 </div>
                             </div>

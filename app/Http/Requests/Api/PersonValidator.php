@@ -44,7 +44,7 @@ class PersonValidator extends FormRequest implements ValidatesWhenResolved
             'cate_id' => 'required',
             'person_name' => 'required',
             'phone' => 'regex:/^1[345789][0-9]{9}$/',
-            'company' => 'required|email',
+            'company' => 'required',
             'ocupation' => 'required',
             'sales_price' => 'required',
             'person_price' => 'required'

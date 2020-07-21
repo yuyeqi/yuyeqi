@@ -169,8 +169,8 @@ class UserService extends BaseSerivce
     {
         //1.查询用的账户信息,校验积分
         $accountInfo = UserStatistic::getAccountDetail($userInfo["id"]);
-        Log::info('[积分兑换,用户信息为：' . json_encode($accountInfo));
-        if (!$accountInfo || $accountInfo['status'] != 10 || $accountInfo['audit_status'] != 2) {
+        Log::info('【积分兑换】-----用户信息为：' . json_encode($accountInfo));
+        if (!$accountInfo || $accountInfo['status'] != 10) {
             Log::error("积分兑换现金-用户不存在");
             $this->setErrorMsg("用户不存在！");
             return false;
@@ -178,12 +178,19 @@ class UserService extends BaseSerivce
         //检测积分余额是否大于兑现积分
         $diffScore = bcsub($accountInfo['score'], $score, 2);
         if ($diffScore < 0) {
-            Log::error("积分兑换-积分不足");
+            Log::error("【积分兑换】-------积分不足");
             $this->setErrorMsg("积分不足！");
             return false;
         }
         //2.获取兑换比例
-        $exchageRate = Config::getConfigByNo("scoreToCash");
+         $config= Config::getConfigByNo("scoreToCash");
+        $exchageRate = 0;
+        if (!$config){
+            Log::info('【积分兑换】----缺少积分兑换配置项');
+            $this->setErrorMsg("缺少系统配置，请联系管理人员");
+            return  false;
+        }
+        $exchageRate = $config->config_value;
         if (empty($exchageRate) || $exchageRate <= 0) {
             Log::error("积分兑换-缺少兑换比例，请联系管理员");
             $this->setErrorMsg("缺少兑换比例，请联系管理人员!");
@@ -201,8 +208,7 @@ class UserService extends BaseSerivce
             'deal_score' => $score,
             'surplus_score' => $diffScore,
             'deal_type' => 4,
-            'remark' => $remark,
-            'create_time' => time()
+            'remark' => $remark
         ];
         //现金记录交易数据
         $cashLog = [
@@ -212,8 +218,7 @@ class UserService extends BaseSerivce
             'amount' => $cash,
             'surplus_amount' => $newCash,
             'deal_type' => 2,
-            'remark' => $remark,
-            'create_time' => time()
+            'remark' => $remark
         ];
         //更新账户数据
         $withdrawScore = $accountInfo['withdraw_score']; //以用积分
@@ -255,13 +260,20 @@ class UserService extends BaseSerivce
     {
         //1.查询用的账户信息,校验余额
         $accountInfo = UserStatistic::getAccountDetail($userInfo["id"]);
-        if (!$accountInfo || $accountInfo['status'] != 10 || $accountInfo['audit_status'] != 2) {
+        if (!$accountInfo || $accountInfo['status'] != 10) {
             Log::error("[用户提现]-用户信息不存在");
             $this->setErrorMsg("用户不存在！");
             return false;
         }
         //检测提现的最小金额
-        $minWithdraw = Config::getConfigByNo("minWithdraw");
+        $config = Config::getConfigByNo("withdrawCush");
+        $minWithdraw = 0;
+        if (!$config){
+            Log::info('【用户提现】----最小金额未配置');
+            $this->setErrorMsg("缺少系统配置，请联系管理人员");
+            return  false;
+        }
+        $minWithdraw = $config->config_value;
         if ($cush < $minWithdraw) {
             Log::error("[用户提现]-提现金额小于" . $minWithdraw);
             $this->setErrorMsg("提现金额不能小于" . $minWithdraw . '元');
@@ -502,5 +514,19 @@ class UserService extends BaseSerivce
         }
         //2.用户注册
         return $this->user->register($data);
+    }
+
+    /**
+     * 提现记录
+     * @param array $userInfo
+     * @param string|null $status
+     * @param string|null $page
+     * @param string|null $limit
+     */
+    public function getCushLists($userInfo, $status, $page, $limit)
+    {
+        $field = ['id','amount','status','create_time'];
+        $pageData = Withdraw::getCushLists($userInfo, $field, $status, $page, $limit);
+        return $this->getPageData($pageData);
     }
 }

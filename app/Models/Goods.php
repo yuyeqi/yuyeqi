@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Config;
  * Class Goods
  * @package App\Models
  */
-class Goods extends BaseController
+class Goods extends Base
 {
     //定义模型关联表
     protected $table = 'hp_goods';
@@ -24,39 +24,6 @@ class Goods extends BaseController
     protected $hidden = ['is_delete'];
     //设置保存字段
     protected $guarded  = ['mulPic'];
-
-    //状态获取器
-    public function getGoodsStatusAttribute($value){
-        $data = [
-            10=>['status'=>10,'status_name'=>"正常"],
-            20=>['status'=>20,'status_name'=>"下架"]
-        ];
-        return $data[$value];
-    }
-    //新品获取器
-    public function getIsNewAttribute($value){
-        $data = [
-            0=>['status'=>0,'status_name'=>"正常"],
-            1=>['status'=>1,'status_name'=>"新品"]
-        ];
-        return $data[$value];
-    }
-    //热门获取器
-    public function getIsHotAttribute($value){
-        $data = [
-            0=>['status'=>0,'status_name'=>"正常"],
-            1=>['status'=>1,'status_name'=>"热门"]
-        ];
-        return $data[$value];
-    }
-    //推荐获取器
-    public function getIsRecommendAttribute($value){
-        $data = [
-            0=>['status'=>0,'status_name'=>"正常"],
-            1=>['status'=>1,'status_name'=>"推荐"]
-        ];
-        return $data[$value];
-    }
 
     /**
      * 关联商品轮播图
@@ -128,7 +95,7 @@ class Goods extends BaseController
      * @return mixed
      */
     public function getNewsGoods(){
-        $map = ['is_new'=>0,'goods_status'=>10,'is_delete'=>0];
+        $map = ['is_new'=>1,'goods_status'=>10,'is_delete'=>0];
         $field = ['id','goods_name','goods_cover','good_price'];
         return self::select($field)->where($map)->orderBy('sort','desc')->take(4)->get();
     }

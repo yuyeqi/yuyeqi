@@ -45,10 +45,9 @@ class PersonController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function addPerson(PersonValidator $personValidator){
-        $data = $personValidator->only(['id','cate_id','person_name','phone','company',
+        $data = $personValidator->only(['cate_id','person_name','phone','company',
             'ocupation','person_remark','person_price','sales_price']);
-        $data['user_id'] = $this->userId;
-        if ($this->personService->addPerson($data)){
+        if ($this->personService->addPerson($this->userInfo,$data)){
             return Render::success('定制成功，等待审核');
         }
         return Render::error($this->personService->getErrorMsg());

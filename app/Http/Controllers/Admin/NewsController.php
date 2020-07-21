@@ -63,11 +63,12 @@ class NewsController extends BaseController
         //添加数据
         try {
             $result = $this->newsService->addNews($data, $this->loginInfo);
-            if ($result > 0){
+            if ($result){
                 return Render::success('添加成功');
             }
             return Render::error('添加失败');
         } catch (\Exception $e) {
+            dd($e);
             return Render::error("系统异常，请稍后再试！");
         }
     }

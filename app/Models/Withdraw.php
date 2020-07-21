@@ -17,6 +17,9 @@ class Withdraw extends Base
     //设置保存字段
     protected $guarded = [];
 
+    //时间转换
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = null;
     /**
      * 提心记录
      * @param $userInfo

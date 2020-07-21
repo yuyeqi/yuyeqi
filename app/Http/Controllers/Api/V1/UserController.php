@@ -7,6 +7,8 @@ use App\Http\Requests\Api\AddressValidator;
 use App\Http\Service\UserCateService;
 use App\Http\Service\UserService;
 use App\Library\Render;
+use App\Models\Config;
+use App\Models\UserStatistic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -43,16 +45,22 @@ class UserController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function exchangeCash(Request $request){
-        $score = $request->input("score",0);
-        $remark = $request->input("remark",'');
-        try {
-            if ($this->userService->exchangeCash($score,$remark,$this->userInfo)) {
-                return Render::success("兑换成功");
+        //get请求获取页面数据
+        if ($request->isMethod('get')){
+            //积分兑现背景图和提示语
+            $detail = Config::getConfigByNo('scoreToCash');
+            return  Render::success('获取成功',compact('detail'));
+        }else{
+            $score = $request->input("score",0);
+            $remark = $request->input("remark",'');
+            try {
+                if ($this->userService->exchangeCash($score,$remark,$this->userInfo)) {
+                    return Render::success("兑换成功");
+                }
+                return  Render::error($this->userService->getErrorMsg() ?: "兑换失败");
+            } catch (\Exception $e) {
+                return  Render::error("系统异常，请稍后再试！");
             }
-            return  Render::error($this->userService->getErrorMsg() ?: "兑换失败");
-        } catch (\Exception $e) {
-            dd($e);
-            return  Render::error("系统异常，请稍后再试！");
         }
 
     }
@@ -63,6 +71,12 @@ class UserController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function withdraw(Request $request){
+        //提现页面数据
+        if ($request->isMethod('get')){
+            //积分兑现背景图和提示语
+            $detail = Config::getConfigByNo('withdrawCush');
+            return  Render::success('获取成功',compact('detail'));
+        }
         $cush = $request->input("cush",0);
         $remark = $request->input("remark",'');
         try {
@@ -114,6 +128,28 @@ class UserController extends BaseController
         return Render::success("获取成功",$lists);
     }
 
+    /**
+     * 账户页面信息
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAccountInfo(){
+        //账户信息
+        $field = ['id','amount','withdraw_amount','frozen_amount'];
+        $account = UserStatistic::getAccountDetail($this->userInfo['id'],$field);
+        $background = Config::getConfigByNo('accountBg')->background;
+        return Render::success('获取成功',compact('account','background'));
+    }
+    /**
+     * 积分页面信息
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getScoreInfo(){
+        //账户信息
+        $field = ['id','score','withdraw_score','present_score'];
+        $account = UserStatistic::getAccountDetail($this->userInfo['id'],$field);
+        $background = Config::getConfigByNo('accountBg')->background;
+        return Render::success('获取成功',compact('account','background'));
+    }
     /**
      * 积分列表
      * @param Request $request

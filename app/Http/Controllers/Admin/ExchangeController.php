@@ -61,8 +61,8 @@ class ExchangeController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function detail($id){
-        $detail = $this->goodsSerivce->getGoodsDetailById($id);
-        return view('admin.goods.show',['detail'=>$detail]);
+        $detail = $this->exchangeCateService->getGoodsDetailById($id);
+        return view('admin.exchange.show',['detail'=>$detail]);
     }
 
     /**
@@ -71,8 +71,8 @@ class ExchangeController extends BaseController
      */
     public function addShow(){
         //商品类别列表
-        $lists = $this->goodsCateService->getCateList();
-        return view('admin.goods.add',compact('lists'));
+        $lists = $this->exchangeCateService->getCateList();
+        return view('admin.exchange.add',compact('lists'));
     }
     /**
      * 添加商品
@@ -80,11 +80,11 @@ class ExchangeController extends BaseController
      */
     public function add(Request $validator){
         //接收数据
-        $data = $validator->only(['goods_no','goods_name','good_price','book_price','score','sales_initial','sort'
-        ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic','cate_id','goods_desc','goods_content']);
+        $data = $validator->only(['goods_no','goods_name','goods_cover','cate_id','goods_desc','content','sales_score'
+        ,'line_score','sales_num','stock_num','sort','status','mulPic']);
         //添加数据
         try {
-            $res = $this->goodsSerivce->addGoods($data, $this->loginInfo);
+            $res = $this->exchangeSerivce->addGoods($data, $this->loginInfo);
             if ($res) {
                 return Render::success('添加成功');
             } else {
@@ -104,7 +104,7 @@ class ExchangeController extends BaseController
         $detail = $this->goodsSerivce->getGoodsDetailById($id);
         //商品类别列表
         $lists = $this->goodsCateService->getCateList();
-        return view("admin.goods.edit",compact('detail','lists'));
+        return view("admin.exchange.edit",compact('detail','lists'));
     }
     /**
      * 修改商品

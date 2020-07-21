@@ -20,9 +20,9 @@ class Config extends Base
      * @return mixed
      */
     public static function getConfigByNo($configNo){
-        $field = ['config_no','config_name',"config_content"];
+        $field = ['config_no','config_name','background','config_value','content'];
         $config = self::select($field)->where(['config_no'=>$configNo])->first();
-        return $config['config_content'];
+        return $config;
     }
 
 }

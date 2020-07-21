@@ -9,7 +9,7 @@
                     </label>
                     <div class="layui-input-inline">
                         <input type="text" id="news_title" name="news_title" required="" lay-verify="required"
-                               autocomplete="off" class="layui-input">
+                               autocomplete="off" class="layui-input" style="width: 800px">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -21,7 +21,7 @@
                             <button type="button" class="layui-btn" id="test1">上传图片</button>
                             <div class="layui-upload-list">
                                 <div id="" class="file-iteme">
-                                    <div class="handle" id="handle"><i class="layui-icon layui-icon-delete"></i></div>
+                                    <div class="handle" id="handle"></div>
                                     <img style="width: 100px;height: 100px;" alt="" id="uploadPic">
                                 </div>
                             </div>

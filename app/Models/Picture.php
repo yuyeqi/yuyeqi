@@ -17,8 +17,6 @@ class Picture extends Base
     const CREATED_AT = 'create_time';
     const UPDATED_AT = null;
 
-    //时间格式
-    protected $dateFormat = 'U';
 
     //隐藏字段
     protected $hidden = ['is_delete'];

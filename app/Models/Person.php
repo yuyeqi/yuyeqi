@@ -18,31 +18,6 @@ class Person extends Base
     //设置保存字段
     protected $guarded  = ['is_audit','is_delete',];
 
-    /**
-     * 状态
-     * @param $value
-     * @return mixed
-     */
-    public function getIsAuditAttribute($value){
-        if ($value == 10){
-            $this->attributes['is_audit'] = [
-                'status' => $value,
-                'status_name' => '审核中'
-            ];
-        }else if ($value == 20){
-            $this->attributes['is_audit'] = [
-                'status' => $value,
-                'status_name' => '通过'
-            ];
-        }else{
-            $this->attributes['is_audit'] = [
-                'status' => $value,
-                'status_name' => '拒绝'
-            ];
-        }
-        return $this->attributes['is_audit'];
-    }
-
     /*--------------------------------小程序----------------------------------*/
     /**
      * 查询本月是否已经提交过私人定制计划
@@ -52,9 +27,9 @@ class Person extends Base
     public function getMonthPerson($userId)
     {
         //当月
-        $month = date('Y-m',time());
+        $month = date('m');
         $map = ['user_id'=>$userId,'is_delete'=>0];
-        return self::where($map)->whereIn('is_audit',[10,20])->whereMonth('create_time',$month)->count();
+        return self::where($map)->whereIn('is_audit',[10,20])->whereMonth('create_time','7')->count();
     }
 
     /**

@@ -29,14 +29,14 @@ class PersonService extends BaseSerivce
      * @param array $data
      * @return mixed
      */
-    public function addPerson(array $data)
+    public function addPerson($userInfo,$data)
     {
         //每月只能提交一次
-        //dd($this->person->getMonthPerson($data['user_id']));
-        if ($this->person->getMonthPerson($data['user_id']) > 0){
+        if ($this->person->getMonthPerson($userInfo['id']) > 0){
             $this->setErrorMsg('你本月已经提交过定制计划');
             return false;
         }
+        $data['user_id'] = $userInfo['id'];
         return $this->person->addPerson($data);
     }
 

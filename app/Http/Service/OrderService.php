@@ -140,7 +140,7 @@ class OrderService extends BaseSerivce
         //商品信息
         $goodsDetail = $this->goods->getApiGoodsDetailById($data["goods_id"]);
         //检测商品是否存在
-        if ($goodsDetail["goods_status"]['status'] != 10 || $goodsDetail["is_delete"] != 0) {
+        if ($goodsDetail["goods_status"] != 10 || $goodsDetail["is_delete"] != 0) {
             $this->setErrorMsg("商品已下架或不存在");
             return false;
         }
@@ -157,7 +157,6 @@ class OrderService extends BaseSerivce
         $data['buyer_remark'] = $data['buyer_remark'];
         $data['goods_name'] = $goodsDetail['goods_name'];
         $data['goods_cover'] = $goodsDetail['goods_cover'];
-        $data['create_time'] = time();
         return $this->order->createOrder($data);
     }
 

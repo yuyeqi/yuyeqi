@@ -62,10 +62,14 @@ class ShopController extends BaseController
 
     /**
      * 商品详情
-     * @param $id
+     * @param $request
      * @return \Illuminate\Http\JsonResponse商品详情
      */
-    public function getShopDetail($id){
+    public function getShopDetail(Request $request){
+        $id = $request->input('id',0);
+        if ($id <= 0){
+            return  Render::error('参数错误，请稍后再试!');
+        }
         $detail = $this->goodsService->getApiGoodsDetail($id);
         return Render::success("获取成功",$detail);
     }
@@ -83,6 +87,7 @@ class ShopController extends BaseController
             }
             return Render::error($this->orderSerice->getErrorMsg() ?: "创建订单失败");
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return Render::error("创建失败");
         }
     }
@@ -121,7 +126,7 @@ class ShopController extends BaseController
     public function comment(Request $request){
         $goods_id = $request->input('goods_id',0);
         $content = $request->input('content');
-        $pictures = $request->input('pictures','[]');
+        $pictures = $request->input('pictures','');
         if ($goods_id <= 0){
             Log::error('【订单评价】----参数错误，id:'.$goods_id);
             return Render::error("参数错误，请重试");

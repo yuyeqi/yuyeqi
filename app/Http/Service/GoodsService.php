@@ -71,7 +71,6 @@ class GoodsService extends BaseSerivce
                     $img[$key]['pic_id'] = $res->id;
                     $img[$key]['pic_type'] = Config::get('constants.PIC_GOODS_TYPE');
                     $img[$key]['pic_url'] = $item;
-                    $img[$key]['create_time'] = time();
                 }
                 $this->picture->addPicture($img);
             }

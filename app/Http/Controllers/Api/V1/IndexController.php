@@ -10,7 +10,9 @@ use App\Http\Service\NewsService;
 use App\Http\Service\SlideshowService;
 use App\Http\Service\UserService;
 use App\Library\Render;
+use App\Models\Config;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /**
  * 首页控制器
@@ -55,12 +57,10 @@ class IndexController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function getUserInfo(){
-        $id = 1;
-        $userinfo = $this->userService->getUserInfo($id);
-        $welcomMsg = '欢迎你进入黄派门窗';
+        $userinfo = $this->userService->getUserInfo($this->userInfo['id']);
         $data['userinfo'] = $userinfo;
-        $data['welcomeMsg'] = $welcomMsg;
-        return Render::success('获取成功',$data);
+        $welcomeMsg = Config::getConfigByNo('welcomeMsg')->content;
+        return Render::success('获取成功',compact('userinfo','welcomeMsg'));
     }
 
     /**
@@ -97,7 +97,12 @@ class IndexController extends BaseController
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCasesDetail($id){
+    public function getCasesDetail(Request $request){
+        $id = $request->input('id',0);
+        if ($id <= 0){
+            Log::error('【案例详情】------参数错误无，缺少id');
+            return  Render::error("参数错误，请重试!");
+        }
         $detail = $this->casesService->getCasesDetail($id);
         return Render::success('获取成功',$detail);
     }

@@ -20,34 +20,34 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>商品价格
+                    <label for="sales_score" class="layui-form-label">
+                        <span class="x-red">*</span>兑换积分
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="good_price" name="good_price" required="" lay-verify="good_price"
+                        <input type="number" id="sales_score" name="sales_score" required="" lay-verify="sales_score"
                                autocomplete="off" class="layui-input">
                     </div>
                     <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>商品订金
+                        <span class="x-red">*</span>划线积分
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="book_price" name="book_price" required="" lay-verify="book_price"
+                        <input type="number" id="line_score" name="line_score" required=""
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>赠送积分
+                        <span class="x-red">*</span>兑换数量
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="score" name="score"  required="" lay-verify="score"
+                        <input type="number" id="sales_num" name="sales_num"  required=""
                                autocomplete="off" class="layui-input">
                     </div>
                     <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>初始销量
+                        <span class="x-red">*</span>库存数量
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="sales_initial" name="sales_initial"  required="" lay-verify="sales_initial"
+                        <input type="number" id="stock_num" name="stock_num"  required=""
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -79,23 +79,7 @@
                         <input type="radio" name="goods_status" value="10" title="上架" checked="">
                         <input type="radio" name="goods_status" value="20" title="下架">
                     </div>
-                    <label class="layui-form-label">新品</label>
-                    <div class="layui-input-inline">
-                        <input type="radio" name="is_new" value="0" title="正常" checked="">
-                        <input type="radio" name="is_new" value="1" title="新品">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">热门</label>
-                    <div class="layui-input-inline">
-                        <input type="radio" name="is_hot" value="0" title="正常" checked="">
-                        <input type="radio" name="is_hot" value="1" title="热门">
-                    </div>
-                    <label class="layui-form-label">推荐</label>
-                    <div class="layui-input-inline">
-                        <input type="radio" name="is_recommend" value="0" title="正常" checked="">
-                        <input type="radio" name="is_recommend" value="1" title="推荐">
-                    </div>
+
                 </div>
                 <div class="layui-form-item">
                     <label for="phone" class="layui-form-label">
@@ -106,7 +90,7 @@
                             <button type="button" class="layui-btn" id="test1">上传图片</button>
                             <div class="layui-upload-list">
                                 <div id="" class="file-iteme">
-                                    <div class="handle" id="handle"><i class="layui-icon layui-icon-delete"></i></div>
+                                    <div class="handle" id="handle"></div>
                                     <img style="width: 100px;height: 100px;" alt="" id="uploadPic">
                                 </div>
                             </div>
@@ -194,16 +178,16 @@
                     data.field.content = layedit.getContent(editIndex);//获取编辑器内容并赋值给保存对象内
                     var fields = data.field;
                     var coverPic = $("#uploadPic").attr('src');
-                    var data = {goods_no:fields.goods_no,goods_name:fields.goods_name,good_price:fields.good_price,book_price:fields.book_price,
-                        score:fields.score,sales_initial:fields.sales_initial,sort:fields.sort,is_new:fields.is_new, goods_status:fields.goods_status,
+                    var data = {goods_no:fields.goods_no,goods_name:fields.goods_name,cate_id:fields.cate_id,goods_desc:fields.goods_desc,
+                        sales_score:fields.sales_score,line_score:fields.line_score,sales_num:fields.sales_num,stock_num:fields.stock_num, sort:fields.sort,
                         is_hot:fields.is_hot,is_recommend:fields.is_recommend,goods_cover:coverPic,mulPic:mulPic,goods_desc:fields.goods_desc,
-                        goods_content:fields.content,cate_id:fields.cate_id};
+                        content:fields.content,status:fields.status};
                         $.ajax({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             type: 'POST',
-                            url: '{{route('goods_add')}}',
+                            url: '{{route('exchange_add')}}',
                             data: data,
                             dataType: 'json',
                             success: function (data) {

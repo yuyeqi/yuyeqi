@@ -16,22 +16,6 @@ class Order extends Base
     const UPDATED_AT = 'update_time';
 
     protected $guarded = [];
-    //支付状态
-    public function getPayStatusAttribute($value){
-        $data = [
-            '10'=>['status'=>10,'status_name'=>'未支付'],
-            '20'=>['status'=>20,'status_name'=>'已支付'],
-            '30'=>['status'=>30,'status_name'=>'退款']
-        ];
-        return $data[$value];
-    }
-    /**
-     * 支付时间
-     * @return false|string
-     */
-    public function getPayTimeAttribute(){
-        return date('Y-m-d H:i:s', $this->attributes['create_time']);
-    }
 
     /*------------------------------------------后端---------------------------------------------------*/
     /**
@@ -167,7 +151,7 @@ class Order extends Base
         //输出字段
         $field = ['id','goods_cover','goods_name','total_price','goods_price','pay_status'];
         //where条件
-        $map = ['id'=>$userInfo['id'],'is_delete'=>0];
+        $map = ['user_id'=>$userInfo['id'],'is_delete'=>0];
         return self::select($field)
             ->where($map)
             ->orderBy('create_time','desc')

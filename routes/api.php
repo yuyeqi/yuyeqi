@@ -13,17 +13,24 @@ use Illuminate\Http\Request;
 |
 */
 
+
 //不需要登陆
-
-//公共路由
-Route::prefix('index')->group(function (){
-    Route::get('slideshow','V1\IndexController@getSlideShowLists');
-    Route::get('getUserInfo','V1\IndexController@getUserInfo');
-    Route::get('getNewsGoods','V1\IndexControllerid@getNewsGoods');
-});
-
-//需要登陆
 Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
+    //首页
+    Route::prefix('index')->group(function (){
+        Route::get('slideshow','V1\IndexController@getSlideShowLists');
+        Route::get('getUserInfo','V1\IndexController@getUserInfo');
+        Route::get('getNewsGoods','V1\IndexController@getNewsGoods');
+        Route::get('getNewsLists','V1\IndexController@getNewsLists');
+        Route::get('getCaseLists','V1\IndexController@getCaseLists');
+        Route::get('getCasesDetail','V1\IndexController@getCasesDetail');
+    });
+    //商城
+    Route::prefix('shop')->group(function (){
+        Route::get('getLists','V1\ShopController@getLists');
+        Route::get('getCateLists','V1\ShopController@getCateLists');
+        Route::get('getShopDetail','V1\ShopController@getShopDetail');
+    });
     //微信
     Route::prefix('wechat')->group(function (){
         Route::get('auth','V1\WxController@auth');
@@ -34,15 +41,6 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
 });
 //需要登陆
 Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
-    //首页
-    Route::prefix('index')->group(function (){
-        Route::get('slideshow','V1\IndexController@getSlideShowLists');
-        Route::get('getUserInfo','V1\IndexController@getUserInfo');
-        Route::get('getNewsGoods','V1\IndexControllerid@getNewsGoods');
-        Route::get('getNewsLists','V1\IndexController@getNewsLists');
-        Route::get('getCaseLists','V1\IndexController@getCaseLists');
-        Route::get('getCasesDetail/{id}','V1\IndexController@getCasesDetail');
-    });
     //新闻
     Route::prefix('news')->group(function (){
         Route::get('getNewsPageLists','V1\NewsController@getNewsPageLists');
@@ -55,9 +53,6 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
     });
     //商城
     Route::prefix('shop')->group(function (){
-        Route::get('getLists','V1\ShopController@getLists');
-        Route::get('getCateLists','V1\ShopController@getCateLists');
-        Route::get('getShopDetail/{id}','V1\ShopController@getShopDetail');
         Route::post('createOrder','V1\ShopController@createOrder');
         Route::get('getOrderLists','V1\ShopController@getOrderLists');
         Route::get('getOrderDetail','V1\ShopController@getOrderDetail');
@@ -67,6 +62,10 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
     Route::prefix('user')->group(function (){
         Route::get('getUserAccount','V1\UserController@getUserAccount');
         Route::post('exchangeCash','V1\UserController@exchangeCash');
+        Route::get('exchangeCash','V1\UserController@exchangeCash');
+        Route::get('getAccountInfo','V1\UserController@getAccountInfo');
+        Route::get('getScoreInfo','V1\UserController@getScoreInfo');
+        Route::get('withdraw','V1\UserController@withdraw');
         Route::post('withdraw','V1\UserController@withdraw');
         Route::get('getWalletList','V1\UserController@getWalletList');
         Route::get('getCushLists','V1\UserController@getCushLists');
@@ -88,6 +87,7 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
     //商品兑换
     Route::prefix('exchange')->group(function (){
         Route::get('getCatelist','V1\ExchangeController@getCatelist');
+        Route::get('getGoodsLists','V1\ExchangeController@getGoodsLists');
         Route::get('getApiGoodsDetail','V1\ExchangeController@getApiGoodsDetail');
         Route::post('createOrder','V1\ExchangeController@createOrder');
     });

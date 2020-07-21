@@ -17,51 +17,6 @@ class User extends Base
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
 
-    //性别
-    public function getSexAttribute($value)
-    {
-        $data = [
-            '0' => ['status' => 0, 'status_name' => '未知'],
-            '1' => ['status' => 1, 'status_name' => '男'],
-            '2' => ['status' => 2, 'status_name' => '女']
-        ];
-        return $data[$value];
-    }
-
-    //用户类型
-    public function getUserTypeAttribute($value)
-    {
-        $data = [
-            '1' => ['status' => 1, 'status_name' => '设计师'],
-            '2' => ['status' => 2, 'status_name' => '异业'],
-            '3' => ['status' => 3, 'status_name' => '用户'],
-            '4' => ['status' => 4, 'status_name' => '员工'],
-            '5' => ['status' => 4, 'status_name' => '其他']
-        ];
-        return $data[$value];
-    }
-
-    //审核状态
-    public function getAuditStatusAttribute($value)
-    {
-        $data = [
-            '1' => ['status' => 1, 'status_name' => '审核中'],
-            '2' => ['status' => 2, 'status_name' => '审核通过'],
-            '3' => ['status' => 3, 'status_name' => '拒绝']
-        ];
-        return $data[$value];
-    }
-
-    //状态
-    public function getStatusAttribute($value)
-    {
-        $data = [
-            '10' => ['status' => 10, 'status_name' => '正常'],
-            '20' => ['status' => 20, 'status_name' => '禁用']
-        ];
-        return $data[$value];
-    }
-
     /**
      * 关联用户统计
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -69,7 +24,7 @@ class User extends Base
     public function userStatistic()
     {
         return $this->hasOne('App\Models\UserStatistic', 'user_id', 'id')
-            ->select(['id', 'user_id', 'amount', 'withdraw_amount','frozen_amount', 'score', 'withdraw_score', 'frozen_score']);
+            ->select(['id', 'user_id', 'amount', 'withdraw_amount','frozen_amount', 'score', 'withdraw_score', 'present_score']);
     }
 
     /**

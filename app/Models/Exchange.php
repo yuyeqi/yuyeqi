@@ -26,37 +26,6 @@ class Exchange extends Model
     //设置保存字段
     protected $guarded  = ['mulPic'];
 
-    public function getGoodsStatusAttribute($value){
-        $data = [
-            10=>['status'=>10,'status_name'=>"正常"],
-            20=>['status'=>20,'status_name'=>"下架"]
-        ];
-        return $data[$value];
-    }
-    //新品获取器
-    public function getIsNewAttribute($value){
-        $data = [
-            0=>['status'=>0,'status_name'=>"正常"],
-            1=>['status'=>1,'status_name'=>"新品"]
-        ];
-        return $data[$value];
-    }
-    //热门获取器
-    public function getIsHotAttribute($value){
-        $data = [
-            0=>['status'=>0,'status_name'=>"正常"],
-            1=>['status'=>1,'status_name'=>"热门"]
-        ];
-        return $data[$value];
-    }
-    //推荐获取器
-    public function getIsRecommendAttribute($value){
-        $data = [
-            0=>['status'=>0,'status_name'=>"正常"],
-            1=>['status'=>1,'status_name'=>"推荐"]
-        ];
-        return $data[$value];
-    }
 
     /**
      * 关联商品轮播图

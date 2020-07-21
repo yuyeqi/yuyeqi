@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Service\ExchangeCateService;
 use App\Http\Service\ExchangeService;
 use App\Library\Render;
 use App\Models\Exchange;
@@ -17,12 +18,14 @@ class ExchangeController extends BaseController
 {
 
     private $exchangeService;   //兑换服务层
+    private $exchangeCateService;   //兑换分类服务层
     /**
      * ExchangeController constructor.
      */
     public function __construct()
     {
         $this->exchangeService = isset($this->exchangeService) ?: new ExchangeService();
+        $this->exchangeCateService = isset($this->exchangeCateService) ?: new ExchangeCateService();
     }
 
     /**
@@ -30,7 +33,7 @@ class ExchangeController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
    public function getCatelist(){
-       $lists = $this->exchangeService->getApiCateLists();
+       $lists = $this->exchangeCateService->getCateList();
        return Render::success('获取成功',$lists);
    }
 

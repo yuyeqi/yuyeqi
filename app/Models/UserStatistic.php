@@ -48,9 +48,9 @@ class UserStatistic extends Base
      * @param $id
      * @return mixed
      */
-    public static function getAccountDetail($id){
+    public static function getAccountDetail($id,$field='*'){
         $map = ['status'=>10,'user_id'=>$id];
-        return self::where($map)->first();
+        return self::select($field)->where($map)->first();
     }
 
     /**

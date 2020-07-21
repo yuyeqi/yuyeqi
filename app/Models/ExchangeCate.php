@@ -15,8 +15,6 @@ class ExchangeCate extends Base
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    //时间格式
-    protected $dateFormat = 'U';
     //隐藏字段
     protected $hidden = ['is_delete'];
 
@@ -92,8 +90,9 @@ class ExchangeCate extends Base
      */
     public function getCateLists()
     {
+        $field = ['id','cate_name'];
         $map = ['status'=>10,'is_delete'=>0];
-        return self::where($map)->get();
+        return self::select($field)->where($map)->get();
     }
 
 }

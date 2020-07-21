@@ -74,14 +74,13 @@ class ExchangeService extends BaseSerivce
         //开启事务
         DB::beginTransaction();
         try {
-            $res = $this->goods->addGoods($data);//添加商品
+            $res = $this->exchange->addGoods($data);//添加商品
             $img = [];
             if (isset($data['mulPic']) && is_array($data['mulPic']) && !empty($data['mulPic'])) {
                 foreach ($data['mulPic'] as $key => $item) {
                     $img[$key]['pic_id'] = $res->id;
-                    $img[$key]['pic_type'] = Config::get('constants.PIC_GOODS_TYPE');
+                    $img[$key]['pic_type'] = 3;
                     $img[$key]['pic_url'] = $item;
-                    $img[$key]['create_time'] = time();
                 }
                 $this->picture->addPicture($img);
             }
