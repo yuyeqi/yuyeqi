@@ -44,8 +44,8 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
     //微信
     Route::prefix('wechat')->group(function (){
         Route::get('auth','V1\WxController@auth');
-        Route::get('getUserInfo','V1\IndexController@getUserInfo');
-        Route::get('getNewsGoods','V1\IndexControllerid@getNewsGoods');
+        Route::get('getJsConfig','V1\WxController@getJsConfig');
+        Route::get('getAppCode','V1\WxController@getAppCode');
     });
 
 });

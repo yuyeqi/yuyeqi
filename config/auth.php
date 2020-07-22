@@ -76,10 +76,10 @@ return [
             'driver' => 'eloquent',
             'model' => \App\Models\Admin::class,
         ],
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        /*'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+        ],*/
     ],
 
     /*

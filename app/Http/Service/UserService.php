@@ -531,4 +531,5 @@ class UserService extends BaseSerivce
         $pageData = Withdraw::getCushLists($userInfo, $field, $status, $page, $limit);
         return $this->getPageData($pageData);
     }
+
 }

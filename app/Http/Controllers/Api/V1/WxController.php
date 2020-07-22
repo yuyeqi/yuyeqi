@@ -11,6 +11,7 @@ use App\Models\User;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Exceptions\DecryptException;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use http\Url;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -25,12 +26,14 @@ class WxController extends Controller
 {
 
     private $app;   //小程序实例
+    private $appOfficialAccount; //公众号
     private $userService;  //用户服务层
 
     public function __construct()
     {
         $config = config('wechat.mini_program.default');
         $this->app = isset($this->app) ?: Factory::miniProgram($config);
+        $this->appOfficialAccount = Factory::officialAccount($config);
         $this->userService = isset($this->userService) ?: new UserService();
     }
 
@@ -56,7 +59,7 @@ class WxController extends Controller
             return Render::error('登录失败');
         }
         if (isset($wechat['errcode'])) {
-            Log::error('【微信授权登录】----授权登录失败:errorInfo='.json_encode($$wechat));
+            Log::error('【微信授权登录】----授权登录失败:errorInfo='.json_encode($wechat));
             switch ($wechat['errcode']) {
                 case 40029:
                     return Render::error("code无效");
@@ -69,8 +72,8 @@ class WxController extends Controller
         }
         $openid = $wechat['openid'];    //用户的openid
         //3.判断用户是否授权过
-        $userInfo = $this->user->getUserInfoByOpenid($openid);
-        $token = '111235895522202'; //登录成功后的token
+        $userInfo = User::getUserInfoByOpenid($openid);
+        $token = str_random(64); //登录成功后的token
         if (!$userInfo){
             //如果用户没有登录过，则新增
             $userData = [
@@ -123,8 +126,9 @@ class WxController extends Controller
         }
         Log::info('【微信登录】-----用户的微信信息：wechatData='.json_encode($wechatData));
         //4.根据用户openid更新用户信息
-        $userInfo = $this->userService->getUserInfoByOpenid($wechatData['openid']);
-        $userInfo->nick_name = '1111';
+        $userInfo = User::getUserInfoByOpenid($wechatData['openid']);
+        $userInfo->nick_name = $wechatData['nickname'];
+        $userInfo->avatar_url = $wechatData['headimgurl'];
         if (!$userInfo->save()){
             Log::error('【微信登录】-----更新用户信息失败');
             return Render::error('更新用户信息失败');
@@ -132,5 +136,41 @@ class WxController extends Controller
         //5.返回用户数据
         $token = $userInfo->token;
         return Render::success('登录成功',compact('userInfo','token'));
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     */
+    public function getAppCode(Request $request){
+        //获取页面路径
+        $page = $request->input('page','/');
+        $appCode = $this->app->app_code->getQrCode($page);
+        // 保存小程序码到文件
+        $filename = '';
+        if ($appCode instanceof \EasyWeChat\Kernel\Http\StreamResponse) {
+            $filename = $appCode->save('qrcode/','qrcode.jpg');
+        }
+        //文件名非空时返回图片路径
+        $baseUrl = url()->previous().'/qrcode/'.$filename;
+        return Render::success("获取成功",$baseUrl);
+    }
+
+    /**
+     * 获取微信jssdk
+     * @return \Illuminate\Http\JsonResponse
+     * @throws InvalidConfigException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function getJsConfig(){
+       $data = $this->appOfficialAccount->jssdk->buildConfig(array('onMenuShareAppMessage',
+            'onMenuShareTimeline',
+            'updateAppMessageShareData',
+            'updateTimelineShareData'), false);
+       return Render::success("获取成功",$data);
     }
 }

@@ -173,4 +173,15 @@ class User extends Base
         return self::wehre(['id'=>$data['id']])->update($data);
     }
 
+    /**
+     * 根据openid获取用户信息
+     * @param $openid
+     * @return mixed
+     */
+    public static function getUserInfoByOpenid($openid)
+    {
+        $field = ['id','openid','token'];
+        $map = ['is_delete'=>0,'openid'=>$openid];
+        return self::select($field)->where($map)->first();
+    }
 }
