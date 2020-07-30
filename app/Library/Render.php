@@ -18,10 +18,10 @@ class Render
     }
 
     //失败返回
-    public static function error($msg = 'fail', $data = [], $url = '')
+    public static function error($msg = 'fail', $code = 1,$data = [], $url = '')
     {
         return response()->json([
-            'code' => 1,
+            'code' => $code,
             'msg'  => $msg,
             'url'  => $url,
             'data' => $data,

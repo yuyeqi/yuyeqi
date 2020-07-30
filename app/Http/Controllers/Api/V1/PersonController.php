@@ -26,6 +26,7 @@ class PersonController extends BaseController
      */
     public function __construct()
     {
+        parent:: __construct();
         $this->personService = isset($this->personService) ?: new PersonService();
         $this->personCateService = isset($this->personCateService) ?: new PersonCateService();
     }

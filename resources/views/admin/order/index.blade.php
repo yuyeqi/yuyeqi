@@ -72,7 +72,13 @@
                 ,{field:'id', width:80, title: 'ID', sort: true}
                 ,{field:'order_no', align: "center",width:200, title: '订单号'}
                 ,{field:'pay_status',align:'center', title: '订单状态',templet: function(d){
-                        return d.pay_status.status_name
+                        if(d.pay_status == 30){
+                            return '已退款';
+                        }else if (d.pay_status == 20) {
+                            return '已支付';
+                        }else{
+                            return '未支付'
+                        }
                     } }
                 ,{field:'user_name',align: "center", minWidth:100, title: '用户名'}
                 ,{field:'phone',align: "center", minWidth:150, title: '电话'}

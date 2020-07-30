@@ -64,16 +64,32 @@
                 ,{field:'book_price', width:100, title: '定金'}
                 ,{field:'comment_num', width:80, title: '评价数'}
                 ,{field:'goods_status', width:80, title: '状态',templet: function (d) {
-                        return d.goods_status.status_name;
+                        if(d.is_hot == 10){
+                            return '正常';
+                        }else{
+                            return  '下架';
+                        }
                     }}
                 ,{field:'is_new', title: '新品', width: 80,templet: function (d) {
-                        return d.is_new.status_name;
+                    if(d.is_new == 0){
+                        return '正常';
+                    }else{
+                        return  '新品';
+                    }
                     }}
-                ,{field:'is_hot->status', width:80, title: '热门',templet: function (d) {
-                        return d.is_hot.status_name;
+                ,{field:'is_hot', width:80, title: '热门',templet: function (d) {
+                        if(d.is_hot == 0){
+                            return '正常';
+                        }else{
+                            return  '热卖';
+                        }
                     }}
                 ,{field:'is_recommend', title: '推荐', minWidth: 80,templet: function (d) {
-                        return d.is_recommend.status_name;
+                        if(d.is_hot == 0){
+                            return '正常';
+                        }else{
+                            return  '推荐';
+                        }
                     }}
                 ,{field:'score', title: '赠送积分', minWidth: 120}
                 ,{field:'sales_actual', width:120, title: '实际销量'}
@@ -90,7 +106,7 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'detail'){
-                xadmin.open('商品信息',"/goods/detail/"+data.id,800,600,true);
+                xadmin.open('商品信息',"/hp/goods/detail/"+data.id,800,600,true);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     del_goods(data.id);

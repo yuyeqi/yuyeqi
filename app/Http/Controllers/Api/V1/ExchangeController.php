@@ -24,6 +24,7 @@ class ExchangeController extends BaseController
      */
     public function __construct()
     {
+        parent:: __construct();
         $this->exchangeService = isset($this->exchangeService) ?: new ExchangeService();
         $this->exchangeCateService = isset($this->exchangeCateService) ?: new ExchangeCateService();
     }

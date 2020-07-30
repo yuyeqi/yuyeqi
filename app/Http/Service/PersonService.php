@@ -5,6 +5,7 @@ namespace App\Http\Service;
 
 
 use App\Models\Person;
+use Illuminate\Support\Facades\Log;
 
 /**
  * 私人定制服务层
@@ -33,6 +34,7 @@ class PersonService extends BaseSerivce
     {
         //每月只能提交一次
         if ($this->person->getMonthPerson($userInfo['id']) > 0){
+            Log::error('【私人定制】');
             $this->setErrorMsg('你本月已经提交过定制计划');
             return false;
         }

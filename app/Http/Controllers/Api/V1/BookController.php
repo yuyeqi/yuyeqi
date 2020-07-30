@@ -22,6 +22,7 @@ class BookController extends BaseController
      */
     public function __construct()
     {
+        parent:: __construct();
         $this->bookService = isset($this->bookService) ?: new BookService();
     }
 

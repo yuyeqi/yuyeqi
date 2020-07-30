@@ -27,6 +27,7 @@ class UserController extends BaseController
      */
     public function __construct()
     {
+        parent:: __construct();
         $this->userService = isset($this->userService) ?: new UserService();
         $this->userCateService = isset($this->userCateService) ?: new UserCateService();
     }
@@ -48,8 +49,9 @@ class UserController extends BaseController
         //get请求获取页面数据
         if ($request->isMethod('get')){
             //积分兑现背景图和提示语
+            $amount = UserStatistic::getAccountDetail($this->userInfo['id'],['id','amount']);
             $detail = Config::getConfigByNo('scoreToCash');
-            return  Render::success('获取成功',compact('detail'));
+            return  Render::success('获取成功',compact('detail','amount'));
         }else{
             $score = $request->input("score",0);
             $remark = $request->input("remark",'');

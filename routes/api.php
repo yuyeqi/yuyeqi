@@ -20,6 +20,8 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
     Route::prefix('public')->group(function (){
         Route::get('getUserCateLists','V1\PublicController@getUserCateLists');
         Route::post('register','V1\PublicController@register');
+        Route::get('aboutUser','V1\PublicController@aboutUser');
+        Route::post('uploadImg','V1\PublicController@uploadImg');
     });
     //首页
     Route::prefix('index')->group(function (){
@@ -35,6 +37,7 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
         Route::get('getLists','V1\ShopController@getLists');
         Route::get('getCateLists','V1\ShopController@getCateLists');
         Route::get('getShopDetail','V1\ShopController@getShopDetail');
+        Route::get('getCommentList','V1\ShopController@getCommentList');
     });
     //新闻
     Route::prefix('news')->group(function (){
@@ -45,16 +48,26 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
     Route::prefix('wechat')->group(function (){
         Route::get('auth','V1\WxController@auth');
         Route::get('getJsConfig','V1\WxController@getJsConfig');
-        Route::get('getAppCode','V1\WxController@getAppCode');
     });
-
-});
-//需要登陆
-Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
     //私人定制
     Route::prefix('person')->group(function (){
         Route::get('getPersonCateLists','V1\PersonController@getPersonCateLists');
+    });
+});
+//需要登陆api
+Route::group(['prefix'=>'v1', 'namespace'=>'Api','middleware' => 'auth.api'],function (){
+    //首页
+    Route::prefix('index')->group(function (){
+        Route::get('getUserInfo','V1\IndexController@getUserInfo');
+    });
+    //私人定制
+    Route::prefix('person')->group(function (){
         Route::post('addPerson','V1\PersonController@addPerson');
+    });
+    //微信
+    Route::prefix('wechat')->group(function (){
+        Route::post('wxLogin','V1\WxController@wxLogin');
+        Route::get('getQrCode','V1\WxController@getQrCode');
     });
     //商城
     Route::prefix('shop')->group(function (){

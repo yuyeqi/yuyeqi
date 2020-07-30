@@ -4,6 +4,7 @@
 namespace App\Models;
 
 
+use Illuminate\Support\Facades\Config;
 use phpDocumentor\Reflection\Types\Self_;
 
 /**
@@ -33,11 +34,40 @@ class GoodsComment extends Base
     }
 
     /**
+     * 关联商品轮播图
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany/
+     */
+    public function picture(){
+        return $this->hasMany('App\Models\Picture','pic_id','id')
+            ->select(['id','pic_id','pic_url'])
+            ->where(['is_delete'=>0])
+            ->where(['pic_type'=>4]);
+    }
+    /**
      * 添加评论
      * @param $data
      * @return mixed
      */
     public function addComment($data){
         return self::create($data);
+    }
+
+    /**
+     * 评论列表
+     * @param $goods_id
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getCommentList($goods_id,$page,$limit){
+        $map = ['is_delete'=>0,'status'=>10,'goods_id'=>$goods_id];
+        $field = ['id','user_name','avatar_url','comment_content','create_time'];
+        return self::select($field)
+            ->where($map)
+            ->with(['picture'])
+            ->orderBy('is_top','desc')
+            ->orderBy('sort','desc')
+            ->orderBy('create_time','desc')
+            ->paginate($limit);
     }
 }

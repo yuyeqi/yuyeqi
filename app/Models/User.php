@@ -45,7 +45,7 @@ class User extends Base
     public function getLists($keywords, $userType, $status, $auditStatus, $limit)
     {
         //查询
-        $field = ['id', 'open_id', 'nick_name', 'avatar_url', 'phone', 'user_name', 'sex', 'position_name',
+        $field = ['id', 'openid', 'nick_name', 'avatar_url', 'phone', 'user_name', 'sex', 'position_name',
             'org_name', 'birthday', 'user_brand', 'province', 'city', 'area', 'address', 'user_type', 'parent_id',
             'audit_status', 'status', 'audit_user_id', 'audit_user_name', 'update_user_name', 'create_time',
             'update_time'];
@@ -136,7 +136,9 @@ class User extends Base
     public function getUserInfo($id)
     {
         $map = ['status' => 10, 'is_delete' => 0, 'id' => $id];
-        $field = ['id', 'nick_name', 'avatar_url', 'user_type'];
+        $field = ['id', 'nick_name', 'avatar_url', 'phone','user_name','position_name','user_type','org_name','birthday','user_brand',
+            'province','city','area','address','deliver_id','parent_name','share_type','audit_status','audit_user_name','status',
+            'create_time','token'];
         return self::select($field)->where($map)->with('userStatistic')->first();
     }
 
@@ -170,7 +172,7 @@ class User extends Base
      */
     public function register($data)
     {
-        return self::wehre(['id'=>$data['id']])->update($data);
+        return self::where(['id'=>$data['id']])->update($data);
     }
 
     /**
@@ -180,8 +182,19 @@ class User extends Base
      */
     public static function getUserInfoByOpenid($openid)
     {
-        $field = ['id','openid','token'];
+        $field = ['id','openid','token','audit_status'];
         $map = ['is_delete'=>0,'openid'=>$openid];
+        return self::select($field)->where($map)->first();
+    }
+
+    /**
+     * 根据token获取用户信息
+     * @param $token
+     * @return mixed
+     */
+    public static function getUserBytoken($token){
+        $field = ['id','openid','session_key','nick_name','avatar_url','phone','user_name','sex','audit_status','audit_status'];
+        $map = ['is_delete'=>0,'token'=>$token];
         return self::select($field)->where($map)->first();
     }
 }

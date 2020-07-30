@@ -137,15 +137,11 @@ class UserController extends BaseController
      */
     public function audit(Request $request){
         $data = $request->only(['id','audit_status','audit_remark']);
-        try {
             $result = $this->userService->userAudit($data, $this->loginInfo);
             if ($result > 0){
                 return  Render::success('操作成功');
             }
-            return  Render::error('操作失败');
-        } catch (\Exception $e) {
-            return Render::error("系统异常，请稍后再试！");
-        }
+            return  Render::error(1,$this->userService->getErrorMsg() ?: '操作失败');
     }
 
     /**

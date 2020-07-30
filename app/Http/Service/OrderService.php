@@ -188,6 +188,7 @@ class OrderService extends BaseSerivce
         $commentData = [
             'user_id' => $userInfo['id'],
             'user_name' => $userInfo['user_name'],
+            'avatar_url' => $userInfo['avatar_url'],
             'goods_id' => $goods_id,
             'comment_content' => $content
         ];

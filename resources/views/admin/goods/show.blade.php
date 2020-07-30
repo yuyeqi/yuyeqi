@@ -21,15 +21,15 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">封面图</label>
                         <div class="layui-input-inline">
-                            <img style="width: 100px;height: 100px" src="{{ $detail->cover or '' }}" class="layui-upload-img">
+                            <img style="width: 100px;height: 100px" src="{{ $detail->goods_cover or '' }}" class="layui-upload-img">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label"> 轮播图</label>
                         <div class="layui-input-block">
-                            @isset($picture)
-                            @foreach($picture as $item)
-                                <img style="width: 100px;height: 100px" src="{{ $item or '' }}" class="layui-upload-img">
+                            @isset($detail->picture)
+                            @foreach($detail->picture as $item)
+                                <img style="width: 100px;height: 100px" src="{{ $item['pic_url'] or '' }}" class="layui-upload-img">
                             @endforeach
                             @endisset
                         </div>

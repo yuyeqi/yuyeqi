@@ -10,6 +10,7 @@ use App\Models\Promoter;
 use App\Models\ScoreDeal;
 use App\Models\User;
 use App\Models\UserAddress;
+use App\Models\UserCate;
 use App\Models\UserStatistic;
 use App\Models\WalletDeal;
 use App\Models\Withdraw;
@@ -29,6 +30,8 @@ class UserService extends BaseSerivce
     private $userStatistic;
     //用户地址
     private $userAddress;
+    //推荐人
+    private $promoter;
 
     /**
      * SlideshowService constructor.
@@ -38,6 +41,7 @@ class UserService extends BaseSerivce
         $this->user = isset($this->user) ?: new User();
         $this->userStatistic = isset($this->userStatistic) ?: new UserStatistic();
         $this->userAddress = isset($this->userAddress) ?: new UserAddress();
+        $this->promoter = isset($this->promoter) ?: new Promoter();
     }
 
     /**
@@ -100,7 +104,71 @@ class UserService extends BaseSerivce
     {
         $data['update_user_id'] = $loginInfo['update_user_id'];
         $data['update_user_name'] = $loginInfo['update_user_name'];
-        return $this->user->auditUser($data);
+        //1.获取用户信息
+        $userInfo = User::getUserDetail($data['id']);
+        if (!$userInfo){
+            $this->setErrorMsg('用户不存在');
+            return  false;
+        }
+        //2.根据用户分类配置
+        $cateInfo = UserCate::getUserCateInfoByUserType($data['id']);
+        if (!$cateInfo){
+            $this->setErrorMsg('缺少用户分类');
+            return false;
+        }
+        //3.是审核通过时添加数据
+        if ($data['audit_status'] == 2){
+            //开启事务
+            DB::beginTransaction();
+            //1.添加用户统计信息
+            try {
+                $userStatistic = [
+                    'user_id' => $data['id'],
+                    'user_name' => $userInfo['user_name'],
+                    'nick_name' => $userInfo['nick_name'],
+                    'phone' => $userInfo['phone'],
+                    'amount' => $cateInfo['register_account']
+                ];
+                UserStatistic::create($userStatistic);
+                //2.判断用户是否有推荐人
+                $promoterInfo = User::getUserDetail($userInfo['parent_id']);
+                if ($promoterInfo) {
+                    //1.获取推广人的账户信息,推广人必须是注册成功的
+                    if ($promoterInfo->audit_status <= 0){
+                        $this->setErrorMsg('账户异常,请联系管理员');
+                        return  false;
+                    }
+                    $promoterAccount = UserStatistic::getAccountDetail($userInfo['parent_id']);
+                    //2审核通过修改推荐人的推荐人数和账户余额
+                    $parentData = [
+                        'id' => $userInfo['parent_id'],
+                        'children_num' => bcadd($promoterAccount->children_num,1),
+                        'amount' => bcadd($promoterAccount->amount,$cateInfo['tg_account'],2)
+                    ];
+                    $this->userStatistic->updatePromoterCount($parentData);
+                    //3.添加推荐关系表
+                    $promoterData = [
+                        'promoter_id' => $userInfo['parent_id'],
+                        'promoter_user' => $userInfo['parent_name'],
+                        'promoter_user_id' => $userInfo['id'],
+                        'promoter_user_name' => $userInfo['user_name'],
+                        'promoter_amount' => $cateInfo['tg_account'],
+                        'promoter_surplus_amount' => bcadd($promoterAccount->amount,$cateInfo['tg_account'],2),
+                        'promoter_type' => $userInfo['user_type'],
+                        'amount' => $cateInfo['register_account'],
+                        'share_type' => $userInfo['']
+                    ];
+                    Promoter::create($promoterData);
+                }
+                DB::commit();
+                return true;
+            } catch (\Exception $e) {
+                $this->setErrorMsg('系统异常，请联系管理员');
+                DB::rollBack();
+                return  false;
+            }
+
+        }
     }
 
     /**
@@ -345,7 +413,7 @@ class UserService extends BaseSerivce
      */
     public function getPromoterLists($userInfo, $page, $limit)
     {
-        $field = ['id', 'promoter_user_id', 'promoter_user_name', 'promoter_amount', 'share_type', 'create_time'];
+        $field = ['p.id', 'promoter_user_id', 'promoter_user_name', 'promoter_amount', 'p.share_type', 'p.create_time','u.avatar_url'];
         $lists = Promoter::getPromoterLists($userInfo, $field, $page, $limit);
         return $this->getPageData($lists);
     }
@@ -505,16 +573,17 @@ class UserService extends BaseSerivce
      * @param $data
      * @return bool
      */
-    public function register($userInfo,$data)
+    public function register($data)
     {
-        Log::info('【用户注册】----注册开始，用户数据：userInfo='.json_encode($userInfo).',注册数据：data='.json_encode($data));
+        Log::info('【用户注册】----注册开始，注册数据：data='.json_encode($data));
         //1.检测用户是否微信登录授权
-        if (empty($userInfo)){
+        $userInfo = User::getUserDetail($data['id']);
+       if (!$userInfo){
             Log::error('【用户注册】----注册失败，注册要先微信授权，成功后才能注册');
             $this->setErrorMsg("请先微信授权");
             return false;
         }
-        //2.用户注册
+       $data['audit_status'] = 1;
         return $this->user->register($data);
     }
 

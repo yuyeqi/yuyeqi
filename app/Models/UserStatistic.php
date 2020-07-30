@@ -14,6 +14,8 @@ class UserStatistic extends Base
     //定义模型关联表
     protected $table = 'hp_user_statistic';
 
+    const CREATED_AT = null;
+
     /**
      * 用户账户列表
      * @param $keywords
@@ -70,5 +72,14 @@ class UserStatistic extends Base
      */
     public function updateExchangeNum($data){
         return self::where(['user_id'=>$data['user_id']])->update($data);
+    }
+
+    /**
+     * 更新推广人账户和推广人数量
+     * @param $data
+     * @return mixed
+     */
+    public function updatePromoterCount($data){
+        return self::where(['id'=>$data['id']])->update($data);
     }
 }

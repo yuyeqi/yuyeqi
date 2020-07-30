@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Validator;
  * Class PublicController
  * @package App\Http\Controllers\Api\V1
  */
-class WxController extends Controller
+class WxController extends BaseController
 {
 
     private $app;   //小程序实例
@@ -31,6 +31,7 @@ class WxController extends Controller
 
     public function __construct()
     {
+        parent:: __construct();
         $config = config('wechat.mini_program.default');
         $this->app = isset($this->app) ?: Factory::miniProgram($config);
         $this->appOfficialAccount = Factory::officialAccount($config);
@@ -81,14 +82,24 @@ class WxController extends Controller
                 'session_key' => $wechat['session_key'],
                 'token' => $token
             ];
+            if (!User::create($userData)){
+                Log::error('【微信授权登录】----保存用户信息失败');
+                return Render::error("登录失败");
+            }
+        }else{
+            //更新token
+            $userInfo->token = $token;
+            $userInfo->session_key = $wechat['session_key'];
+            if(!$userInfo->save()){
+                Log::error('【微信授权登录】----更新用户信息失败');
+                return Render::error("登录失败");
+            }
         }
-        if (!User::create($userData)){
-            Log::error('【微信授权登录】----保存用户信息失败');
-            return Render::error("登录失败");
-        }
-        Log::info('【微信授权登录】----保存用户信息，user='.json_encode($userData));
+        //获取用户信息
+        $userDetail = User::getUserInfoByOpenid($openid);
+        Log::info('【微信授权登录】----保存用户信息，user='.json_encode($userDetail));
         //4.返回token
-        return Render::success('获取token成功',compact('token'));
+        return Render::success('获取token成功',compact('userDetail'));
     }
 
     /**
@@ -107,7 +118,7 @@ class WxController extends Controller
             return Render::error($validator->errors()->first());
         }
         //2.获取用户sessionkey
-       $sessionKey = $request->user['session_key'];
+       $sessionKey = $this->userInfo['session_key'];
         Log::info('【微信登录】-----用户信息：sessionKey='.$sessionKey);
         if (!$sessionKey){
             Log::error("【微信登录】-----用户sessionKey不存在");
@@ -120,15 +131,15 @@ class WxController extends Controller
             Log::error("【微信登录】----sessionKey无效");
             return Render::error("session_key失效");
         }
-        if (isset($wechatData['openid'])){
+        if (!isset($wechatData['openId'])){
             Log::error('【微信登录】-----获取openid错误');
             return Render::error('获取openid错误');
         }
         Log::info('【微信登录】-----用户的微信信息：wechatData='.json_encode($wechatData));
         //4.根据用户openid更新用户信息
-        $userInfo = User::getUserInfoByOpenid($wechatData['openid']);
-        $userInfo->nick_name = $wechatData['nickname'];
-        $userInfo->avatar_url = $wechatData['headimgurl'];
+        $userInfo = User::getUserInfoByOpenid($wechatData['openId']);
+        $userInfo->nick_name = $wechatData['nickName'];
+        $userInfo->avatar_url = $wechatData['avatarUrl'];
         if (!$userInfo->save()){
             Log::error('【微信登录】-----更新用户信息失败');
             return Render::error('更新用户信息失败');
@@ -145,10 +156,13 @@ class WxController extends Controller
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      */
-    public function getAppCode(Request $request){
+    public function getQrCode(Request $request){
         //获取页面路径
-        $page = $request->input('page','/');
-        $appCode = $this->app->app_code->getQrCode($page);
+        $page = 'pages/index/index';
+        $appCode = $this->app->app_code->getUnlimit('scene-value', [
+            'page'  => $page,
+            'width' => 600,
+        ]);
         // 保存小程序码到文件
         $filename = '';
         if ($appCode instanceof \EasyWeChat\Kernel\Http\StreamResponse) {

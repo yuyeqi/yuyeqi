@@ -37,6 +37,7 @@ class IndexController extends BaseController
      */
     public function __construct()
     {
+        parent:: __construct();
         $this->slideshowService = isset($this->slideshowService) ?: new SlideshowService();
         $this->userService = isset($this->userService) ?: new UserService();
         $this->goodsSerivice = isset($this->goodsSerivice) ?: new GoodsService();

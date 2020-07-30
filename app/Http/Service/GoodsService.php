@@ -4,6 +4,7 @@
 namespace App\Http\Service;
 
 use App\Models\Goods;
+use App\Models\GoodsComment;
 use App\Models\Picture;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,9 @@ class GoodsService extends BaseSerivce
 
     //图片模型
     protected $picture;
+
+    //评论模型
+    protected $comment;
     /**
      * GoodsService constructor.
      */
@@ -27,6 +31,7 @@ class GoodsService extends BaseSerivce
     {
         $this->goods = isset($this->goods) ?: new Goods();
         $this->picture = isset($this->picture) ?: new Picture();
+        $this->comment = isset($this->comment) ?: new GoodsComment();
     }
 
     /**
@@ -112,7 +117,6 @@ class GoodsService extends BaseSerivce
                     $img[$key]['pic_id'] = $data['id'];
                     $img[$key]['pic_type'] = Config::get('constants.PIC_GOODS_TYPE');
                     $img[$key]['pic_url'] = $item;
-                    $img[$key]['create_time'] = time();
                 }
                 $this->picture->addPicture($img);
             }
@@ -170,5 +174,17 @@ class GoodsService extends BaseSerivce
     public function getApiGoodsDetail($id)
     {
         return $this->goods->getApiGoodsDetail($id);
+    }
+
+    /**
+     * 评论列表
+     * @param $goods_id
+     * @param $page
+     * @param $limit
+     * @return array
+     */
+    public function getCommentList($goods_id,$page,$limit){
+        $pageData = $this->comment->getCommentList($goods_id,$page,$limit);
+        return $this->getPageData($pageData);
     }
 }

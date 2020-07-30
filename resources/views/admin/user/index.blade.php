@@ -34,7 +34,7 @@
 @endsection
 @section('js')
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="audit">审核</a>
+    <a class="layui-btn layui-btn-xs audit" lay-event="audit">审核</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="show">查看</a>
     <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="account">账户</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -61,25 +61,51 @@
                 ,{field:'avatar_url',align: "center", title: '微信图像',templet: function(d){
                         return  "<span id='pic_" + d.id + "'><img src='" + d.avatar_url + "'  style='width: 40px' lay-event='showPic' ></span>";
                     } }
-                ,{field:'user_type',align: "center", width:100, title: '用户类型',templet:function (d) {
-                        return d.user_type.status_name
-                    }}
+                , {
+                    field: 'user_type', align: "center", width: 100, title: '用户类型', templet: function (d) {
+                        if (d.user_type == 1) {
+                            return '设计师';
+                        } else if (d.user_type == 2) {
+                            return '异业';
+                        } else if (d.user_type == 3) {
+                            return '用户';
+                        } else if (d.user_type == 4) {
+                            return '员工';
+                        } else{
+                            return '其他';
+                        }
+                    }
+                }
                 ,{field:'phone', align: "center",width:100, title: '电话'}
                 ,{field:'sex',align: "center", title: '性别', minWidth: 80,templet: function(d){
-                        return d.sex.status_name
+                    if(d.sex == 1){
+                        return  '男';
+                    }else if(d.sex ==2){
+                        return  '女';
+                    }else{
+                        return  '未知'
+                    }
                     } }
-                ,{field:'parent_id', align: "center",width:150, title: '推荐人'}
+                ,{field:'parent_name', align: "center",width:150, title: '推荐人'}
                 ,{field:'position_name', align: "center",title: '职称', minWidth: 100}
                 ,{field:'org_name', align: "center",title: '单位名称', minWidth: 100}
                 ,{field:'status', title: '状态',align: "center", width:120,templet: function(d){
                         if(d.status.status == 10){
-                            return '<button type="button" onclick="member_stop('+d.id+','+d.status.status+')" class="layui-btn layui-btn-normal">正常</button>'
+                            return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
                         }else{
-                            return '<button type="button" onclick="member_stop('+d.id+','+d.status.status+')" class="layui-btn layui-btn-danger">禁用</button>'
+                            return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'
                         }
                     } }
                 ,{field:'audit_status',align:'center', title: '审核状态',templet: function(d){
-                        return d.audit_status.status_name
+                    if(d.audit_status == 0){
+                        return  '未注册';
+                    }else if(d.audit_status ==1){
+                        return  '审核中';
+                    }else if(d.audit_status ==2){
+                        return  '审核通过';
+                    }else if(d.audit_status ==3){
+                        return  '拒绝 ';
+                    }
                     } }
                 ,{field:'audit_user_name', align: "center",title: '审核人姓名'}
                 ,{field:'update_user_name',align: "center", title: '更新人'}

@@ -105,7 +105,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加案例','{{ route('cases_add_show') }}',700,500)"><i class="layui-icon"></i>添加</button>
+                   {{-- <button class="layui-btn" onclick="xadmin.open('添加案例','{{ route('cases_add_show') }}',700,500)"><i class="layui-icon"></i>添加</button>--}}
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -117,7 +117,7 @@
 @endsection
 @section('js')
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    {{--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>--}}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
@@ -134,7 +134,7 @@
             ,cols: [[
                 {type: 'checkbox',field: 'left'}
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
-                ,{field:'book_no', width:120, title: '预约码', align:"center"}
+                ,{field:'book_no', width:150, title: '预约码', align:"center"}
                 ,{field:'client_name', width:120, title: '客户姓名',align: "center"}
                 ,{field:'client_phone', width:120, title: '客户电话',align: "center"}
                 ,{field:'sex', width:120, title: '性别',align: "center"}

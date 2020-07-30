@@ -23,6 +23,7 @@ class NewsController extends BaseController
      */
     public function __construct()
     {
+        parent:: __construct();
         $this->newsService = isset($this->newsService) ?: new NewsService();
     }
 
