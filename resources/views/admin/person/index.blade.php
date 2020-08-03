@@ -48,7 +48,9 @@
 @endsection
 @section('js')
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="audit">审核</a>
+    @{{# if(d.is_audit == 10){ }}
+    <a class="layui-btn layui-btn-xs audit" lay-event="audit">审核</a>
+    @{{# } }}
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -73,13 +75,21 @@
                 ,{field:'person_price', width:150, title: '定制预算',align: "center"}
                 ,{field:'sales_price', width:150, title: '销售额',align: "center"}
                 ,{field:'is_audit', title: '状态',align: "center", width:120,templet:function (d) {
-                        return d.is_audit.status_name
+                        if(d.is_audit == 10){
+                            return '审核中';
+                        }else if(d.is_audit == 20){
+                            return  '审核通过';
+                        }else if(d.is_audit == 30) {
+                            return '拒绝'
+                        }else {
+                            return  '';
+                        }
                     } }
                 ,{field:'person_remark', width:150, title: '备注',align: "center"}
                 ,{field:'create_user_name',align: "center", width:100, title: '创建人'}
                 ,{field:'update_time', title: '更新时间',align: "center",width:200}
                 ,{field:'create_time', title: '创建时间',align: "center",width:200}
-                ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:120}
+                ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:200}
             ]]
             ,page: true
             ,id: 'tableId'

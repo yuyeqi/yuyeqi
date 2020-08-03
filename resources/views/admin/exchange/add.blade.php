@@ -76,8 +76,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="goods_status" value="10" title="上架" checked="">
-                        <input type="radio" name="goods_status" value="20" title="下架">
+                        <input type="radio" name="status" value="10" title="上架" checked="">
+                        <input type="radio" name="status" value="20" title="下架">
                     </div>
 
                 </div>

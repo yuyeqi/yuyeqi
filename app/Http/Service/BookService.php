@@ -4,6 +4,7 @@
 namespace App\Http\Service;
 
 use App\Models\Book;
+use App\Models\ScoreDeal;
 use App\Models\UserCate;
 use App\Models\UserStatistic;
 use Illuminate\Support\Facades\DB;
@@ -47,6 +48,89 @@ class BookService extends BaseSerivce
         return $this->book->getBookAdminLists($data,$limit);
     }
 
+    /**
+     * 修改状态
+     * @param $data
+     * @param $loginInfo
+     * @return bool
+     */
+    public function updateStatus($data,$loginInfo){
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        //1.预约信息
+        $bookInfo = Book::getApiBookDetail($data['id']);
+        if (!$bookInfo){
+            $this->setErrorMsg('预约信息不存在');
+            return false;
+        }
+        //2.获取用户账户信息
+        $accountInfo = UserStatistic::getAccountDetail($bookInfo->user_id);
+        if (!$accountInfo){
+            $this->setErrorMsg('用户信息不存在');
+            return  false;
+        }
+        //状态验证
+        if ($bookInfo->status >= $data['status']){
+            $this->setErrorMsg('不可以重复操作');
+            return  false;
+        }
+        //开启事务
+        DB::beginTransaction();
+        try {
+            //3.修改状态
+            $this->book->updateStatus($data);//4.预约到店赠送积分
+            if ($data['status'] == 20) {
+                //生成积分记录
+                $dealNo = $this->getOrderNo("yy");
+                $scoreLog = [
+                    'deal_no' => $dealNo,
+                    'user_id' => $bookInfo->user_id,
+                    'user_name' => $bookInfo->user_name,
+                    'deal_score' => $bookInfo->store_score,
+                    'surplus_score' => bcadd($accountInfo->amount, $bookInfo->store_score, 2),
+                    'deal_type' => 2,
+                    'remark' => '预约积分'
+                ];
+                ScoreDeal::create($scoreLog);
+            } else if ($data['status'] == 40) {
+                //生成积分记录
+                $dealNo = $this->getOrderNo("fc");
+                $scoreLog = [
+                    'deal_no' => $dealNo,
+                    'user_id' => $bookInfo['user_id'],
+                    'user_name' => $bookInfo['user_name'],
+                    'deal_score' => $bookInfo->finished_score,
+                    'surplus_score' => bcadd($accountInfo->amount, $bookInfo->finished_score, 2),
+                    'deal_type' => 3,
+                    'remark' => '完成预定积分'
+                ];
+                ScoreDeal::create($scoreLog);
+            }
+            DB::commit();
+            return  true;
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            $this->setErrorMsg('系统异常,请稍后再试');
+            DB::rollBack();
+            return  false;
+        }
+
+
+    }
+
+    /**
+     * 批量删除
+     * @param array $ids
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function delBatch(array $ids, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        $data['is_delete'] = 1;
+        return $this->book->delBatch($data, $ids);
+    }
     /*-------------------------小程序------------------------------*/
     /**
      * 小程序预约列表
@@ -83,9 +167,13 @@ class BookService extends BaseSerivce
         //根据用户的类型获取用户预约的赠送积分
         $bookScore = $userCateInfo['book_score'];   //预约赠送积分
         $storeScore = $userCateInfo['store_score']; //到店赠送积分
+        $finishedScore = $userCateInfo['order_score']; //完成赠送积分
         $data['book_score'] = $bookScore;
         $data['store_score'] = $storeScore;
+        $data['finish_score'] = $finishedScore;
         Log::info('[用户预约]--------预约信息：data='.json_encode($data));
+        //用户账户积分信息
+        $accountInfo = UserStatistic::getAccountDetail($userInfo['id']);
         //开启事务
         DB::beginTransaction();
         try {
@@ -93,6 +181,18 @@ class BookService extends BaseSerivce
             $this->book->addBook($data);
             //2.修改预约用户预约记录数
             $this->userStatistic->updateUserCount($userInfo['id'],'book_num');
+            //3.生成积分记录
+            $dealNo = $this->getOrderNo("yy");
+            $scoreLog = [
+                'deal_no' => $dealNo,
+                'user_id' => $userInfo['id'],
+                'user_name' => $userInfo['user_name'],
+                'deal_score' => $userCateInfo->store_score,
+                'surplus_score' => bcadd($accountInfo->amount,$userCateInfo->store_score,2),
+                'deal_type' => 1,
+                'remark' => '预约积分'
+            ];
+            ScoreDeal::create($scoreLog);
             Log::info("【客户预约】-----预约成功，预约人id:".$userInfo['id'].'，姓名:'.$userInfo['user_name']);
             DB::commit();
             return true;

@@ -7,18 +7,12 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">审核状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="is_audit" value="10" title="审核中" checked="">
-                        <input type="radio" name="is_audit" value="20" title="通过">
-                        <input type="radio" name="is_audit" value="30" title="拒绝">
+                        <input type="radio" name="status" value="20" title="到店">
+                        <input type="radio" name="status" value="30" title="预算">
+                        <input type="radio" name="status" value="40" title="完成">
                     </div>
                 </div>
                 <form class="layui-form layui-form-pane" action="">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">备注</label>
-                        <div class="layui-input-block">
-                            <textarea name="audit_remark" cols="30" rows="4" ></textarea>
-                        </div>
-                    </div>
                     <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label">
                         </label>
@@ -45,13 +39,13 @@
                 form.on('submit(add)', function(data) {
                     var fields = data.field;
                     var id = $('#hiddenId').val();
-                    var data = {'id':id,'is_audit':fields.is_audit,'audit_remark':fields.audit_remark};
+                    var data = {'id':id,'status':fields.status};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
-                        url: "{{ route('person_update_status') }}",
+                        url: "{{ route('book_update_status') }}",
                         data: data,
                         dataType: 'json',
                         success: function (data) {

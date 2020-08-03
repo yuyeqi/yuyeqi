@@ -37,4 +37,43 @@ class ExchangeRecord extends Base
             ->paginate($limit);
     }
 
+    /**
+     * 交易记录
+     * @param $keywords
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getRecordList($keywords,$page,$limit){
+        $map = ['is_delete'=>0];
+        $field = ['*'];
+        return self::select($field)
+            ->where($map)
+            ->when(!empty($keywords),function ($query) use ($keywords){
+                return $query->where('deal_no','like','%'.$keywords.'%')
+                    ->orWhere('user_name','like','%'.$keywords.'%')
+                    ->orWhere('goods_name','like','%'.$keywords.'%');
+            })
+            ->orderBy('create_time','desc')
+            ->paginate($limit);
+    }
+
+    /**
+     * 更新状态
+     * @param $data
+     * @return mixed
+     */
+    public function updateStatus($data){
+        return self::where(['id'=>$data['id']])->update($data);
+    }
+
+    /**
+     * 批量删除
+     * @param $ids
+     * @param $data
+     * @return mixed
+     */
+    public function delBatchRecord($ids,$data){
+        return self::whereIn('id',$ids)->update($data);
+    }
 }

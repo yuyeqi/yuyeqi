@@ -30,6 +30,9 @@ class ExchangeService extends BaseSerivce
 
     //用户模型
     private $userStatistic = null;
+
+    //兑换记录
+    private $record;
     /**
      * GoodsService constructor.
      */
@@ -38,6 +41,7 @@ class ExchangeService extends BaseSerivce
         $this->exchange = isset($this->exchange) ?: new Exchange();
         $this->picture = isset($this->picture) ?: new Picture();
         $this->userStatistic = isset($this->userStatistic) ?: new UserStatistic();
+        $this->record = isset($this->record) ?: new ExchangeRecord();
     }
 
     /**
@@ -56,7 +60,7 @@ class ExchangeService extends BaseSerivce
      * @return mixed
      */
     public function getGoodsDetailById($id){
-        return $this->goods->getGoodsDetailById($id);
+        return $this->exchange->getGoodsDetailById($id);
     }
 
     /**
@@ -114,22 +118,22 @@ class ExchangeService extends BaseSerivce
         DB::beginTransaction();
         try {
             //添加新的轮播
-            $res = $this->goods->updateGoods($data);
+            $res = $this->exchange->updateGoods($data);
             //删除原来的图片
             $this->picture->deletePic($data["id"]);
             $img = [];
             if (isset($mulPic) && is_array($mulPic) && !empty($mulPic)) {
                 foreach ($mulPic as $key => $item) {
                     $img[$key]['pic_id'] = $data['id'];
-                    $img[$key]['pic_type'] = Config::get('constants.PIC_GOODS_TYPE');
+                    $img[$key]['pic_type'] = 3;
                     $img[$key]['pic_url'] = $item;
-                    $img[$key]['create_time'] = time();
                 }
                 $this->picture->addPicture($img);
             }
             DB::commit();
             return true;
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             $this->setErrorCode(0);
             $this->setErrorMsg($e);
@@ -149,6 +153,44 @@ class ExchangeService extends BaseSerivce
         $data['is_delete'] = 1;
         return $this->goods->delBatch($ids,$data);
     }
+
+    /**
+     * 兑换记录
+     * @param $keywords
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getRecordList($keywords,$page,$limit){
+        return $this->record->getRecordList($keywords,$page,$limit);
+    }
+
+    /**
+     * 修改状态
+     * @param array $data
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function audit(array $data, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        return $this->record->updateStatus($data);
+    }
+    /**
+     * 删除兑换记录
+     * @param $ids
+     * @param $loginInfo
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function delBatchRecord($ids,$loginInfo){
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        $data['is_delete'] = 1;
+        return $this->record->delBatchRecord($ids,$data);
+    }
+
 /*----------------------------------------小程序------------------------------------------------------*/
     /**
      * 小程序首页新品推荐

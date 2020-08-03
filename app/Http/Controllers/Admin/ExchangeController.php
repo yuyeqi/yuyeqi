@@ -49,6 +49,7 @@ class ExchangeController extends BaseController
     public function getLists(Request $request){
         //接收参数
         $keyword = trim($request->get('keywords',''));
+        $page = intval($request->get('page','1'));
         $limit = intval($request->get('limit','10'));
         //获取数据
         $lists = $this->exchangeSerivce->getLists($keyword,$limit);
@@ -61,7 +62,7 @@ class ExchangeController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function detail($id){
-        $detail = $this->exchangeCateService->getGoodsDetailById($id);
+        $detail = $this->exchangeSerivce->getGoodsDetailById($id);
         return view('admin.exchange.show',['detail'=>$detail]);
     }
 
@@ -101,9 +102,9 @@ class ExchangeController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id){
-        $detail = $this->goodsSerivce->getGoodsDetailById($id);
+        $detail = $this->exchangeSerivce->getGoodsDetailById($id);
         //商品类别列表
-        $lists = $this->goodsCateService->getCateList();
+        $lists = $this->exchangeCateService->getCateList();
         return view("admin.exchange.edit",compact('detail','lists'));
     }
     /**
@@ -112,15 +113,14 @@ class ExchangeController extends BaseController
      */
     public function updateGoods(Request $validator){
         //接收数据
-        $data = $validator->only(['id','goods_no','goods_name','good_price','book_price','score','sales_initial','sort'
-            ,'is_new','goods_status','is_hot','is_recommend','goods_cover','mulPic','cate_id','goods_desc','goods_content']);
+        $data = $validator->only(['id','goods_no','goods_name','goods_cover','cate_id','goods_desc','content','sales_score'
+            ,'line_score','sales_num','stock_num','sort','status','mulPic']);
         //修改数据
         try {
-            $res = $this->goodsSerivce->updateGoods($data, $this->loginInfo);
+            $res = $this->exchangeSerivce->updateGoods($data, $this->loginInfo);
             if ($res) {
                 return Render::success('修改成功');
             } else {
-                dd($this->goodsSerivce->getErrorMsg());
                 return Render::error("修改失败");
             }
         } catch (\Exception $e) {
@@ -138,7 +138,7 @@ class ExchangeController extends BaseController
         if (empty($ids)){
             return Render::error("参数错误");
         }
-        if ($this->goodsSerivce->delBatch($ids,$this->loginInfo)){
+        if ($this->exchangeSerivce->delBatch($ids,$this->loginInfo)){
             return Render::success("删除成功");
         }
         return Render::error("删除失败");
@@ -152,9 +152,65 @@ class ExchangeController extends BaseController
     }
 
     /**
-     * 修改排序
+     * 兑换记录
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function updateSort(){
+    public function record(){
+        return view('admin.exchange.record');
+    }
 
+    /**
+     * 兑换商品交易记录
+     * @param Request $request
+     * @return mixed
+     */
+    public function getRecordList(Request $request){
+        $page = $request->input('page',1);
+        $limit = $request->input('limit',10);
+        $keywords = $request->input('keywords','');
+        $lists = $this->exchangeSerivce->getRecordList($keywords,$page,$limit);
+        return  Render::table($lists->items(),$lists->total());
+    }
+
+    /**
+     * 审核
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function auditShow($id){
+        return view('admin.exchange.audit',['id'=>$id]);
+    }
+
+    /**
+     * 审核
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function audit(Request $request){
+        $data = $request->only(['id','deal_status','reject_reason']);
+        try {
+            $result = $this->exchangeSerivce->audit($data, $this->loginInfo);
+            if ($result > 0){
+                return  Render::success('操作成功');
+            }
+            return  Render::error('操作失败');
+        } catch (\Exception $e) {
+            return Render::error("系统异常，请稍后再试！");
+        }
+
+    }
+
+    /**
+     * 删除商品
+     * @param $request
+     */
+    public function delBatchRecord(Request $request){
+        $ids = $request->input("ids");
+        if (empty($ids)){
+            return Render::error("参数错误");
+        }
+        if ($this->exchangeSerivce->delBatchRecord($ids,$this->loginInfo)){
+            return Render::success("删除成功");
+        }
+        return Render::error("删除失败");
     }
 }

@@ -83,7 +83,7 @@ class PublicController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(Request $request){
+    public function uploadAdmin(Request $request){
         $file = $request->file('file');
         if ($file && $file->isValid()) {
             // 获取文件相关信息

@@ -117,7 +117,19 @@
 @endsection
 @section('js')
 <script type="text/html" id="barDemo">
-    {{--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>--}}
+    @{{# if(d.status == 10){ }}
+    <a class="layui-btn layui-btn-warm layui-btn-xs audit" lay-event="audit">预约</a>
+    @{{# } }}
+    @{{# if(d.status == 20){ }}
+    <a class="layui-btn layui-btn-warm layui-btn-xs audit" lay-event="audit">到店</a>
+    @{{# } }}
+    @{{# if(d.status == 30){ }}
+    <a class="layui-btn layui-btn-warm layui-btn-xs audit" lay-event="audit">预算</a>
+    @{{# } }}
+    @{{# if(d.status == 40){ }}
+    <a class="layui-btn layui-btn-warm layui-btn-xs audit" lay-event="audit">成交</a>
+    @{{# } }}
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
@@ -146,13 +158,23 @@
                 ,{field:'deal_finished_time', width:150, title: '交易完成时间',align: "center"}
                 ,{field:'arrive_time', width:150, title: '到店时间',align: "center"}
                 ,{field:'status', title: '状态',align: "center", width:120,templet: function(d){
-                        return d.status.status_name
+                        if(d.status == 10){
+                            return '预约';
+                        }else if(d.status == 20){
+                            return '到店';
+                        }else if(d.status == 30){
+                            return  '预算';
+                        }else if(d.status == 40){
+                            return  '完成';
+                        }else {
+                            return  '';
+                        }
                     } }
                 ,{field:'create_user_name',align: "center", width:100, title: '创建人'}
                 ,{field:'create_time', title: '创建时间',align: "center",width:200}
                 ,{field:'update_user_name',align: "center", width:100, title: '更新人'}
                 ,{field:'update_time', title: '更新时间',align: "center",width:200}
-                ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:120}
+                ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:200}
             ]]
             ,page: true
             ,id: 'tableId'
@@ -173,6 +195,8 @@
                     //0-6的选择，指定弹出图片动画类型，默认随机
                     anim: 5
                 })
+            }else if(obj.event === 'audit'){
+                xadmin.open('审核',"/hp/book/audit/"+data.id,450,200);
             }
         });
         //执行重载

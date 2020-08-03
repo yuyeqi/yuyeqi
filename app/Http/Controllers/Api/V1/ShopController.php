@@ -164,14 +164,14 @@ class ShopController extends BaseController
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function unifiedorder($order)
+    private function unifiedorder($order)
     {
         //设置支付参数
         $data = [
             'body' => '黄派门窗-订单支付',
             'out_trade_no' => $order->id,
-            'total_fee' => $order->total_price,
-            'notify_url' => 'https://pay.weixin.qq.com/wxpay/pay.action', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+            //'total_fee' => $order->total_price,
+            'total_fee' => 101,
             'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
             'openid' => $this->userInfo['openid'],
         ];
@@ -201,5 +201,57 @@ class ShopController extends BaseController
         }
         $lists = $this->goodsService->getCommentList($goods_id,$page,$limit);
         return Render::success('获取成功',$lists);
+    }
+
+    /**
+     * 微信支付回调
+     * @param Request $request
+     * @throws \EasyWeChat\Kernel\Exceptions\Exception
+     */
+    public function notify(Request $request){
+        $response = $this->app->handlePaidNotify(function($message, $fail){
+            Log::info('【支付回调信息】----message='.json_encode($message));
+            // 1.使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
+            $order = Order::getOrderDetailByNo($message['out_trade_no']);
+            if (!$order || $order->pay_status == 20 || $order->pay_time) { // 如果订单不存在 或者 订单已经支付过了
+                return true; // 告诉微信，我已经处理完了，订单没找到，别再通知我了
+            }
+            Log::info('【订单信息】----------order='.json_encode($order->toArray()));
+            ///////////// <- 建议在这里调用微信的【订单查询】接口查一下该笔订单的情况，确认是已经支付 /////////////
+            //2.查询微信订单是否支付
+            $orderRet = $this->app->order->queryByOutTradeNumber($message['out_trade_no']);
+            Log::info('【查询微信订单】--------wxOrder='.json_encode($orderRet));
+            if($orderRet['return_code'] === 'SUCCESS' &&
+                array_get($orderRet, 'result_code') === 'SUCCESS'
+                && array_get($orderRet, 'trade_state') === 'SUCCESS'){
+                return  true;
+            }
+            //3.验证支付金额
+            $amount = bcdiv($message['total_fee'],100,2);   //支付金额
+            if ($amount != $order->total_price){
+                Log::error('【微信支付回调】--------支付金额不等于订单金额，支付失败');
+                return  true;
+            }
+            if ($order->pay_price)
+            //支付成功处理
+            if ($message['return_code'] === 'SUCCESS') { // return_code 表示通信状态，不代表支付状态
+                // 用户是否支付成功
+                if (array_get($message, 'result_code') === 'SUCCESS') {
+                    $order->pay_time = time(); // 更新支付时间为当前时间
+                    $order->pay_status = 20;
+                    $order->transaction_id = $message['transaction_id'];
+                    $order->pay_price = $amount;
+                    // 用户支付失败
+                } elseif (array_get($message, 'result_code') === 'FAIL') {
+                    $order->pay_status = '10';
+                }
+            } else {
+                return $fail('通信失败，请稍后再通知我');
+            }
+            $order->save(); // 保存订单
+            return true; // 返回处理完成
+        });
+
+        $response->send(); // return $response;
     }
 }

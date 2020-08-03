@@ -64,7 +64,11 @@
                 ,{field:'line_score', width:100, title: '兑换数量'}
                 ,{field:'sales_num', width:80, title: '评价数'}
                 ,{field:'status', width:80, title: '状态',templet: function (d) {
-                        return d.status.status_name;
+                    if(d.status == 10){
+                        return '正常';
+                    }else{
+                        return  '下架';
+                    }
                     }}
                 ,{field:'update_user_name', width:100, title: '更新人'}
                 ,{field:'update_time', title: '更新时间',width: 200}
@@ -79,13 +83,13 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'detail'){
-                xadmin.open('商品信息',"/goods/detail/"+data.id,800,600,true);
+                xadmin.open('商品信息',"/hp/exchange/detail/"+data.id,800,600,true);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     del_goods(data.id);
                 })
             } else if(obj.event === 'edit'){
-                xadmin.open('编辑',"/hp/goods/edit/"+data.id,600,650,true);
+                xadmin.open('编辑',"/hp/exchange/edit/"+data.id,600,650,true);
             }else if(obj.event === 'pwd'){
                 setPasword(data.id);
             }else if(obj.event === 'showPic'){
@@ -141,7 +145,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: "{{ route('goods_delete_all') }}",
+            url: "{{ route('exchange_delete_all') }}",
             dataType: 'json',
             data: {ids:ids},
             success: function (data) {
@@ -171,7 +175,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '{{route("goods_delete_all")}}',
+                url: '{{route("exchange_delete_all")}}',
                 dataType: 'json',
                 data: {ids: ids},
                 success: function (data) {

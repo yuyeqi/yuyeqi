@@ -23,7 +23,7 @@
                 </div>
                 <div class="layui-form-item">
                     <label for="tg_account" class="layui-form-label">
-                        <span class="x-red">*</span>推广赠送金额
+                        <span class="x-red">*</span>推广赠送积分
                     </label>
                     <div class="layui-input-inline">
                         <input type="number" id="tg_account" name="tg_account"  required="" lay-verify="required"

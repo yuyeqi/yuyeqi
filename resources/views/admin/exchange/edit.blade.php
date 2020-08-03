@@ -8,50 +8,50 @@
                         <span class="x-red">*</span>商品编码
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="goods_no" name="goods_no" required="" lay-verify="required"
-                               autocomplete="off" class="layui-input" value="{{ $detail->goods_no or '' }}">
+                        <input type="text" id="goods_no" name="goods_no"  value="{{ $detail->goods_no or '' }}"  required="" lay-verify="required"
+                               autocomplete="off" class="layui-input">
+                        <input type="hidden" value="{{ $detail->id or '' }}" id="hiddenId">
                     </div>
                     <label for="username" class="layui-form-label">
                         <span class="x-red">*</span>商品名称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="goods_name" name="goods_name" required="" lay-verify="required"
-                               autocomplete="off" class="layui-input" value="{{ $detail->goods_name or '' }}">
+                        <input type="text" id="goods_name" name="goods_name" value="{{ $detail->goods_name or '' }}" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="sales_score" class="layui-form-label">
+                        <span class="x-red">*</span>兑换积分
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="number" id="sales_score" name="sales_score" value="{{ $detail->sales_score or '' }}" required="" lay-verify="sales_score"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>划线积分
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="number" id="line_score" name="line_score" value="{{ $detail->line_score or '' }}" required=""
+                               autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>商品价格
+                        <span class="x-red">*</span>兑换数量
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="good_price" name="good_price" required="" lay-verify="good_price"
-                               autocomplete="off" class="layui-input" value="{{ $detail->good_price or '' }}">
+                        <input type="number" id="sales_num" name="sales_num"  value="{{ $detail->sales_num or '' }}" required=""
+                               autocomplete="off" class="layui-input">
                     </div>
                     <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>商品订金
+                        <span class="x-red">*</span>库存数量
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="book_price" name="book_price" required="" lay-verify="book_price"
-                               autocomplete="off" class="layui-input" value="{{ $detail->book_price or '' }}">
+                        <input type="number" id="stock_num" name="stock_num" value="{{ $detail->stock_num or '' }}"  required=""
+                               autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>赠送积分
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="number" id="score" name="score"  required="" lay-verify="score"
-                               autocomplete="off" class="layui-input" value="{{ $detail->score or '' }}">
-                    </div>
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>初始销量
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="number" id="sales_initial" name="sales_initial"  required="" lay-verify="sales_initial"
-                               autocomplete="off" class="layui-input" value="{{ $detail-> sales_initial or ''}}">
-                    </div>
-                </div>
-
                 <div class="layui-form-item">
                     <label for="L_email" class="layui-form-label">
                         <span class="x-red">*</span>商品分类
@@ -61,7 +61,7 @@
                             <option value="0">请选择</option>
                             @isset($lists)
                                 @foreach($lists as $item)
-                                    <option @if($detail->cate_id == $item->id )selected=""@endif value="{{$item->id}}">{{$item->cate_name}}</option>
+                                    <option value="{{$item->id}}" @if($detail->cate_id == $item->id) selected @endif>{{$item->cate_name}}</option>
                                 @endforeach
                             @endisset
                         </select>
@@ -70,33 +70,17 @@
                         <span class="x-red">*</span>排序
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="sort" name="sort"  required="" lay-verify="sort"
-                               autocomplete="off" class="layui-input" value="{{ $detail->sort or '' }}">
+                        <input type="number" id="sort" name="sort"  value="{{ $detail->sort or '' }}" required="" lay-verify="sort"
+                               autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="goods_status" value="10" title="上架"  @if($detail->goods_status['status'] == 10 )checked=""@endif>
-                        <input type="radio" name="goods_status" value="20" title="下架" @if($detail->goods_status['status'] == 20 )checked=""@endif>
+                        <input type="radio" name="status" value="10" title="上架" @if($detail->status == 10) checked @endif>
+                        <input type="radio" name="status" value="20" title="下架" @if($detail->status == 20) checked @endif>
                     </div>
-                    <label class="layui-form-label">新品</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="is_new" value="0" title="正常"  @if($detail->is_new['status'] == 0) checked @endif >
-                        <input type="radio" name="is_new" value="1" title="新品" @if($detail->is_new['status'] == 1) checked @endif >
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">热门</label>
-                    <div class="layui-input-inline">
-                        <input type="radio" name="is_hot" value="0" title="正常" @if($detail->is_hot['status'] == 0) checked @endif>
-                        <input type="radio" name="is_hot" value="1" title="热门" @if($detail->is_hot['status'] == 1) checked @endif>
-                    </div>
-                    <label class="layui-form-label">推荐</label>
-                    <div class="layui-input-inline">
-                        <input type="radio" name="is_recommend" value="0" title="正常" @if($detail->is_recommend['status'] == 0)checked=""@endif>
-                        <input type="radio" name="is_recommend" value="1" title="推荐" @if($detail->is_recommend['status'] == 1)checked=""@endif>
-                    </div>
+
                 </div>
                 <div class="layui-form-item">
                     <label for="phone" class="layui-form-label">
@@ -108,7 +92,7 @@
                             <div class="layui-upload-list">
                                 <div id="" class="file-iteme">
                                     <div class="handle" id="handle"></div>
-                                    <img style="width: 100px;height: 100px;" alt="" src="{{ $detail->goods_cover or '' }}" id="uploadPic">
+                                    <img style="width: 100px;height: 100px;" src="{{ $detail->goods_cover }}" alt="" required="" id="uploadPic">
                                 </div>
                             </div>
                         </div>
@@ -124,14 +108,14 @@
                             <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 88%">
                                     预览图：
                                     <div class="layui-upload-list uploader-list" style="overflow: auto;" id="uploader-list">
-                                        @foreach($detail->picture as $item)
+                                    @foreach($detail->picture as $item)
                                         <div id="" class="file-iteme">
                                             <div class="handle pic"><i class="layui-icon layui-icon-delete"></i></div>
                                             <img style="width: 100px;height: 100px;" src='{{ $item->pic_url }}'>
                                             <div class="info"></div>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                        </div>
+                                    @endforeach
+                                        </div>
                             </blockquote>
                         </div>
                     </div>
@@ -139,20 +123,19 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">商品简介</label>
                     <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" name="goods_desc" class="layui-textarea">{{ $detail->goods_desc or '' }}</textarea>
+                        <textarea placeholder="请输入内容" name="goods_desc"  class="layui-textarea">{{ $detail->goods_desc or '' }}</textarea>
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">编辑器</label>
                     <div class="layui-input-block">
-                        <textarea class="layui-textarea layui-hide" name="goods_content" lay-verify="content" id="LAY_demo_editor">{{ $detail->goods_content or '' }}</textarea>
+                        <textarea class="layui-textarea layui-hide" name="goods_content" lay-verify="content" id="LAY_demo_editor"> {{ $detail->content     or '' }}</textarea>
                     </div>
                 </div>
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label">
                         </label>
-                        <input type="hidden" value="{{ $detail->id or '' }}" id="hiddenId">
                         <button  class="layui-btn" lay-filter="add" lay-submit="">
                             保存
                         </button>
@@ -207,16 +190,19 @@
                     $("#uploader-list img").each(function (index,$val) {
                         pics[index] = $(this).attr('src')
                     })
-                    var data = {id:id,goods_no:fields.goods_no,goods_name:fields.goods_name,good_price:fields.good_price,book_price:fields.book_price,
-                        score:fields.score,sales_initial:fields.sales_initial,sort:fields.sort,is_new:fields.is_new, goods_status:fields.goods_status,
+                    if(pics.length <= 0){
+                        layer.alert('请选择轮播图',{icon:5,time:1000});
+                    }
+                    var data = {id:id,goods_no:fields.goods_no,goods_name:fields.goods_name,cate_id:fields.cate_id,goods_desc:fields.goods_desc,
+                        sales_score:fields.sales_score,line_score:fields.line_score,sales_num:fields.sales_num,stock_num:fields.stock_num, sort:fields.sort,
                         is_hot:fields.is_hot,is_recommend:fields.is_recommend,goods_cover:coverPic,mulPic:pics,goods_desc:fields.goods_desc,
-                        goods_content:fields.content,cate_id:fields.cate_id};
+                        content:fields.content,status:fields.status};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '{{route('goods_edit')}}',
+                        url: '{{route('exchange_edit')}}',
                         data: data,
                         dataType: 'json',
                         success: function (data) {

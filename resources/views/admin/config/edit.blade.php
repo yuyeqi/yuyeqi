@@ -4,17 +4,35 @@
         <div class="layui-row">
             <form class="layui-form">
                 <div class="layui-form-item">
-                    <label for="slideshow_name" class="layui-form-label">
-                        <span class="x-red">*</span>名称
+                    <label for="news_title" class="layui-form-label">
+                        <span class="x-red">*</span>配置编号
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="slideshow_name" name="slideshow_name" required="" lay-verify="required"
-                               autocomplete="off" class="layui-input">
+                        <input type="text" disabled id="config_no" name="config_no" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input"  style="width: 800px" value="{{ $detail->config_no or '' }}">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="slideshow_url" class="layui-form-label">
-                        <span class="x-red">*</span>轮播图
+                    <label for="news_title" class="layui-form-label">
+                        <span class="x-red">*</span>配置名称
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="config_name" name="config_name" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input"  style="width: 800px" value="{{ $detail->config_name or '' }}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="news_title" class="layui-form-label">
+                        <span class="x-red">*</span>配置值
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="config_value" name="config_value"
+                               autocomplete="off" class="layui-input"  style="width: 800px" value="{{ $detail->config_value or '' }}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="news_cover" class="layui-form-label">
+                        <span class="x-red">*</span>配置图
                     </label>
                     <div class="layui-input-inline">
                         <div class="layui-upload">
@@ -22,25 +40,16 @@
                             <div class="layui-upload-list">
                                 <div id="" class="file-iteme">
                                     <div class="handle" id="handle"></div>
-                                    <img style="width: 100px;height: 100px;" alt="" id="uploadPic">
+                                    <img src="{{ $detail->background or '' }}" style="width: 100px;height: 100px;" alt="" id="uploadPic">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>排序
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="number" id="sort" name="sort"  required="" lay-verify="sort"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">简介</label>
+                    <label class="layui-form-label">配置内容</label>
                     <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" name="description" class="layui-textarea"></textarea>
+                        <textarea placeholder="请输入内容" name="content" class="layui-textarea">{{ $detail->content or '' }}</textarea>
                     </div>
                 </div>
                 <form class="layui-form layui-form-pane" action="">
@@ -48,7 +57,7 @@
                         <label for="L_repass" class="layui-form-label">
                         </label>
                         <button  class="layui-btn" lay-filter="add" lay-submit="">
-                            增加
+                            保存
                         </button>
                     </div>
                 </form>
@@ -92,13 +101,13 @@
                 form.on('submit(add)', function(data) {
                     var fields = data.field;
                     var coverPic = $("#uploadPic").attr('src');
-                    var data = {slideshow_name:fields.slideshow_name,description:fields.description, sort:fields.sort,slideshow_url:coverPic};
+                    var data = {config_no:fields.config_no,config_name:fields.config_name,config_value:fields.config_value, background:coverPic,content:fields.content};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '{{route('slideshow_add')}}',
+                        url: '{{route('config_edit')}}',
                         data: data,
                         dataType: 'json',
                         success: function (data) {
@@ -129,12 +138,10 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                     ,url: "{{ route('upload') }}" //改成您自己的上传接口
-                    ,method:'post'
                     ,accept:'images'
                     ,exts: 'jpg|png|gif|bmp|jpeg'
                     ,size: 4*1024*1024
                     ,before: function(obj){
-                        console.log(obj)
                         layer.msg('图片上传中...', {
                             icon: 16,
                             shade: 0.01,
@@ -142,7 +149,6 @@
                         })
                     }
                     ,done: function(res){
-                        console.log(res,1111)
                         //如果上传失败
                         if(res.code > 0){
                             return layer.msg('上传失败');

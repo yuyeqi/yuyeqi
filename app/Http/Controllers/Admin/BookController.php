@@ -45,62 +45,6 @@ class BookController extends BaseController
         return Render::table($lists->items(),$lists->total());;
     }
 
-    /**
-     * 添加新闻
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function addShow(){
-        return view('admin.slideshow.add');
-    }
-
-    /**
-     * 添加数据
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function add(Request $request){
-        $data = $request->only(['slideshow_name','slideshow_url','sort','description']);
-        //添加数据
-        try {
-            $result = $this->slideshowService->addSlideshow($data, $this->loginInfo);
-            if (!empty($result)){
-                return Render::success('添加成功');
-            }
-            return Render::error('添加失败');
-        } catch (\Exception $e) {
-            return Render::error("系统异常，请稍后再试！");
-        }
-    }
-
-    /**
-     * 编辑
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function editShow($id){
-        $detail = $this->slideshowService->getAdminSlideshowById($id);
-        return view('admin.slideshow.edit',['detail'=>$detail]);
-    }
-
-    /**
-     * 修改
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function edit(Request $request){
-        $data = $request->only(['id','slideshow_name','slideshow_url','sort','description']);
-        //修改数据
-        try {
-            $result = $this->slideshowService->editSlideshow($data, $this->loginInfo);
-            if ($result > 0){
-                return Render::success('修改成功');
-            }
-            return Render::error('修改失败');
-        } catch (\Exception $e) {
-            return Render::error("系统异常，请稍后再试！");
-        }
-
-    }
 
     /**
      * 批量删除
@@ -114,7 +58,7 @@ class BookController extends BaseController
         }
         //删除数据
         try {
-            $result = $this->slideshowService->delBatch($ids, $this->loginInfo);
+            $result = $this->bookService->delBatch($ids, $this->loginInfo);
             if ($result > 0){
                 return Render::success('删除成功');
             }
@@ -130,34 +74,21 @@ class BookController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateStatus(Request $request){
-        $data = $request->only(['id','status']);
-        try {
-            $result = $this->slideshowService->updateStatus($data, $this->loginInfo);
-            if ($result > 0){
-                return  Render::success('操作成功');
-            }
-            return  Render::error('操作失败');
-        } catch (\Exception $e) {
-            return Render::error("系统异常，请稍后再试！");
+        $data = $request->only(['id','status','audit_remark']);
+        $result = $this->bookService->updateStatus($data, $this->loginInfo);
+        if ($result > 0){
+            return  Render::success('操作成功');
         }
+        return  Render::error($this->bookService->getErrorMsg() ?: '操作失败');
 
     }
 
     /**
-     * 修改推荐状态
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * 审核页面
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function updateRecommend(Request $request){
-        $data = $request->only(['id','is_recommend']);
-        try {
-            $result = $this->newsService->updateIsRecommend($data, $this->loginInfo);
-            if ($result > 0){
-                return Render::success('操作成功');
-            }
-            return Render::error('操作失败');
-        } catch (\Exception $e) {
-            return Render::error("系统异常，请稍后再试！");
-        }
+    public function audit($id){
+        return view('admin.book.audit',compact('id'));
     }
 }

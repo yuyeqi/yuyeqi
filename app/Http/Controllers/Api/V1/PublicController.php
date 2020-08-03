@@ -103,7 +103,7 @@ class PublicController extends BaseController
     public function register(UserValidator $request)
     {
         $data = $request->only(['id', 'user_type', 'user_name', 'phone', 'sex', 'position_name', 'org_name', 'birthday', 'user_brand',
-            'province', 'province', 'area', 'address', 'parent_id', 'share_type']);
+            'province', 'city', 'area', 'address', 'parent_id', 'share_type']);
         if ($this->userService->register($data)) {
             Log::info('【用户注册】----注册成功');
             return Render::success("注册成功，待审核");

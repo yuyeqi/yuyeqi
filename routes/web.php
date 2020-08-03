@@ -12,11 +12,12 @@
 */
 //后台登陆
 //后台用户
+
 Route::prefix('public')->group(function (){
     Route::get('login','Admin\PublicController@login')->name('login');
     Route::post('login','Admin\PublicController@login')->name('login');
     Route::get('loginOut','Admin\PublicController@loginOut')->name('loginOut');
-    Route::post('upload','Admin\PublicController@upload')->name('upload');
+    Route::any('uploadAdmin','Admin\PublicController@uploadAdmin')->name('upload');
 });
 Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],function () {
     //后台首页
@@ -36,6 +37,13 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('updateStatus','AdminController@updateStatus')->name('admin_update_status');
         Route::post('deleteAll','AdminController@deleteAll')->name('admin_delete_all');
     });
+    //后台用户
+    Route::prefix('config')->group(function (){
+        Route::get('index','ConfigController@index')->name('config_index');
+        Route::get('lists','ConfigController@getConfigLists')->name('config_lists');
+        Route::get('editShow/{configNo}','ConfigController@editShow');
+        Route::post('edit','ConfigController@edit')->name('config_edit');;
+    });
     //商品管理
     Route::prefix('goods')->group(function (){
         Route::get('index','GoodsController@index')->name('goods_index');
@@ -46,6 +54,11 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('add','GoodsController@add')->name('goods_add');
         Route::post('updateGoods','GoodsController@updateGoods')->name('goods_edit');
         Route::post('delBatch','GoodsController@delBatch')->name('goods_delete_all');
+        Route::get('comment','GoodsController@comment')->name('goods_comment');
+        Route::get('getCommentLists','GoodsController@getCommentLists')->name('goods_comment_lists');
+        Route::post('updateStatus','GoodsController@updateStatus')->name('goods_update_status');
+        Route::post('updateTop','GoodsController@updateTop')->name('goods_update_top');
+        Route::post('delBatchCommnet','GoodsController@delBatchCommnet')->name('goods_delete_comment');
     });
     //新闻管理
     Route::prefix('news')->group(function (){
@@ -111,6 +124,7 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('edit','BookController@edit')->name('book_edit');
         Route::post('delBatch','BookController@delBatch')->name('book_del');
         Route::post('updateStatus','BookController@updateStatus')->name('book_update_status');
+        Route::get('audit/{id}','BookController@audit')->name('book_audit_show')->where('id', '[0-9]+');
     });
     //商品分类管理
     Route::prefix('goodsCate')->group(function (){
@@ -147,6 +161,18 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('edit','UserController@edit')->name('user_edit');
         Route::post('delBatch','UserController@delBatch')->name('user_del');
         Route::post('updateStatus','UserController@updateStatus')->name('user_update_status');
+        Route::get('withdraw','UserController@withdraw')->name('user_withdraw');
+        Route::get('withdrawList','UserController@withdrawList')->name('user_withdraw_lists');
+        Route::get('walletDeal','UserController@walletDeal')->name('user_walletDeal');
+        Route::get('walletDealList','UserController@walletDealList')->name('user_walletDeal_lists');
+        Route::get('scoreDeal','UserController@scoreDeal')->name('user_scoreDeal');
+        Route::get('scoreDealList','UserController@scoreDealList')->name('user_scoreDeal_lists');
+        Route::get('promoter','UserController@promoter')->name('user_promoter');
+        Route::get('promoterlList','UserController@promoterlList')->name('user_promoterl_lists');
+        Route::post('delBatchWithdraw','UserController@delBatchWithdraw')->name('user_withdraw_del');
+        Route::post('delBatchWallet','UserController@delBatchWallet')->name('user_wallet_del');
+        Route::post('delBatchScore','UserController@delBatchScore')->name('user_score_del');
+        Route::post('delBatchPromoter','UserController@delBatchPromoter')->name('user_promoter_del');
     });
     //订单
     Route::prefix('order')->group(function (){
@@ -178,5 +204,10 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('add','ExchangeController@add')->name('exchange_add');
         Route::post('updateGoods','ExchangeController@updateGoods')->name('exchange_edit');
         Route::post('delBatch','ExchangeController@delBatch')->name('exchange_delete_all');
+        Route::get('record','ExchangeController@record')->name('exchange_record');
+        Route::get('getRecordList','ExchangeController@getRecordList')->name('exchange_record_lists');
+        Route::get('auditShow/{id}','ExchangeController@auditShow')->name('exchange_auditShow');
+        Route::post('audit','ExchangeController@audit')->name('exchange_audit');
+        Route::post('delBatchRecord','ExchangeController@delBatchRecord')->name('exchange_delete_record');
     });
 });

@@ -94,9 +94,9 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('用户列表','{{ route("admin_index") }}')">
+                                <a onclick="xadmin.add_tab('用户列表','{{ route("config_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>用户列表</cite></a>
+                                    <cite>配置列表</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -115,6 +115,26 @@
                                 <a onclick="xadmin.add_tab('用户分类','{{ route("userCate_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>用户分类</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('提现记录','{{ route("user_withdraw") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>提现记录</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('钱包记录','{{ route("user_walletDeal") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>钱包记录</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('积分记录','{{ route("user_scoreDeal") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>积分记录</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('推广用户','{{ route("user_promoter") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>推广用户</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -147,18 +167,10 @@
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>商品分类</cite></a>
                             </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="城市联动">&#xe723;</i>
-                            <cite>日志管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('三级地区联动','city.html')">
+                                <a onclick="xadmin.add_tab('评论列表','{{ route('goods_comment') }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>三级地区联动</cite></a>
+                                    <cite>评论列表</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -247,6 +259,24 @@
                                 <a onclick="xadmin.add_tab('商品列表','{{ route("exchange_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>商品列表</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('兑换记录','{{ route("exchange_record") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>兑换记录</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="城市联动">&#xe723;</i>
+                            <cite>日志管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('日志列表','city.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>日志列表</cite></a>
                             </li>
                         </ul>
                     </li>

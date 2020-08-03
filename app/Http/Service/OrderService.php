@@ -184,12 +184,20 @@ class OrderService extends BaseSerivce
     public function addComment($userInfo, $goods_id, $content, $pictures)
     {
         Log::info("【订单评价开始】-----当前用户信息：userInfo:" . json_encode($userInfo));
+        //1.查询商品是否存在
+        $goodsInfo = $this->goods->getApiGoodsDetail($goods_id);
+        if(!$goodsInfo){
+            Log::error('[订单评价]-----评价商品不存在');
+            $this->setErrorMsg('商品不存在或已下架');
+            return  false;
+        }
         //评价数据
         $commentData = [
             'user_id' => $userInfo['id'],
             'user_name' => $userInfo['user_name'],
             'avatar_url' => $userInfo['avatar_url'],
             'goods_id' => $goods_id,
+            'goods_name' => $goodsInfo->goods_name,
             'comment_content' => $content
         ];
         Log::info('【订单评价】--------评价数据commentData:' . json_encode($commentData));

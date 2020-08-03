@@ -38,6 +38,7 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
         Route::get('getCateLists','V1\ShopController@getCateLists');
         Route::get('getShopDetail','V1\ShopController@getShopDetail');
         Route::get('getCommentList','V1\ShopController@getCommentList');
+        Route::any('notify','V1\ShopController@notify');
     });
     //新闻
     Route::prefix('news')->group(function (){

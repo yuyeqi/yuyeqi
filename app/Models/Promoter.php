@@ -12,8 +12,8 @@ namespace App\Models;
 class Promoter extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_promoter as p';
-
+    protected $table = 'hp_promoter';
+    const UPDATED_AT = null;
     //设置保存字段
     protected $guarded = [];
 
@@ -45,4 +45,37 @@ class Promoter extends Base
     }
 
 
+    /**
+     * 推广列表
+     * @param $goodsId
+     * @param $keywords
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function promoterlList($userId,$keywords,$dealType,$page,$limit){
+        $map = ['is_delete'=>0];
+        $userId > 0 && $map['promoter_id'] = $userId;
+        $dealType >  0 && $map['share_type'] = $dealType;
+        $field = ['*'];
+        return self::select($field)
+            ->when(!empty($keywords),function ($query) use ($keywords){
+                return $query->where('promoter_user','like','%'.$keywords.'%')
+                    ->orWhere('promoter_user_name','like','%'.$keywords.'%');
+            })
+            ->where($map)
+            ->orderBy('create_time','desc')
+            ->paginate($limit);
+    }
+
+    /**
+     * 批量删除
+     * @param $data
+     * @param array $ids
+     * @return mixed
+     */
+    public function delBatch($data, array $ids)
+    {
+        return self::whereIn('id', $ids)->update($data);
+    }
 }

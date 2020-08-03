@@ -70,4 +70,46 @@ class GoodsComment extends Base
             ->orderBy('create_time','desc')
             ->paginate($limit);
     }
+
+    /**
+     * 后端评论列表
+     * @param $keywords
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getCommentLists($keywords,$page,$limit){
+        $map = ['is_delete'=>0];
+        $field = ['*'];
+        return self::select($field)
+            ->where($map)
+            ->when(!empty($keywords),function ($query) use ($keywords){
+                return $query->where('user_name','like','%'.$keywords.'%')
+                    ->orWhere('goods_name','like','%'.$keywords.'%');
+            })
+            ->with(['picture'])
+            ->orderBy('is_top','desc')
+            ->orderBy('sort','desc')
+            ->orderBy('create_time','desc')
+            ->paginate($limit);
+    }
+
+    /**
+     * 更新状态
+     * @param $data
+     * @return mixed
+     */
+    public function updateStatus($data){
+        return self::where(["id"=>$data['id']])->update($data);
+    }
+
+    /**
+     * 批量删除数据
+     * @param $ids
+     * @param $data
+     * @return mixed
+     */
+    public function delBatch($ids,$data){
+        return self::whereIn("id",$ids)->update($data);
+    }
 }

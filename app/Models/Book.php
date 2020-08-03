@@ -183,9 +183,7 @@ class Book extends Base
      */
     public static function getApiBookDetail($id){
         $map = ['id'=>$id,'is_delete'=>0];
-        $field = ['id','book_no','client_name','client_phone','province','city', 'district',
-            'community','house_name','sex','arrive_time','status','book_score','store_score',
-            'actual_arrive_time','deal_finished_time','create_time'];
+        $field = ['*'];
         return self::select($field)
             ->where($map)
             ->first();

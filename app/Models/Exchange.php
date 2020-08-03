@@ -38,6 +38,15 @@ class Exchange extends Model
             ->where(['pic_type'=>3]);
     }
     /**
+     * 关联商品分类
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany/
+     */
+    public function cate(){
+        return $this->hasOne('App\Models\ExchangeCate','id','cate_id')
+            ->select(['id','cate_name'])
+            ->where(['is_delete'=>0]);
+    }
+    /**
      * 商品列表
      * @param $keyword
      * @param $limit
@@ -66,7 +75,7 @@ class Exchange extends Model
      */
     public function getGoodsDetailById($id){
         $map = ['is_delete'=>0,'id'=>$id];
-        return self::where($map)->with('picture')->first();
+        return self::where($map)->with('picture','cate')->first();
     }
 
     /**

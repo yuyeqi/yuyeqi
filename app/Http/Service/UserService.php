@@ -14,6 +14,7 @@ use App\Models\UserCate;
 use App\Models\UserStatistic;
 use App\Models\WalletDeal;
 use App\Models\Withdraw;
+use EasyWeChat\Factory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -32,6 +33,14 @@ class UserService extends BaseSerivce
     private $userAddress;
     //推荐人
     private $promoter;
+    //提现
+    private $withdraw;
+    //钱包交易
+    private $walletDeal;
+    //积分交易
+    private $scoreDeal;
+    //微信支付
+    private $app;
 
     /**
      * SlideshowService constructor.
@@ -42,6 +51,11 @@ class UserService extends BaseSerivce
         $this->userStatistic = isset($this->userStatistic) ?: new UserStatistic();
         $this->userAddress = isset($this->userAddress) ?: new UserAddress();
         $this->promoter = isset($this->promoter) ?: new Promoter();
+        $this->withdraw = isset($this->withdraw) ?: new Withdraw();
+        $this->walletDeal = isset($this->walletDeal) ?: new WalletDeal();
+        $this->scoreDeal = isset($this->scoreDeal) ?: new ScoreDeal();
+        $config = config('wechat.payment.default');
+        $this->app = isset($this->app) ?: Factory::payment($config);
     }
 
     /**
@@ -83,7 +97,7 @@ class UserService extends BaseSerivce
             //更新用户信息
             $this->user->updateUserInfoById($data);
             //更新用户账户信息
-            $this->userStatistic->updateAccout($userStatistic);
+            //$this->userStatistic->updateAccout($userStatistic);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -106,18 +120,23 @@ class UserService extends BaseSerivce
         $data['update_user_name'] = $loginInfo['update_user_name'];
         //1.获取用户信息
         $userInfo = User::getUserDetail($data['id']);
-        if (!$userInfo){
+        if (!$userInfo) {
             $this->setErrorMsg('用户不存在');
-            return  false;
+            return false;
+        }
+        //判断用户是否审核过
+        if ($userInfo->audit_status > 1) {
+            $this->setErrorMsg('禁止重复审核');
+            return false;
         }
         //2.根据用户分类配置
-        $cateInfo = UserCate::getUserCateInfoByUserType($data['id']);
-        if (!$cateInfo){
+        $cateInfo = UserCate::getUserCateInfoByUserType($userInfo->user_type);
+        if (!$cateInfo) {
             $this->setErrorMsg('缺少用户分类');
             return false;
         }
         //3.是审核通过时添加数据
-        if ($data['audit_status'] == 2){
+        if ($data['audit_status'] == 2) {
             //开启事务
             DB::beginTransaction();
             //1.添加用户统计信息
@@ -131,41 +150,53 @@ class UserService extends BaseSerivce
                 ];
                 UserStatistic::create($userStatistic);
                 //2.判断用户是否有推荐人
-                $promoterInfo = User::getUserDetail($userInfo['parent_id']);
+                $promoterInfo = User::getUserDetail($userInfo->parent_id);
                 if ($promoterInfo) {
                     //1.获取推广人的账户信息,推广人必须是注册成功的
-                    if ($promoterInfo->audit_status <= 0){
+                    if ($promoterInfo->audit_status != 2 || $promoterInfo->share_type > 0) {
                         $this->setErrorMsg('账户异常,请联系管理员');
-                        return  false;
+                        return false;
                     }
-                    $promoterAccount = UserStatistic::getAccountDetail($userInfo['parent_id']);
+                    $promoterAccount = UserStatistic::getAccountDetail($userInfo->parent_id);
                     //2审核通过修改推荐人的推荐人数和账户余额
                     $parentData = [
-                        'id' => $userInfo['parent_id'],
-                        'children_num' => bcadd($promoterAccount->children_num,1),
-                        'amount' => bcadd($promoterAccount->amount,$cateInfo['tg_account'],2)
+                        'id' => $userInfo->parent_id,
+                        'children_num' => bcadd($promoterAccount->children_num, 1),
+                        //'amount' => bcadd($promoterAccount->amount,$cateInfo->tg_account,2)
                     ];
                     $this->userStatistic->updatePromoterCount($parentData);
                     //3.添加推荐关系表
+                    $dealNo = $this->getOrderNo("gz");
                     $promoterData = [
-                        'promoter_id' => $userInfo['parent_id'],
-                        'promoter_user' => $userInfo['parent_name'],
-                        'promoter_user_id' => $userInfo['id'],
-                        'promoter_user_name' => $userInfo['user_name'],
-                        'promoter_amount' => $cateInfo['tg_account'],
-                        'promoter_surplus_amount' => bcadd($promoterAccount->amount,$cateInfo['tg_account'],2),
-                        'promoter_type' => $userInfo['user_type'],
-                        'amount' => $cateInfo['register_account'],
-                        'share_type' => $userInfo['']
+                        'deal_no' => $dealNo,
+                        'promoter_id' => $userInfo->parent_id,
+                        'promoter_user' => $userInfo->parent_name,
+                        'promoter_user_id' => $userInfo->id,
+                        'promoter_user_name' => $userInfo->user_name,
+                        'promoter_amount' => $cateInfo->tg_account,
+                        'promoter_surplus_amount' => bcadd($promoterAccount->amount, $cateInfo['tg_account'], 2),
+                        'promoter_type' => $userInfo->user_type,
+                        'amount' => $cateInfo->register_account,
+                        'share_type' => $userInfo->share_type
                     ];
                     Promoter::create($promoterData);
+                    //添加推广人的的推广积分
+                    $scoreLog = [
+                        'deal_no' => $dealNo,
+                        'user_id' => $promoterAccount->parent_id,
+                        'user_name' => $promoterAccount->parent_name,
+                        'deal_score' => $cateInfo->tg_account,
+                        'surplus_score' => bcadd($promoterAccount->amount, $cateInfo->tg_account, 2),
+                        'deal_type' => 5,
+                        'remark' => '推广积分'
+                    ];
                 }
                 DB::commit();
                 return true;
             } catch (\Exception $e) {
                 $this->setErrorMsg('系统异常，请联系管理员');
                 DB::rollBack();
-                return  false;
+                return false;
             }
 
         }
@@ -251,12 +282,12 @@ class UserService extends BaseSerivce
             return false;
         }
         //2.获取兑换比例
-         $config= Config::getConfigByNo("scoreToCash");
+        $config = Config::getConfigByNo("scoreToCash");
         $exchageRate = 0;
-        if (!$config){
+        if (!$config) {
             Log::info('【积分兑换】----缺少积分兑换配置项');
             $this->setErrorMsg("缺少系统配置，请联系管理人员");
-            return  false;
+            return false;
         }
         $exchageRate = $config->config_value;
         if (empty($exchageRate) || $exchageRate <= 0) {
@@ -336,10 +367,10 @@ class UserService extends BaseSerivce
         //检测提现的最小金额
         $config = Config::getConfigByNo("withdrawCush");
         $minWithdraw = 0;
-        if (!$config){
+        if (!$config) {
             Log::info('【用户提现】----最小金额未配置');
             $this->setErrorMsg("缺少系统配置，请联系管理人员");
-            return  false;
+            return false;
         }
         $minWithdraw = $config->config_value;
         if ($cush < $minWithdraw) {
@@ -362,8 +393,7 @@ class UserService extends BaseSerivce
             'user_name' => $userInfo['user_name'],
             'amount' => $cush,
             'surplus_amount' => $diffCush,
-            'remark' => $remark,
-            'create_time' => time()
+            'remark' => $remark
         ];
         //5.更新账户数据
         $accountData = [
@@ -413,7 +443,7 @@ class UserService extends BaseSerivce
      */
     public function getPromoterLists($userInfo, $page, $limit)
     {
-        $field = ['p.id', 'promoter_user_id', 'promoter_user_name', 'promoter_amount', 'p.share_type', 'p.create_time','u.avatar_url'];
+        $field = ['p.id', 'promoter_user_id', 'promoter_user_name', 'promoter_amount', 'p.share_type', 'p.create_time', 'u.avatar_url'];
         $lists = Promoter::getPromoterLists($userInfo, $field, $page, $limit);
         return $this->getPageData($lists);
     }
@@ -542,8 +572,9 @@ class UserService extends BaseSerivce
      * @param $id
      * @return bool
      */
-    public function setDefaultUserAddress($userInfo,$id){
-        Log::info('【设置用户默认地址开始】----用户信息：userInfo = '.json_encode($userInfo).',id='.$id);
+    public function setDefaultUserAddress($userInfo, $id)
+    {
+        Log::info('【设置用户默认地址开始】----用户信息：userInfo = ' . json_encode($userInfo) . ',id=' . $id);
         //开启事务
         DB::beginTransaction();
 
@@ -553,7 +584,7 @@ class UserService extends BaseSerivce
             //2.设置默认地址
             $this->userAddress->setDefaultUserAddress($id);
             //3.修改用户默认地址
-            $this->user->updateUserAddress($userInfo['id'],$id);
+            $this->user->updateUserAddress($userInfo['id'], $id);
             Log::info('【设置用户默认地址】----设置成功');
             DB::commit();
             return true;
@@ -575,15 +606,15 @@ class UserService extends BaseSerivce
      */
     public function register($data)
     {
-        Log::info('【用户注册】----注册开始，注册数据：data='.json_encode($data));
+        Log::info('【用户注册】----注册开始，注册数据：data=' . json_encode($data));
         //1.检测用户是否微信登录授权
         $userInfo = User::getUserDetail($data['id']);
-       if (!$userInfo){
+        if (!$userInfo) {
             Log::error('【用户注册】----注册失败，注册要先微信授权，成功后才能注册');
             $this->setErrorMsg("请先微信授权");
             return false;
         }
-       $data['audit_status'] = 1;
+        $data['audit_status'] = 1;
         return $this->user->register($data);
     }
 
@@ -596,9 +627,195 @@ class UserService extends BaseSerivce
      */
     public function getCushLists($userInfo, $status, $page, $limit)
     {
-        $field = ['id','amount','status','create_time'];
+        $field = ['id', 'amount', 'status', 'create_time'];
         $pageData = Withdraw::getCushLists($userInfo, $field, $status, $page, $limit);
         return $this->getPageData($pageData);
     }
 
+    /**
+     * 提现列表
+     * @param $goodsId
+     * @param $keywords
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getWithdrawList($goodsId, $keywords, $page, $limit)
+    {
+        return $this->withdraw->getWithdrawList($goodsId, $keywords, $page, $limit);
+    }
+
+    /**
+     * 提现列表
+     * @param $goodsId
+     * @param $keywords
+     * @param $dealType
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function walletDealList($goodsId, $keywords, $dealType, $page, $limit)
+    {
+        return $this->walletDeal->walletDealList($goodsId, $keywords, $dealType, $page, $limit);
+    }
+
+    /**
+     * 积分交易列表
+     * @param $goodsId
+     * @param $keywords
+     * @param $dealType
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function scoreDealList($goodsId, $keywords, $dealType, $page, $limit)
+    {
+        return $this->scoreDeal->scoreDealList($goodsId, $keywords, $dealType, $page, $limit);
+    }
+
+    /**
+     * 推广列表
+     * @param $goodsId
+     * @param $keywords
+     * @param $dealType
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function promoterlList($goodsId, $keywords, $dealType, $page, $limit)
+    {
+        return $this->promoter->promoterlList($goodsId, $keywords, $dealType, $page, $limit);
+    }
+
+    /**
+     * 删除提现记录
+     * @param array $ids
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function delBatchWithdraw(array $ids, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        $data['is_delete'] = 1;
+        return $this->withdraw->delBatch($data, $ids);
+    }
+
+    /**
+     * 删除钱包记录
+     * @param array $ids
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function delBatchWallet(array $ids, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        $data['is_delete'] = 1;
+        return $this->walletDeal->delBatch($data, $ids);
+    }
+
+    /**
+     * 删除积分
+     * @param array $ids
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function delBatchScore(array $ids, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        $data['is_delete'] = 1;
+        return $this->scoreDeal->delBatch($data, $ids);
+    }
+
+    /**
+     * 删除推广用户
+     * @param array $ids
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function delBatchPromoter(array $ids, $loginInfo)
+    {
+        $data['is_delete'] = 1;
+        return $this->promoter->delBatch($data, $ids);
+    }
+
+    /**
+     * 提现审核操作
+     * @param $data
+     * @param $loginInfo
+     * @return bool
+     */
+    public function cushAudit($data, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        //1.获取提现记录信息
+        $cushInfo = Withdraw::getWalletdrawInfo($data['id']);
+        if (!$cushInfo) {
+            $this->setErrorMsg('提现记录不存在');
+            return false;
+        }
+        if ($cushInfo->status == 20) {
+            $this->setErrorMsg('提现已通过，请勿重复操作');
+            return false;
+        }
+        //开启事务
+        DB::beginTransaction();
+        //2.如果审核通过,需要企业给用户转账到零钱
+        try {
+            //3.修改提现记录状态
+            $this->withdraw->updateStatus($data);
+            //4.提现人用户信息
+            $accountInfo = UserStatistic::getAccountDetail($cushInfo->user_id);
+            //5.提现用户的账户信息
+            $userInfo = User::getUserDetail($cushInfo->user_id);
+            if (!$accountInfo && !$userInfo) {
+                $this->setErrorMsg('用户不存在,请联系管理员');
+                return false;
+            }
+            if ($data['status'] == 20) {
+                //6.修改用户账户信息
+                $accountData = [
+                    'frozen_amount' => bcsub($accountInfo->frozen_amount, $userInfo->amount, 2),  //解冻账户金额
+                    'withdraw_amount' => bcadd($accountInfo->withdraw_amount, $userInfo->amount, 2),  //增加提现金额
+                ];
+                $this->userStatistic->updateAccout($accountData);
+                //7.生成提现记录
+                $cushLog = [
+                    'deal_no' => $cushInfo->dealNo,
+                    'user_id' => $userInfo['id'],
+                    'user_name' => $userInfo['user_name'],
+                    'amount' => $cushInfo->account,
+                    'surplus_amount' => $cushInfo->surplus_amount,
+                    'remark' => '用户提现'
+                ];
+                WalletDeal::create($cushLog);
+                //8.企业转账到用户
+                $payData = [
+                    'partner_trade_no' => $cushInfo->deal_no, // 商户订单号，需保持唯一性(只能是字母或者数字，不能包含有符号)
+                    'openid' => $userInfo->openid,
+                    'check_name' => 'NO_CHECK', // NO_CHECK：不校验真实姓名, FORCE_CHECK：强校验真实姓名
+                    're_user_name' => $cushInfo->user_name, // 如果 check_name 设置为FORCE_CHECK，则必填用户真实姓名
+                    'amount' => bcmul($userInfo->account, 100, 2), // 企业付款金额，单位为分
+                    'desc' => '用户' . $cushInfo->user_name . '的账户提现', // 企业付款操作说明信息。必填
+                ];
+                $this->app->transfer($payData);
+            }elseif ($data['status'] == 30){
+                //6.拒绝申请,修改用户账户信息,返回余额
+                $accountData = [
+                    'frozen_amount' => bcsub($accountInfo->frozen_amount, $userInfo->amount, 2),  //解冻账户金额
+                    'amount' => bcadd($accountInfo->amount, $userInfo->amount, 2),  //增加提现金额
+                ];
+                $this->userStatistic->updateAccout($accountData);
+            }
+            DB::commit();
+            return  true;
+        } catch (\Exception $e) {
+            $this->setErrorMsg($e->getMessage());
+            DB::rollBack();
+            return  false;
+        }
+    }
 }

@@ -142,6 +142,42 @@ class GoodsService extends BaseSerivce
         $data['is_delete'] = 1;
         return $this->goods->delBatch($ids,$data);
     }
+
+    /**
+     * 评论列表
+     * @param $keywords
+     * @param $page
+     * @param $limit
+     * @return mixed
+     */
+    public function getCommentLists($keywords,$page,$limit){
+        return $this->comment->getCommentLists($keywords,$page,$limit);
+    }
+
+    /**
+     * 修改状态
+     * @param $data
+     * @return bool
+     */
+    public function updateStatus($data,$loginInfo){
+        $data['update_user_id'] = $loginInfo['id'];
+        $data['update_user_name'] = $loginInfo['username'];
+        return $this->comment->updateStatus($data);
+    }
+
+    /**
+     * 删除评论
+     * @param $ids
+     * @param $loginInfo
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function delBatchCommnet($ids,$loginInfo){
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        $data['is_delete'] = 1;
+        return $this->comment->delBatch($ids,$data);
+    }
 /*----------------------------------------小程序------------------------------------------------------*/
     /**
      * 小程序首页新品推荐

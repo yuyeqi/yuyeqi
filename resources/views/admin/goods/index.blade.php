@@ -22,7 +22,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('goods_add_show') }}',850,600,true)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加商品','{{ route('goods_add_show') }}',850,600,true)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -64,7 +64,7 @@
                 ,{field:'book_price', width:100, title: '定金'}
                 ,{field:'comment_num', width:80, title: '评价数'}
                 ,{field:'goods_status', width:80, title: '状态',templet: function (d) {
-                        if(d.is_hot == 10){
+                        if(d.goods_status == 10){
                             return '正常';
                         }else{
                             return  '下架';
@@ -85,7 +85,7 @@
                         }
                     }}
                 ,{field:'is_recommend', title: '推荐', minWidth: 80,templet: function (d) {
-                        if(d.is_hot == 0){
+                        if(d.is_recommend == 0){
                             return '正常';
                         }else{
                             return  '推荐';

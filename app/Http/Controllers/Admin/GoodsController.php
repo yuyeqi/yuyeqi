@@ -8,6 +8,7 @@ use App\Http\Service\GoodsCateService;
 use App\Http\Service\GoodsService;
 use App\Library\Render;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * 商品控制器
@@ -141,17 +142,84 @@ class GoodsController extends BaseController
         return Render::error("删除失败");
     }
 
-    /**
-     * 修改商品状态
-     */
-    public function updateStatus(){
-
-    }
 
     /**
      * 修改排序
      */
     public function updateSort(){
 
+    }
+
+    /**
+     * 评论列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function comment(){
+        return view('admin.goods.comment');
+    }
+    /**
+     * 评论列表
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCommentLists(Request $request){
+        $page = $request->input('page',1);
+        $limit = $request->input('limit',10);
+        $keywords = $request->input('keywords','');
+        $lists = $this->goodsSerivce->getCommentLists($keywords,$page,$limit);
+        return  Render::table($lists->items(),$lists->total());
+    }
+
+    /**
+     * 更新状态
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateStatus(Request $request){
+        $data = $request->only('id','status');
+        //数据验证
+        $validator =Validator::make($data,[
+            'id' => 'required|integer',
+            'status' => 'required|integer',
+        ]);
+        //更新状态
+        if ($this->goodsSerivce->updateStatus($data,$this->loginInfo)){
+            return Render::success('设置成功');
+        }
+        return  Render::error('设置失败');
+    }
+
+    /**
+     * 置顶
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateTop(Request $request){
+        $data = $request->only('id','is_top');
+        //数据验证
+        $validator =Validator::make($data,[
+            'id' => 'required|integer',
+            'is_top' => 'required|integer',
+        ]);
+        //更新状态
+        if ($this->goodsSerivce->updateStatus($data,$this->loginInfo)){
+            return Render::success('设置成功');
+        }
+        return  Render::error('设置失败');
+    }
+
+    /**
+     * 删除商品
+     * @param $request
+     */
+    public function delBatchCommnet(Request $request){
+        $ids = $request->input("ids");
+        if (empty($ids)){
+            return Render::error("参数错误");
+        }
+        if ($this->goodsSerivce->delBatchCommnet($ids,$this->loginInfo)){
+            return Render::success("删除成功");
+        }
+        return Render::error("删除失败");
     }
 }

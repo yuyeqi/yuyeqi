@@ -77,25 +77,25 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="goods_status" value="10" title="上架"  @if($detail->goods_status['status'] == 10 )checked=""@endif>
-                        <input type="radio" name="goods_status" value="20" title="下架" @if($detail->goods_status['status'] == 20 )checked=""@endif>
+                        <input type="radio" name="goods_status" value="10" title="上架"  @if($detail->goods_status == 10 )checked=""@endif>
+                        <input type="radio" name="goods_status" value="20" title="下架" @if($detail->goods_status == 20 )checked=""@endif>
                     </div>
                     <label class="layui-form-label">新品</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="is_new" value="0" title="正常"  @if($detail->is_new['status'] == 0) checked @endif >
-                        <input type="radio" name="is_new" value="1" title="新品" @if($detail->is_new['status'] == 1) checked @endif >
+                        <input type="radio" name="is_new" value="0" title="正常"  @if($detail->is_new == 0) checked @endif >
+                        <input type="radio" name="is_new" value="1" title="新品" @if($detail->is_new == 1) checked @endif >
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">热门</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="is_hot" value="0" title="正常" @if($detail->is_hot['status'] == 0) checked @endif>
-                        <input type="radio" name="is_hot" value="1" title="热门" @if($detail->is_hot['status'] == 1) checked @endif>
+                        <input type="radio" name="is_hot" value="0" title="正常" @if($detail->is_hot == 0) checked @endif>
+                        <input type="radio" name="is_hot" value="1" title="热门" @if($detail->is_hot == 1) checked @endif>
                     </div>
                     <label class="layui-form-label">推荐</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="is_recommend" value="0" title="正常" @if($detail->is_recommend['status'] == 0)checked=""@endif>
-                        <input type="radio" name="is_recommend" value="1" title="推荐" @if($detail->is_recommend['status'] == 1)checked=""@endif>
+                        <input type="radio" name="is_recommend" value="0" title="正常" @if($detail->is_recommend == 0)checked=""@endif>
+                        <input type="radio" name="is_recommend" value="1" title="推荐" @if($detail->is_recommend == 1)checked=""@endif>
                     </div>
                 </div>
                 <div class="layui-form-item">

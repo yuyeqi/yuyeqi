@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('Admin.layouts.app')
 @section('title','管理员列表')
 @section('nav')
 <!-- 导航开始 -->
@@ -18,13 +18,25 @@
             <div class="layui-card">
                 <div class="layui-card-body ">
                     <div class="layui-inline">
-                        <input class="layui-input" name="keywords" autocomplete="off">
+                        <input class="layui-input" name="keywords" autocomplete="off" placeholder="请输入用户名">
+                    </div>
+                    <div class="layui-inline">
+                        <input class="layui-input" name="userId" autocomplete="off" placeholder="请输入用户id">
+                    </div>
+                    <div class="layui-input-inline layui-show-xs-block">
+                        <select id="dealType" class="layui-select" style="width: 150px">
+                            <option value="0">交易类型</option>
+                            <option value="1">预约</option>
+                            <option value="2">到店</option>
+                            <option value="3">订单</option>
+                            <option value="4">积分兑换</option>
+                            <option value="5">商品兑换</option>
+                        </select>
                     </div>
                     <button class="layui-btn" data-type="reload">搜索</button>
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加分类','{{ route('userCate_add_show') }}',650,500)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -36,7 +48,6 @@
 @endsection
 @section('js')
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
@@ -49,25 +60,28 @@
         //表格展示
         table.render({
             elem: '#table'
-            ,url: "{{ route('userCate_lists') }}"
+            ,url: "{{ route('user_scoreDeal_lists') }}"
             ,cols: [[
                 {type: 'checkbox',field: 'left'}
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
-                ,{field:'cate_name', width:120, title: '分类名称',align: "center"}
-                ,{field:'register_account', width:120, title: '注册金额',align: "center"}
-                ,{field:'tg_account', width:120, title: '推广积分',align: "center"}
-                ,{field:'book_score', width:120, title: '预约积分',align: "center"}
-                ,{field:'store_score', width:120, title: '到店积分',align: "center"}
-                ,{field:'order_score', width:120, title: '下单积分',align: "center"}
-                ,{field:'status', title: '状态',align: "center", width:120,templet: function(d){
-                        if(d.status == 10){
-                            return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
-                        }else{
-                            return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'
+                ,{field:'deal_no', width:200, title: '交易单号',align:"center"}
+                ,{field:'user_name', width:100, title: '用户名 ',align: "center"}
+                ,{field:'deal_score', width:120, title: '交易积分',align:"center"}
+                ,{field:'surplus_score', width:120, title: '积分余额 ',align: "center"}
+                ,{field:'deal_type', title: '交易类型',align: "center", width:120,templet: function(d){
+                        if(d.deal_type == 1){
+                            return '预约';
+                        }else if(d.deal_type == 2){
+                            return '到店';
+                        }else if(d.status == 3){
+                            return  '订单';
+                        }else if(d.deal_type == 4){
+                            return '积分兑换';
+                        }else if(d.status == 5){
+                            return  '商品兑换';
                         }
                     } }
-                ,{field:'update_user_name',align: "center", width:100, title: '更新人'}
-                ,{field:'update_time', title: '更新时间',align: "center",width:200}
+                ,{field:'remark',align: "center", width:200, title: '提现备注'}
                 ,{field:'create_time', title: '创建时间',align: "center",width:200}
                 ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:120}
             ]]
@@ -78,8 +92,8 @@
         //监听工具条
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
-            if(obj.event === 'edit'){
-                xadmin.open('编辑',"/hp/userCate/editShow/"+data.id,650,500);
+            if(obj.event === 'audit'){
+                xadmin.open('编辑',"/hp/goodsCate/editShow/"+data.id,500,300);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);
@@ -90,6 +104,8 @@
         var $ = layui.$,active = {
             reload: function (){
                 var keywords = $("input[name='keywords']").val();
+                var userId = $("input[name='userId']").val();
+                var dealType  = $("#dealType").val();
                 //执行重载
                 table.reload('tableId',{
                     page: {
@@ -97,6 +113,8 @@
                     }
                     , where: {
                         keywords:keywords,
+                        userId:userId,
+                        dealType:dealType
                     }
                 })
             }
@@ -124,34 +142,6 @@
             elem: '#end' //指定元素
         });
     });
-    /*用户-停用*/
-    function member_stop(id,status){
-        var status = status == 10 ? 20 : 10;
-        var msg = status == 20 ? '确认要停用吗？' : '确认要启用吗？';
-        layer.confirm(msg,function(index){
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'post',
-                url: "{{ route('userCate_update_status') }}",
-                dataType: 'json',
-                data: {id:id,status:status},
-                success: function (data) {
-                    if(data.code == 0){
-                        layer.msg(data.msg,{icon:1,time:1000});
-                    }else{
-                        layer.msg(data.msg,{icon:5,time:1000});
-                    }
-                    //刷新页面
-                    location.reload();
-                },
-                error: function (xhr,type) {
-
-                }
-            })
-        });
-    }
     /*用户-删除*/
     function member_del(id){
         var data = [id];
@@ -161,7 +151,7 @@
             },
             type: 'post',
             data: {ids:data},
-            url: "{{ route('userCate_del') }}",
+            url: "{{ route('user_score_del') }}",
             dataType: 'json',
             success: function (data) {
                 if(data.code == 0){
@@ -190,7 +180,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '{{route("userCate_del")}}',
+                url: '{{route("user_score_del")}}',
                 dataType: 'json',
                 data: {ids: ids},
                 success: function (data) {

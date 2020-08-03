@@ -8,7 +8,7 @@
                         用户姓名
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="user_name" value="{{ $detail->user_name or '' }}" name="user_name" required="" lay-verify="required"
+                        <input type="text" id="user_name" value="{{ $detail->user_name or '' }}" name="user_name"
                                                                              autocomplete="off" class="layui-input">
                         <input type="hidden" value="{{ $detail->id or '' }}" id="hiddenId">
                     </div>
@@ -16,7 +16,7 @@
                         用户电话
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="phone" value="{{ $detail->phone or '' }}" name="phone" required="" lay-verify="username" lay-verify="phone"
+                        <input type="text" id="phone" value="{{ $detail->phone or '' }}" name="phone"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -26,17 +26,17 @@
                     </label>
                     <div class="layui-input-inline">
                         <select name="user_type">
-                            <option value="1"  @if($detail->user_type['status'] == 1 )selected=""@endif>设计师</option>
-                            <option value="2"  @if($detail->user_type['status'] == 2 )selected=""@endif>异业</option>
-                            <option value="3"  @if($detail->user_type['status'] == 3 )selected=""@endif>用户</option>
-                            <option value="4"  @if($detail->user_type['status'] == 4 )selected=""@endif>员工</option>
-                            <option value="5"  @if($detail->user_type['status'] == 5 )selected=""@endif>其他</option>
+                            <option value="1"  @if($detail->user_type == 1 )selected=""@endif>设计师</option>
+                            <option value="2"  @if($detail->user_type == 2 )selected=""@endif>异业</option>
+                            <option value="3"  @if($detail->user_type == 3 )selected=""@endif>用户</option>
+                            <option value="4"  @if($detail->user_type == 4 )selected=""@endif>员工</option>
+                            <option value="5"  @if($detail->user_type == 5 )selected=""@endif>其他</option>
                         </select>
                     </div>
                     <label class="layui-form-label">用户性别</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="sex" value="1" title="男"  @if($detail->sex['status'] == 1 )checked=""@endif>
-                        <input type="radio" name="sex" value="2" title="女"  @if($detail->sex['status'] == 2 )checked=""@endif>
+                        <input type="radio" name="sex" value="1" title="男"  @if($detail->sex == 1 )checked=""@endif>
+                        <input type="radio" name="sex" value="2" title="女"  @if($detail->sex == 2 )checked=""@endif>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -44,7 +44,7 @@
                         用户职称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="position_name" value="{{ $detail->position_name or '' }}" name="position_name" required=""
+                        <input type="text" id="position_name" value="{{ $detail->position_name or '' }}" name="position_name"
                                autocomplete="off" class="layui-input">
                     </div>
                     <label for="org_name" class="layui-form-label">
