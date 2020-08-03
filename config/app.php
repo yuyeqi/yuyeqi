@@ -162,7 +162,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Way\Generators\GeneratorsServiceProvider::class,
         Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
-
+        Jacobcyl\AliOSS\AliOssServiceProvider::class,
     ],
 
     /*
