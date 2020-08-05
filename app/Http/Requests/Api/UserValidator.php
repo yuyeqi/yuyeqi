@@ -41,6 +41,7 @@ class UserValidator extends FormRequest implements ValidatesWhenResolved
     public function rules()
     {
         return [
+            'id' => 'required|number',
             'user_type' => 'required',
             'user_name' => 'required',
             'phone' => 'regex:/^1[345789][0-9]{9}$/|unique:hp_user'
@@ -54,6 +55,7 @@ class UserValidator extends FormRequest implements ValidatesWhenResolved
      */
     public function messages(){
         return [
+            'id.required' => '缺少用户ID',
             'user_type.required' => '缺少用户分类',
             'user_name.required' => '请输入姓名',
             'phone.regex'  => '请输入正确的电话号',

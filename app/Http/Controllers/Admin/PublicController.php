@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 class PublicController extends Controller
 {
     private $adminService;
-
+    const   PHTHURL = 'admin'; //上传文件路径
     /**
      * PublicController constructor.
      * @param $adminService
@@ -87,7 +87,6 @@ class PublicController extends Controller
         $file = $request->file('file');
         if ($file && $file->isValid()) {
             // 获取文件相关信息
-            $originalName = $file->getClientOriginalName(); //文件原名
             $ext = $file->getClientOriginalExtension();     // 扩展名
             $realPath = $file->getRealPath();   //临时文件的绝对路径
             $type = $file->getClientMimeType();     // image/jpeg
@@ -99,11 +98,9 @@ class PublicController extends Controller
             if(!in_array($ext,$extArr)){
                 return Render::error('文件格式不正确');
             }
-            // 拼接文件名称
-            $filename = date('YmdHis') . uniqid() . '.' . $ext;
-            $bool = Storage::disk('admin')->put($filename, file_get_contents($realPath));
+            $bool = Storage::put(self::PHTHURL, $file);
             if ($bool){
-                $url = $request->server()['HTTP_ORIGIN'].'/storage/upload/admin/'.date('Ymd',time()).'/'.$filename;
+                $url = Storage::url($bool);
                 return Render::success('上传成功',$url);
             }else{
                 return  Render::error('上传失败');

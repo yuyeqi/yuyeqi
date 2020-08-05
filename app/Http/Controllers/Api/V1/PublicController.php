@@ -12,6 +12,7 @@ use App\Models\Base;
 use App\Models\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 
 /**
@@ -23,6 +24,7 @@ class PublicController extends BaseController
 {
     private $userService;  //用户服务层
     private $userCateService;   //用户分类服务层
+    const   PHTHURL = 'api'; //上传文件路径
 
     /**
      * UserController constructor.
@@ -41,26 +43,29 @@ class PublicController extends BaseController
      */
     public function uploadImg(Request $request)
     {
-        $Path = "/public/upload/";
-        if (!empty($_FILES['file'])) {
-            //获取扩展名
-            $exename = $this->getExeName($_FILES['file']['name']);
-            if ($exename != 'png' && $exename != 'jpg' && $exename != 'gif') {
-                return Render::error("图片格式错误");
+        $file = $request->file('file');
+        if ($file && $file->isValid()) {
+            // 获取文件相关信息
+            $ext = $file->getClientOriginalExtension();     // 扩展名
+            $realPath = $file->getRealPath();   //临时文件的绝对路径
+            $type = $file->getClientMimeType();     // image/jpeg
+            $size =$file->getSize();
+            if($size > 4*1024*1024){
+                return Render::error('文件大小超过4M');
             }
-            $fileName = $_SERVER['DOCUMENT_ROOT'] . $Path . date('Ym');//文件路径
-            $upload_name = '/img_' . date("YmdHis") . rand(0, 100) . '.' . $exename;//文件名加后缀
-            if (!file_exists($fileName)) {
-                //进行文件创建
-                mkdir($fileName, 0777, true);
+            $extArr = array('jpg','jpeg','png','gif');
+            if(!in_array($ext,$extArr)){
+                return Render::error('文件格式不正确');
             }
-            $imageSavePath = $fileName . $upload_name;
-            if (move_uploaded_file($_FILES['file']['tmp_name'], $imageSavePath)) {
-                return Render::success('上传成功', $Path . date('Ym') . $upload_name);
+            $bool = Storage::put(self::PHTHURL, $file);
+            if ($bool){
+                $url = Storage::url($bool);
+                return Render::success('上传成功',$url);
+            }else{
+                return  Render::error('上传失败');
             }
-        } else {
-            return Render::error("上传失败");
         }
+        return  Render::error('上传失败');
 
     }
 
