@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title','管理员列表')
+@section('title','积分列表')
 @section('nav')
     <!-- 导航开始 -->
     <div class="x-nav">
