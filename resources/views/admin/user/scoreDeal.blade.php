@@ -17,7 +17,20 @@
                 <div class="layui-card">
                     <div class="layui-card-body ">
                         <div class="layui-inline">
-                            <input class="layui-input" name="keywords" autocomplete="off">
+                            <input class="layui-input" name="keywords" autocomplete="off" placeholder="请输入用户名">
+                        </div>
+                        <div class="layui-inline">
+                            <input class="layui-input" name="userId" autocomplete="off" placeholder="请输入用户id">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select id="dealType" class="layui-select" style="width: 150px">
+                                <option value="0">交易类型</option>
+                                <option value="1">预约</option>
+                                <option value="2">到店</option>
+                                <option value="3">订单</option>
+                                <option value="4">积分兑换</option>
+                                <option value="5">商品兑换</option>
+                            </select>
                         </div>
                         <button class="layui-btn" data-type="reload">搜索</button>
                     </div>
