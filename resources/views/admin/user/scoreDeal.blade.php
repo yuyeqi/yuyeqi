@@ -47,12 +47,6 @@
 @endsection
 @section('js')
     <script type="text/html" id="barDemo">
-        @{{# if(d.audit_status == 1){ }}
-        <a class="layui-btn layui-btn-xs audit" lay-event="audit">审核</a>
-        @{{# } }}
-        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="show">查看</a>
-        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="account">账户</a>
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
     <script>
@@ -62,76 +56,33 @@
             var  form = layui.form,
                 table = layui.table,
                 $ = layui.$;
-            var username = $("input[name='username']").val();
             //表格展示
             table.render({
                 elem: '#table'
-                ,url: "{{ route('user_lists') }}"
-                ,cellMinWidth: 150
+                ,url: "{{ route('user_scoreDeal_lists') }}"
                 ,cols: [[
                     {type: 'checkbox',field: 'left'}
-                    ,{field:'id', width:80, title: 'ID', sort: true}
-                    ,{field:'user_name', align: "center",width:100, title: '姓名'}
-                    ,{field:'nick_name',align: "center", minWidth:150, title: '微信昵称'}
-                    ,{field:'avatar_url',align: "center", title: '微信图像',templet: function(d){
-                            return  "<span id='pic_" + d.id + "'><img src='" + d.avatar_url + "'  style='width: 40px' lay-event='showPic' ></span>";
-                        } }
-                    , {
-                        field: 'user_type', align: "center", width: 100, title: '用户类型', templet: function (d) {
-                            if (d.user_type == 1) {
-                                return '设计师';
-                            } else if (d.user_type == 2) {
-                                return '异业';
-                            } else if (d.user_type == 3) {
-                                return '用户';
-                            } else if (d.user_type == 4) {
-                                return '员工';
-                            } else{
-                                return '其他';
-                            }
-                        }
-                    }
-                    ,{field:'phone', align: "center",width:100, title: '电话'}
-                    ,{field:'sex',align: "center", title: '性别', minWidth: 80,templet: function(d){
-                            if(d.sex == 1){
-                                return  '男';
-                            }else if(d.sex ==2){
-                                return  '女';
-                            }else{
-                                return  '未知'
+                    ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
+                    ,{field:'deal_no', width:200, title: '交易单号',align:"center"}
+                    ,{field:'user_name', width:100, title: '用户名 ',align: "center"}
+                    ,{field:'deal_score', width:120, title: '交易积分',align:"center"}
+                    ,{field:'surplus_score', width:120, title: '积分余额 ',align: "center"}
+                    ,{field:'deal_type', title: '交易类型',align: "center", width:120,templet: function(d){
+                            if(d.deal_type == 1){
+                                return '预约';
+                            }else if(d.deal_type == 2){
+                                return '到店';
+                            }else if(d.status == 3){
+                                return  '订单';
+                            }else if(d.deal_type == 4){
+                                return '积分兑换';
+                            }else if(d.status == 5){
+                                return  '商品兑换';
                             }
                         } }
-                    ,{field:'parent_name', align: "center",width:150, title: '推荐人',templet: function(d){
-                            if(d.parent_name == '' || d.parent_name == null){
-                                return '平台';
-                            }
-                            return d.parent_name;
-                        } }
-                    ,{field:'position_name', align: "center",title: '职称', minWidth: 100}
-                    ,{field:'org_name', align: "center",title: '单位名称', minWidth: 100}
-                    ,{field:'status', title: '状态',align: "center", width:120,templet: function(d){
-                            if(d.status.status == 10){
-                                return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
-                            }else{
-                                return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'
-                            }
-                        } }
-                    ,{field:'audit_status',align:'center', title: '审核状态',templet: function(d){
-                            if(d.audit_status == 0){
-                                return  '未注册';
-                            }else if(d.audit_status ==1){
-                                return  '审核中';
-                            }else if(d.audit_status ==2){
-                                return  '审核通过';
-                            }else if(d.audit_status ==3){
-                                return  '拒绝 ';
-                            }
-                        } }
-                    ,{field:'audit_user_name', align: "center",title: '审核人姓名'}
-                    ,{field:'update_user_name',align: "center", title: '更新人'}
-                    ,{field:'update_time', align: "center",title: '更新时间'}
-                    ,{field:'create_time',align: "center", title: '创建时间'}
-                    ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:260}
+                    ,{field:'remark',align: "center", width:200, title: '提现备注'}
+                    ,{field:'create_time', title: '创建时间',align: "center",width:200}
+                    ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:120}
                 ]]
                 ,page: true
                 ,id: 'tableId'
@@ -140,24 +91,20 @@
             //监听工具条
             table.on('tool(tableTool)', function(obj){
                 var data = obj.data;
-                if(obj.event === 'edit'){
-                    xadmin.open('编辑',"/hp/user/editShow/"+data.id,800,650);
+                if(obj.event === 'audit'){
+                    xadmin.open('编辑',"/hp/goodsCate/editShow/"+data.id,500,300);
                 } else if(obj.event === 'del'){
                     layer.confirm('确认要删除吗？',function (){
                         member_del(data.id);
                     })
-                }else if(obj.event === 'account'){
-                    xadmin.open('账户信息',"/hp/user/account/"+data.id,850,600);
-                }else if(obj.event === 'audit'){
-                    xadmin.open('审核',"/hp/user/auditShow/"+data.id,500,400);
-                }else if(obj.event === 'show'){
-                    xadmin.open('查看',"/hp/user/show/"+data.id,800,600);
                 }
             });
             //执行重载
             var $ = layui.$,active = {
                 reload: function (){
                     var keywords = $("input[name='keywords']").val();
+                    var userId = $("input[name='userId']").val();
+                    var dealType  = $("#dealType").val();
                     //执行重载
                     table.reload('tableId',{
                         page: {
@@ -165,6 +112,8 @@
                         }
                         , where: {
                             keywords:keywords,
+                            userId:userId,
+                            dealType:dealType
                         }
                     })
                 }
@@ -192,34 +141,6 @@
                 elem: '#end' //指定元素
             });
         });
-        /*用户-停用*/
-        function member_stop(id,status){
-            var status = status == 10 ? 20 : 10;
-            var msg = status ? '确认要停用吗？' : '确认要启用吗？';
-            layer.confirm(msg,function(index){
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: 'post',
-                    url: "{{ route('user_update_status') }}",
-                    dataType: 'json',
-                    data: {id:id,status:status},
-                    success: function (data) {
-                        if(data.code == 0){
-                            layer.msg(data.msg,{icon:1,time:1000});
-                        }else{
-                            layer.msg(data.msg,{icon:5,time:1000});
-                        }
-                        //刷新页面
-                        location.reload();
-                    },
-                    error: function (xhr,type) {
-
-                    }
-                })
-            });
-        }
         /*用户-删除*/
         function member_del(id){
             var data = [id];
@@ -229,7 +150,7 @@
                 },
                 type: 'post',
                 data: {ids:data},
-                url: "{{ route('user_del') }}",
+                url: "{{ route('user_score_del') }}",
                 dataType: 'json',
                 success: function (data) {
                     if(data.code == 0){
@@ -258,7 +179,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     type: 'post',
-                    url: '{{route("user_del")}}',
+                    url: '{{route("user_score_del")}}',
                     dataType: 'json',
                     data: {ids: ids},
                     success: function (data) {
