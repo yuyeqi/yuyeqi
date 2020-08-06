@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\UserService;
 use App\Library\Render;
 use App\Models\User;
+use App\Models\UserStatistic;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Exceptions\DecryptException;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
@@ -82,10 +83,13 @@ class WxController extends BaseController
                 'session_key' => $wechat['session_key'],
                 'token' => $token
             ];
-            if (!User::create($userData)){
-                Log::error('【微信授权登录】----保存用户信息失败');
-                return Render::error("登录失败");
-            }
+                $user = User::create($userData);
+                if (!$user) {
+                    Log::error('【微信授权登录】----保存用户信息失败');
+                    return Render::error("登录失败");
+                }//新增用户统计
+                $userStatistic = ['user_id' => $user->id];
+                UserStatistic::create($userStatistic);
         }else{
             //更新token
             $userInfo->token = $token;
