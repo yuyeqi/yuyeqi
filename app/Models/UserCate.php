@@ -104,7 +104,7 @@ class UserCate extends Base
      * @return mixed
      */
     public static function getUserCateInfoByUserType($userType){
-        $map = ['status'=>10,'is_delete'=>0,'id'=>$userType];
+        $map = ['status'=>0,'is_delete'=>0,'id'=>$userType];
         $field = ['id','cate_name','status','register_account','tg_account','book_score',
             'store_score','order_score'];
         return self::where($map)->first($field);
