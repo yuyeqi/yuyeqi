@@ -1,6 +1,4 @@
-@extends('Admin.layouts.app')
-@section('title','管理员列表')
-@section('nav')
+@include('Admin.layouts.header')
 <!-- 导航开始 -->
 <div class="x-nav">
     <span class="layui-breadcrumb">
@@ -10,8 +8,6 @@
     </span>
 </div>
 <!-- 导航结束 -->
-@endsection
-@section('content')
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
@@ -44,8 +40,7 @@
         </div>
     </div>
 </div>
-@endsection
-@section('js')
+
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -196,4 +191,4 @@
         })
     }
 </script>
-@endsection
+@include('Admin.layouts.footer')
