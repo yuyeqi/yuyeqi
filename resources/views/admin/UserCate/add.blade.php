@@ -13,6 +13,22 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="case_cover" class="layui-form-label">
+                        <span class="x-red">*</span>背景图
+                    </label>
+                    <div class="layui-input-inline">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="test1">上传图片</button>
+                            <div class="layui-upload-list">
+                                <div id="" class="file-iteme">
+                                    <div class="handle" id="handle"></div>
+                                    <img style="width: 100px;height: 100px;" alt="" id="uploadPic">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label for="register_account" class="layui-form-label">
                         <span class="x-red">*</span>注册赠送金额
                     </label>
