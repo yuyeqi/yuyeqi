@@ -75,6 +75,7 @@ class WxController extends BaseController
         $openid = $wechat['openid'];    //用户的openid
         //3.判断用户是否授权过
         $userInfo = User::getUserInfoByOpenid($openid);
+
         $token = str_random(64); //登录成功后的token
         if (!$userInfo) {
             //如果用户没有登录过，则新增
@@ -83,7 +84,7 @@ class WxController extends BaseController
                 'session_key' => $wechat['session_key'],
                 'token' => $token
             ];
-            $rst = User::create($userData);
+            $rst = User::insert($userData);
             if (!$rst) {
                 Log::error('【微信授权登录】----保存用户信息失败');
                 return Render::error("登录失败");
