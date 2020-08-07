@@ -29,7 +29,7 @@ class Person extends Base
         //当月
         $month = date('m');
         $map = ['user_id'=>$userId,'is_delete'=>0];
-        return self::where($map)->whereIn('is_audit',[10,20])->whereMonth('create_time','7')->count();
+        return self::where($map)->whereIn('is_audit',[10,20])->whereMonth('create_time',$month)->count();
     }
 
     /**
