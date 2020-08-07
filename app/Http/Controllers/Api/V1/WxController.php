@@ -33,10 +33,10 @@ class WxController extends BaseController
     public function __construct()
     {
         parent:: __construct();
-        $config                   = config('wechat.mini_program.default');
-        $this->app                = isset($this->app) ?: Factory::miniProgram($config);
+        $config = config('wechat.mini_program.default');
+        $this->app = isset($this->app) ?: Factory::miniProgram($config);
         $this->appOfficialAccount = Factory::officialAccount($config);
-        $this->userService        = isset($this->userService) ?: new UserService();
+        $this->userService = isset($this->userService) ?: new UserService();
     }
 
 
@@ -75,26 +75,17 @@ class WxController extends BaseController
         $openid = $wechat['openid'];    //用户的openid
         //3.判断用户是否授权过
         $userInfo = User::getUserInfoByOpenid($openid);
-<<<<<<< HEAD
 
         $token = str_random(64); //登录成功后的token
-=======
-        $token    = str_random(64); //登录成功后的token
->>>>>>> d1f0c03c4c7176b781daa2a30d6615b6e71b16c0
         if (!$userInfo) {
             //如果用户没有登录过，则新增
             $userData = [
-                'openid'      => $openid,
+                'openid' => $openid,
                 'session_key' => $wechat['session_key'],
-                'token'       => $token,
+                'token' => $token,
             ];
-<<<<<<< HEAD
-            $rst = User::insert($userData);
-            if (!$rst) {
-=======
-            $user     = User::create($userData);
+            $user = User::create($userData);
             if (!$user) {
->>>>>>> d1f0c03c4c7176b781daa2a30d6615b6e71b16c0
                 Log::error('【微信授权登录】----保存用户信息失败');
                 return Render::error("登录失败");
             }//新增用户统计
@@ -102,7 +93,7 @@ class WxController extends BaseController
             UserStatistic::create($userStatistic);
         } else {
             //更新token
-            $userInfo->token       = $token;
+            $userInfo->token = $token;
             $userInfo->session_key = $wechat['session_key'];
             if (!$userInfo->save()) {
                 Log::error('【微信授权登录】----更新用户信息失败');
@@ -128,7 +119,7 @@ class WxController extends BaseController
         $validator = Validator::make(
             $data,
             [
-                'iv'            => 'required',
+                'iv' => 'required',
                 'encryptedData' => 'required',
             ]
         );
@@ -155,8 +146,8 @@ class WxController extends BaseController
         }
         Log::info('【微信登录】-----用户的微信信息：wechatData=' . json_encode($wechatData));
         //4.根据用户openid更新用户信息
-        $userInfo             = User::getUserInfoByOpenid($wechatData['openId']);
-        $userInfo->nick_name  = $wechatData['nickName'];
+        $userInfo = User::getUserInfoByOpenid($wechatData['openId']);
+        $userInfo->nick_name = $wechatData['nickName'];
         $userInfo->avatar_url = $wechatData['avatarUrl'];
         if (!$userInfo->save()) {
             Log::error('【微信登录】-----更新用户信息失败');
@@ -170,18 +161,18 @@ class WxController extends BaseController
 
     /**
      * @param Request $request
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      * @return \Illuminate\Http\JsonResponse
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     public function getQrCode(Request $request)
     {
         //获取页面路径
-        $page    = 'pages/index/index';
+        $page = 'pages/index/index';
         $appCode = $this->app->app_code->getUnlimit(
             'scene-value',
             [
-                'page'  => $page,
+                'page' => $page,
                 'width' => 600,
             ]
         );
@@ -197,10 +188,10 @@ class WxController extends BaseController
 
     /**
      * 获取微信jssdk
-     * @throws InvalidConfigException
+     * @return \Illuminate\Http\JsonResponse
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @return \Illuminate\Http\JsonResponse
+     * @throws InvalidConfigException
      */
     public function getJsConfig()
     {
