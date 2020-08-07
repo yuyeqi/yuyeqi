@@ -170,7 +170,7 @@ class BookService extends BaseSerivce
         $finishedScore = $userCateInfo['order_score']; //完成赠送积分
         $data['book_score'] = $bookScore;
         $data['store_score'] = $storeScore;
-        $data['finish_score'] = $finishedScore;
+        $data['finished_score'] = $finishedScore;
         Log::info('[用户预约]--------预约信息：data='.json_encode($data));
         //用户账户积分信息
         $accountInfo = UserStatistic::getAccountDetail($userInfo['id']);

@@ -16,8 +16,17 @@ class Person extends Base
     const UPDATED_AT = 'update_time';
 
     //设置保存字段
-    protected $guarded  = ['is_audit','is_delete',];
+    protected $guarded  = ['is_audit','is_delete'];
 
+    /**
+     * 定制分类
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function cate(){
+        return $this->hasOne('App\Models\PersonCate','id','cate_id')
+            ->select(['id','cate_name'])
+            ->where(['is_delete'=>0]);
+    }
     /*--------------------------------小程序----------------------------------*/
     /**
      * 查询本月是否已经提交过私人定制计划
@@ -71,6 +80,7 @@ class Person extends Base
                 return $query->whereDate('create_time','<',$endTime);
             })
             ->where($map)
+            ->with('cate')
             ->orderBy('id','desc')
             ->paginate($limit);
     }

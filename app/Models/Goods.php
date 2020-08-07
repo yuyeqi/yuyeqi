@@ -20,7 +20,6 @@ class Goods extends Base
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
 
-    protected $dateFormat = "U";
     //隐藏字段
     protected $hidden = ['is_delete'];
     //设置保存字段
