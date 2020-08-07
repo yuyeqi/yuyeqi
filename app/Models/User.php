@@ -222,7 +222,8 @@ class User extends Base
      * @return mixed
      */
     public static function getUserBytoken($token){
-        $field = ['id','openid','session_key','nick_name','avatar_url','phone','user_name','sex','audit_status','audit_status'];
+       $field = ['*'];
+        // $field = ['id','openid','session_key','nick_name','avatar_url','phone','user_name','sex','audit_status','audit_status'];
         $map = ['is_delete'=>0,'token'=>$token];
         return self::select($field)->where($map)->first();
     }

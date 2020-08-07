@@ -74,6 +74,7 @@ return [
             'access_id' => 'LTAI4GCvB4Q5vyiGGqYzqQNe',
             'access_key' => '8ek1F4KWqIfsqjczMw7rmpGvBYouD9',
             'bucket' => 'hpmc',
+            //'endpoint' => 'oss-cn-beijing-internal.aliyuncs.com', // OSS 外网节点或自定义外部域名
             'endpoint' => 'oss-cn-beijing.aliyuncs.com', // OSS 外网节点或自定义外部域名
             //'endpoint_internal' =>
             'cdnDomain' => false,
