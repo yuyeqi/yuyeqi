@@ -1,15 +1,14 @@
-@extends('Admin.layouts.app')
-@section('title','管理员列表')
+@extends('admin.layouts.app')
+@section('title','钱包记录')
 @section('nav')
-<!-- 导航开始 -->
-<div class="x-nav">
+    <!-- 导航开始 -->
+    <div class="x-nav">
     <span class="layui-breadcrumb">
         <a href="">首页</a>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
         <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
-    </span>
-</div>
-<!-- 导航结束 -->
+    </div>
+    <!-- 导航结束 -->
 @endsection
 @section('content')
 <div class="layui-fluid">

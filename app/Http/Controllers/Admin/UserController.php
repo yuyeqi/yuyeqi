@@ -75,7 +75,6 @@ class UserController extends BaseController
             }
             return Render::error('修改失败');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return Render::error("系统异常，请稍后再试！");
         }
 

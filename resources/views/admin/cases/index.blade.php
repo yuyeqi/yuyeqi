@@ -24,7 +24,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加案例','{{ route('cases_add_show') }}',1000,800)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加案例','{{ route('cases_add_show') }}',800,600)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -78,7 +78,7 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'edit'){
-                xadmin.open('编辑',"/hp/cases/editShow/"+data.id,1000,800);
+                xadmin.open('编辑',"/hp/cases/editShow/"+data.id,800,600);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);

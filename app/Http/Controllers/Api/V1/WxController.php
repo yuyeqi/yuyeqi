@@ -61,7 +61,7 @@ class WxController extends BaseController
             return Render::error('登录失败');
         }
         if (isset($wechat['errcode'])) {
-            Log::error('【微信授权登录】----授权登录失败:errorInfo='.json_encode($wechat));
+            Log::error('【微信授权登录】----授权登录失败:errorInfo=' . json_encode($wechat));
             switch ($wechat['errcode']) {
                 case 40029:
                     return Render::error("code无效");
@@ -76,13 +76,14 @@ class WxController extends BaseController
         //3.判断用户是否授权过
         $userInfo = User::getUserInfoByOpenid($openid);
         $token = str_random(64); //登录成功后的token
-        if (!$userInfo){
+        if (!$userInfo) {
             //如果用户没有登录过，则新增
             $userData = [
                 'openid' => $openid,
                 'session_key' => $wechat['session_key'],
                 'token' => $token
             ];
+<<<<<<< HEAD
                 $user = User::create($userData);
                 if (!$user) {
                     Log::error('【微信授权登录】----保存用户信息失败');
@@ -91,19 +92,32 @@ class WxController extends BaseController
                 $userStatistic = ['user_id' => $user->id];
                 UserStatistic::create($userStatistic);
         }else{
+=======
+            $rst = User::create($userData);
+            if (!$rst) {
+                Log::error('【微信授权登录】----保存用户信息失败');
+                return Render::error("登录失败");
+            }
+            Log::info('-----------------------'.$rst.'--------------------');
+            //保存统计信息
+            $userStatistic = ['user_id' => 1];
+
+            UserStatistic::create($userStatistic);
+        } else {
+>>>>>>> 785e02c81eddf27197cc296c96f8ee750ff0f00e
             //更新token
             $userInfo->token = $token;
             $userInfo->session_key = $wechat['session_key'];
-            if(!$userInfo->save()){
+            if (!$userInfo->save()) {
                 Log::error('【微信授权登录】----更新用户信息失败');
                 return Render::error("登录失败");
             }
         }
         //获取用户信息
         $userDetail = User::getUserInfoByOpenid($openid);
-        Log::info('【微信授权登录】----保存用户信息，user='.json_encode($userDetail));
+        Log::info('【微信授权登录】----保存用户信息，user=' . json_encode($userDetail));
         //4.返回token
-        return Render::success('获取token成功',compact('userDetail'));
+        return Render::success('获取token成功', compact('userDetail'));
     }
 
     /**
@@ -111,20 +125,21 @@ class WxController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function wxLogin(Request $request){
-        $data = $request->only(['iv','encryptedData']);
+    public function wxLogin(Request $request)
+    {
+        $data = $request->only(['iv', 'encryptedData']);
         //1.验证数据
-        $validator = Validator::make($data,[
+        $validator = Validator::make($data, [
             'iv' => 'required',
             'encryptedData' => 'required'
         ]);
-        if ($validator->fails()){
+        if ($validator->fails()) {
             return Render::error($validator->errors()->first());
         }
         //2.获取用户sessionkey
-       $sessionKey = $this->userInfo['session_key'];
-        Log::info('【微信登录】-----用户信息：sessionKey='.$sessionKey);
-        if (!$sessionKey){
+        $sessionKey = $this->userInfo['session_key'];
+        Log::info('【微信登录】-----用户信息：sessionKey=' . $sessionKey);
+        if (!$sessionKey) {
             Log::error("【微信登录】-----用户sessionKey不存在");
             return Render::error("session_key不存在，请重试");
         }
@@ -135,22 +150,22 @@ class WxController extends BaseController
             Log::error("【微信登录】----sessionKey无效");
             return Render::error("session_key失效");
         }
-        if (!isset($wechatData['openId'])){
+        if (!isset($wechatData['openId'])) {
             Log::error('【微信登录】-----获取openid错误');
             return Render::error('获取openid错误');
         }
-        Log::info('【微信登录】-----用户的微信信息：wechatData='.json_encode($wechatData));
+        Log::info('【微信登录】-----用户的微信信息：wechatData=' . json_encode($wechatData));
         //4.根据用户openid更新用户信息
         $userInfo = User::getUserInfoByOpenid($wechatData['openId']);
         $userInfo->nick_name = $wechatData['nickName'];
         $userInfo->avatar_url = $wechatData['avatarUrl'];
-        if (!$userInfo->save()){
+        if (!$userInfo->save()) {
             Log::error('【微信登录】-----更新用户信息失败');
             return Render::error('更新用户信息失败');
         }
         //5.返回用户数据
         $token = $userInfo->token;
-        return Render::success('登录成功',compact('userInfo','token'));
+        return Render::success('登录成功', compact('userInfo', 'token'));
     }
 
 
@@ -160,21 +175,22 @@ class WxController extends BaseController
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      */
-    public function getQrCode(Request $request){
+    public function getQrCode(Request $request)
+    {
         //获取页面路径
         $page = 'pages/index/index';
         $appCode = $this->app->app_code->getUnlimit('scene-value', [
-            'page'  => $page,
+            'page' => $page,
             'width' => 600,
         ]);
         // 保存小程序码到文件
         $filename = '';
         if ($appCode instanceof \EasyWeChat\Kernel\Http\StreamResponse) {
-            $filename = $appCode->save('qrcode/','qrcode.jpg');
+            $filename = $appCode->save('qrcode/', 'qrcode.jpg');
         }
         //文件名非空时返回图片路径
-        $baseUrl = url()->previous().'/qrcode/'.$filename;
-        return Render::success("获取成功",$baseUrl);
+        $baseUrl = url()->previous() . '/qrcode/' . $filename;
+        return Render::success("获取成功", $baseUrl);
     }
 
     /**
@@ -184,11 +200,12 @@ class WxController extends BaseController
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function getJsConfig(){
-       $data = $this->appOfficialAccount->jssdk->buildConfig(array('onMenuShareAppMessage',
+    public function getJsConfig()
+    {
+        $data = $this->appOfficialAccount->jssdk->buildConfig(array('onMenuShareAppMessage',
             'onMenuShareTimeline',
             'updateAppMessageShareData',
             'updateTimelineShareData'), false);
-       return Render::success("获取成功",$data);
+        return Render::success("获取成功", $data);
     }
 }

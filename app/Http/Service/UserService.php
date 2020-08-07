@@ -116,8 +116,10 @@ class UserService extends BaseSerivce
      */
     public function userAudit($data, $loginInfo)
     {
-        $data['update_user_id'] = $loginInfo['update_user_id'];
-        $data['update_user_name'] = $loginInfo['update_user_name'];
+        $data['update_user_id'] = $loginInfo['id'];
+        $data['update_user_name'] = $loginInfo['name'];
+        $data['audit_user_id'] = $loginInfo['id'];
+        $data['audit_user_name'] = $loginInfo['name'];
         //1.获取用户信息
         $userInfo = User::getUserDetail($data['id']);
         if (!$userInfo) {
@@ -148,7 +150,7 @@ class UserService extends BaseSerivce
                     'phone' => $userInfo['phone'],
                     'amount' => $cateInfo['register_account']
                 ];
-                UserStatistic::create($userStatistic);
+                $this->userStatistic->updateAccout($userStatistic);
                 //2.判断用户是否有推荐人
                 $promoterInfo = User::getUserDetail($userInfo->parent_id);
                 if ($promoterInfo) {
@@ -191,6 +193,8 @@ class UserService extends BaseSerivce
                         'remark' => '推广积分'
                     ];
                 }
+                //3.修改审核状态
+                $this->user->updateUserStatus($data);
                 DB::commit();
                 return true;
             } catch (\Exception $e) {
