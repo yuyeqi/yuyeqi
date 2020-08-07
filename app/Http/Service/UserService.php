@@ -117,9 +117,9 @@ class UserService extends BaseSerivce
     public function userAudit($data, $loginInfo)
     {
         $data['update_user_id'] = $loginInfo['id'];
-        $data['update_user_name'] = $loginInfo['name'];
+        $data['update_user_name'] = $loginInfo['username'];
         $data['audit_user_id'] = $loginInfo['id'];
-        $data['audit_user_name'] = $loginInfo['name'];
+        $data['audit_user_name'] = $loginInfo['username'];
         //1.获取用户信息
         $userInfo = User::getUserDetail($data['id']);
         if (!$userInfo) {
