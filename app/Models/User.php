@@ -16,36 +16,7 @@ class User extends Base
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    //字段类型转换
-    protected $casts = [
-        'id' => 'integer',
-        'openid' => 'string',
-        'session_key' => 'string',
-        'nick_name' => 'string',
-        'avatar_url' => 'string',
-        'phone' => 'string',
-        'user_name' => 'string',
-        'sex' => 'integer',
-        'position_name' => 'string',
-        'org_name' => 'string',
-        //'birthday' => 'datetime',
-        'user_brand' => 'string',
-        'province' => 'string',
-        'city' => 'string',
-        'area' => 'string',
-        'address' => 'string',
-        'deliver_id' => 'integer',
-        'user_type' => 'integer',
-        'parent_id' => 'integer',
-        'parent_name' => 'string',
-        'share_type' => 'integer',
-        'audit_status' => 'integer',
-        'audit_user_id' => 'integer',
-        'audit_user_name' => 'string',
-        'audit_remark' => 'string',
-        'status' => 'integer',
-
-    ];
+   
     /**
      * 关联用户统计
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
