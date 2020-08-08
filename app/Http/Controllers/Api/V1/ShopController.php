@@ -180,7 +180,7 @@ class ShopController extends BaseController
         //记录支付记录
         if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
             //
-            $result = $this->app->jssdk->bridgeConfig($result['prepay_id']);//第二次前面
+            $result = $this->app->jssdk->sdkConfig($result['prepay_id']);//第二次前面
             return $result;
         }else{
             Log::error('微信支付签名错误');
