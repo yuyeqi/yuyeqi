@@ -241,6 +241,7 @@ class ShopController extends BaseController
                 return  true;
             }
             //3.验证支付金额
+            Log::info('【微信支付】===========支付金额:total_fee='.$message['total_fee']);
             $amount = bcdiv($message['total_fee'],100,2);   //支付金额
             Log::info('【微信支付金额】======total_fee='.$amount);
            /* if ($amount != $order->total_price){
@@ -251,6 +252,7 @@ class ShopController extends BaseController
             if ($message['return_code'] === 'SUCCESS') { // return_code 表示通信状态，不代表支付状态
                 // 用户是否支付成功
                 if (array_get($message, 'result_code') === 'SUCCESS') {
+                    Log::info('【微信支付回调】=========修改订单状态');
                     $order->pay_time = time(); // 更新支付时间为当前时间
                     $order->pay_status = 20;
                     $order->transaction_id = $message['transaction_id'];
