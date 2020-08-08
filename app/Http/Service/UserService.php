@@ -845,4 +845,5 @@ class UserService extends BaseSerivce
     public function updateUserData($data){
         return $this->userStatistic->updateAccout($data);
     }
+
 }

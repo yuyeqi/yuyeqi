@@ -10,6 +10,7 @@ use App\Http\Service\OrderService;
 use App\Http\Service\UserService;
 use App\Library\Render;
 use App\Models\Order;
+use App\Models\ScoreDeal;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -287,7 +288,7 @@ class ShopController extends BaseController
                         'deal_type' => 3,
                         'remark' => '订单赠送积分'
                     ];
-                    $this->userService->addScore($scoreLog);
+                    ScoreDeal::create($scoreLog);
                 } elseif (array_get($message, 'result_code') === 'FAIL') {
                     $order->pay_status = '10';
                 }
@@ -300,9 +301,5 @@ class ShopController extends BaseController
         });
 
         $response->send(); // return $response;
-    }
-
-    private function udpateOrderStatus
-    {
     }
 }
