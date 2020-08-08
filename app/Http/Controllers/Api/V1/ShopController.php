@@ -257,7 +257,6 @@ class ShopController extends BaseController
                     $order->pay_status = 20;
                     $order->transaction_id = $message['transaction_id'];
                     $order->pay_price = $amount;
-                    $order->save();
                     // 用户支付失败
                 } elseif (array_get($message, 'result_code') === 'FAIL') {
                     $order->pay_status = '10';
@@ -266,6 +265,7 @@ class ShopController extends BaseController
                 return $fail('通信失败，请稍后再通知我');
             }
             $order->save(); // 保存订单
+            Log::info('【订单支付】======支付成功');
             return true; // 返回处理完成
         });
 
