@@ -210,7 +210,7 @@ class UserService extends BaseSerivce
                 DB::commit();
                 return true;
             } catch (\Exception $e) {
-                $this->setErrorMsg('系统异常，请联系管理员');
+                $this->setErrorMsg($e->getMessage());
                 DB::rollBack();
                 return false;
             }

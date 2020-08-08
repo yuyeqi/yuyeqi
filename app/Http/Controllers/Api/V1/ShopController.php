@@ -94,7 +94,9 @@ class ShopController extends BaseController
                 $payment = $this->unifiedorder($rst);
                 //修改前端冲突
                 $payment['packageValue'] = $payment['package'];
+                $payment['timeStamp'] = $payment['timestamp'];
                 unset($payment['package']);
+                unset($payment['timestamp']);
                 if (!$payment){
                     return  Render::error('签名错误');
                 }
@@ -135,7 +137,7 @@ class ShopController extends BaseController
         if (empty($id)) {
             return Render::error("参数错误，请重试!");
         }
-        $detail = Order::getOrderByNo($id);
+        $detail = Order::getOrderBy($id);
         return Render::success("获取成功", $detail);
     }
 
