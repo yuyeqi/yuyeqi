@@ -101,10 +101,11 @@ class ShopController extends BaseController
                 //修改前端冲突
                 $paymentData = [
                     'appId' => $payment['appId'],
-                    'timeStamp' => $payment['timestamp'],
                     'nonceStr' => $payment['nonceStr'],
                     'packageValue' => $payment['package'],
                     'signType' => $payment['signType'],
+                    'paySign' => $payment['paySign'],
+                    'timeStamp' => $payment['timestamp']
                 ];
                 if (!$payment) {
                     return Render::error('签名错误');
@@ -274,7 +275,7 @@ class ShopController extends BaseController
                     //2.赠送用户积分
                     $scoreData = [
                         $data['order_num'] = bcadd($user->order_num, 1),
-                        $data['score'] = bcadd($user->score, $data['order_score']),
+                        $data['score'] = bcadd($user->score, $order->score),
                         $data['user_id'] => $order->user_id
                     ];
                     //3.用户账户信息
