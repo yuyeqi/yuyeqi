@@ -158,7 +158,7 @@ class Order extends Base
      */
     public function getOrderLists($userInfo,$page,$limit){
         //输出字段
-        $field = ['id','goods_cover','goods_name','total_price','goods_price','pay_status'];
+        $field = ['id','goods_cover','order_no','goods_name','total_price','goods_price','pay_status'];
         //where条件
         $map = ['user_id'=>$userInfo['id'],'is_delete'=>0];
         return self::select($field)
