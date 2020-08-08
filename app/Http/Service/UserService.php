@@ -203,8 +203,8 @@ class UserService extends BaseSerivce
                     'deal_no' => $rgCushLog,
                     'user_id' => $promoterAccount->id,
                     'user_name' => $promoterAccount->user_name,
-                    'deal_score' => $cateInfo->register_account,
-                    'surplus_score' => bcadd($promoterAccount->amount, $cateInfo->register_account, 2),
+                    'amount' => $cateInfo->register_account,
+                    'surplus_amount' => bcadd($promoterAccount->amount, $cateInfo->register_account, 2),
                     'deal_type' => 3,
                     'remark' => '注册赠送金额'
                 ];
