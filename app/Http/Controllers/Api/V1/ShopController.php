@@ -113,7 +113,7 @@ class ShopController extends BaseController
             return Render::error($this->orderSerice->getErrorMsg() ?: "创建订单失败");
         } catch (\Exception $e) {
             Log::info('【创建订单】-----创建失败:e='.$e->getMessage());
-            return Render::error("支付失败");
+            return Render::error("下单失败");
         }
     }
 
@@ -190,7 +190,9 @@ class ShopController extends BaseController
         //记录支付记录
         if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
             //
+            Log::info('【支付成功】-----生成预支付单成功:data='.json_encode($result));
             $result = $this->app->jssdk->sdkConfig($result['prepay_id']);//第二次前面
+            Log::info('【支付jssdk]--------jssdk'.json_encode($result));
             return $result;
         }else{
             Log::error('微信支付签名错误');
