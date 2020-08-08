@@ -94,23 +94,26 @@ class ShopController extends BaseController
                 $payment = $this->unifiedorder($rst);
                 Log::info('【支付返回】------data='.json_encode($payment));
                 //修改前端冲突
-                $payment['packageValue'] = $payment['package'];
-                $payment['timeStamp'] = $payment['timestamp'];
-                unset($payment['package']);
-                unset($payment['timestamp']);
+                $paymentData = [
+                    'appId' => $payment['appId'],
+                    'timeStamp' => $payment['timestamp'],
+                    'nonceStr' => $payment['nonceStr'],
+                    'package' => $payment['packageValue'],
+                    'signType' => $payment['signType'],
+                ];
                 if (!$payment){
                     return  Render::error('签名错误');
                 }
                 $data = [
                     'order_no' => $rst->order_no,
-                    'payment' => $payment
+                    'payment' => $paymentData
                 ];
                 return Render::success("创建成功", $data);
             }
             return Render::error($this->orderSerice->getErrorMsg() ?: "创建订单失败");
         } catch (\Exception $e) {
             Log::info('【创建订单】-----创建失败:e='.$e->getMessage());
-            return Render::error("系统异常，请稍后再试");
+            return Render::error("支付失败");
         }
     }
 
