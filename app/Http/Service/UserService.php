@@ -188,8 +188,8 @@ class UserService extends BaseSerivce
                         'deal_no' => $tgDealNo,
                         'user_id' => $promoterAccount->parent_id,
                         'user_name' => $promoterAccount->parent_name,
-                        'deal_score' => $cateInfo->tg_account,
-                        'surplus_score' => bcadd($promoterAccount->amount, $cateInfo->tg_account, 2),
+                        'amount' => $cateInfo->tg_account,
+                        'surplus_amount' => bcadd($promoterAccount->amount, $cateInfo->tg_account, 2),
                         'deal_type' => 4,
                         'remark' => '推广赠送金额'
                     ];
