@@ -186,8 +186,8 @@ class UserService extends BaseSerivce
                     $tgDealNo = $this->getOrderNo('tg');
                     $stgCushLog = [
                         'deal_no' => $tgDealNo,
-                        'user_id' => $promoterAccount->parent_id,
-                        'user_name' => $promoterAccount->parent_name,
+                        'user_id' => $promoterInfo->parent_id,
+                        'user_name' => $promoterInfo->parent_name,
                         'amount' => $cateInfo->tg_account,
                         'surplus_amount' => bcadd($promoterAccount->amount, $cateInfo->tg_account, 2),
                         'deal_type' => 4,
