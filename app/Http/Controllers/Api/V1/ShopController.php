@@ -242,11 +242,11 @@ class ShopController extends BaseController
             }
             //3.验证支付金额
             $amount = bcdiv($message['total_fee'],100,2);   //支付金额
-            if ($amount != $order->total_price){
+            Log::info('【微信支付金额】======total_fee='.$amount);
+           /* if ($amount != $order->total_price){
                 Log::error('【微信支付回调】--------支付金额不等于订单金额，支付失败');
                 return  true;
-            }
-            if ($order->pay_price)
+            }*/
             //支付成功处理
             if ($message['return_code'] === 'SUCCESS') { // return_code 表示通信状态，不代表支付状态
                 // 用户是否支付成功
