@@ -836,4 +836,13 @@ class UserService extends BaseSerivce
             return  false;
         }
     }
+
+    /**
+     * \修改用户信息
+     * @param $data
+     * @return bool|mixed
+     */
+    public function updateUserData($data){
+        return $this->userStatistic->updateAccout($data);
+    }
 }
