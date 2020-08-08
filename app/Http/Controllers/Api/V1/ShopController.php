@@ -98,7 +98,7 @@ class ShopController extends BaseController
                     'appId' => $payment['appId'],
                     'timeStamp' => $payment['timestamp'],
                     'nonceStr' => $payment['nonceStr'],
-                    'package' => $payment['package'],
+                    'packageValue' => $payment['package'],
                     'signType' => $payment['signType'],
                 ];
                 if (!$payment){
