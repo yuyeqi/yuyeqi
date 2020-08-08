@@ -92,6 +92,9 @@ class ShopController extends BaseController
         try {
             if ($rst = $this->orderSerice->createOrder($data, $this->userInfo)) {
                 $payment = $this->unifiedorder($rst);
+                //修改前端冲突
+                $payment['packageValue'] = $payment['package'];
+                unset($payment['package']);
                 if (!$payment){
                     return  Render::error('签名错误');
                 }
