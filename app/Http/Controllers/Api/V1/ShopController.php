@@ -234,12 +234,12 @@ class ShopController extends BaseController
             ///////////// <- 建议在这里调用微信的【订单查询】接口查一下该笔订单的情况，确认是已经支付 /////////////
             //2.查询微信订单是否支付
             $orderRet = $this->app->order->queryByOutTradeNumber($message['out_trade_no']);
-            /*Log::info('【查询微信订单】--------wxOrder='.json_encode($orderRet));
-            if($orderRet['return_code'] === 'SUCCESS' &&
-                array_get($orderRet, 'result_code') === 'SUCCESS'
-                && array_get($orderRet, 'trade_state') === 'SUCCESS'){
+            Log::info('【查询微信订单】--------wxOrder='.json_encode($orderRet));
+            if($orderRet['return_code'] !== 'SUCCESS' &&
+                array_get($orderRet, 'result_code') !== 'SUCCESS'
+                && array_get($orderRet, 'trade_state') !== 'SUCCESS'){
                 return  true;
-            }*/
+            }
             //3.验证支付金额
             Log::info('【微信支付】===========支付金额:total_fee='.$message['cash_fee']);
             $amount = bcdiv($message['cash_fee'],100,2);   //支付金额
@@ -253,7 +253,7 @@ class ShopController extends BaseController
                 // 用户是否支付成功
                 if (array_get($message, 'result_code') === 'SUCCESS') {
                     Log::info('【微信支付回调】=========修改订单状态');
-                    $order->pay_time = time(); // 更新支付时间为当前时间
+                    $order->pay_time = date("Y-m-d h:i:s", time()); // 更新支付时间为当前时间
                     $order->pay_status = 20;
                     $order->transaction_id = $message['transaction_id'];
                     $order->pay_price = $amount;
