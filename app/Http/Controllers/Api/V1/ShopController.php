@@ -241,8 +241,8 @@ class ShopController extends BaseController
                 return  true;
             }
             //3.验证支付金额
-            Log::info('【微信支付】===========支付金额:total_fee='.$message['total_fee']);
-            $amount = bcdiv($message['total_fee'],100,2);   //支付金额
+            Log::info('【微信支付】===========支付金额:total_fee='.$message['cash_fee']);
+            $amount = bcdiv($message['cash_fee'],100,2);   //支付金额
             Log::info('【微信支付金额】======total_fee='.$amount);
            /* if ($amount != $order->total_price){
                 Log::error('【微信支付回调】--------支付金额不等于订单金额，支付失败');
