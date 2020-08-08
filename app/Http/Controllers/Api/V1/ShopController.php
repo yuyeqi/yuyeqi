@@ -267,25 +267,26 @@ class ShopController extends BaseController
                     $order->transaction_id = $message['transaction_id'];
                     $order->pay_price = $amount;
                     //2.获取用户账户信息
-                    $userStatistic = UserStatistic::getAccountDetail($order->user_id);
+                    $userId = $order->user_id;
+                    $userStatistic = UserStatistic::getAccountDetail($userId);
                     Log::info('【用户信息】===========userInfo='.json_encode($userStatistic));
                     if (!$userStatistic) {
                         Log::error('用户信息不存在');
                         return true;
                     }
-                    Log::info('【用户信息】=====用户id='.$order->user_id);
+                    Log::info('【用户信息】=====用户id='.$userId);
                     //2.赠送用户积分
                     $scoreData = [
                         $data['order_num'] = bcadd($userStatistic->order_num, 1),
                         $data['score'] = bcadd($userStatistic->score, $order->score),
-                        $data['user_id'] => $order->user_id
+                        $data['user_id'] => $userId
                     ];
                     //3.用户账户信息
                     $this->userService->updateUserData($scoreData);
                     //4.记录赠送积分记录
                     $scoreLog = [
                         'deal_no' => $order->order_no,
-                        'user_id' => $order->user_id,
+                        'user_id' => $userId,
                         'user_name' => $userStatistic->user_name,
                         'deal_score' => $order->score,
                         'surplus_score' => $data['score'],
