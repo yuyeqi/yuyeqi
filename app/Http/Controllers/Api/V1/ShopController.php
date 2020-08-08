@@ -277,9 +277,9 @@ class ShopController extends BaseController
                     Log::info('【用户信息】=====用户id='.$userId);
                     //2.赠送用户积分
                     $scoreData = [
-                        $data['order_num'] = bcadd($userStatistic->order_num, 1),
-                        $data['score'] = bcadd($userStatistic->score, $order->score),
-                        $data['user_id'] => $userId
+                        'order_num' => bcadd($userStatistic->order_num, 1),
+                        'score' => bcadd($userStatistic->score, $order->score),
+                        'user_id' => $userId
                     ];
                     //3.用户账户信息
                     $this->userService->updateUserData($scoreData);
@@ -289,7 +289,7 @@ class ShopController extends BaseController
                         'user_id' => $userId,
                         'user_name' => $userStatistic->user_name,
                         'deal_score' => $order->score,
-                        'surplus_score' => $data['score'],
+                        'surplus_score' => bcadd($userStatistic->score, $order->score),
                         'deal_type' => 3,
                         'remark' => '订单赠送积分'
                     ];
