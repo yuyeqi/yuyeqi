@@ -255,6 +255,7 @@ class ShopController extends BaseController
                     $order->pay_status = 20;
                     $order->transaction_id = $message['transaction_id'];
                     $order->pay_price = $amount;
+                    $order->save();
                     // 用户支付失败
                 } elseif (array_get($message, 'result_code') === 'FAIL') {
                     $order->pay_status = '10';
