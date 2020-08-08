@@ -179,7 +179,7 @@ class ShopController extends BaseController
         //设置支付参数
         $data = [
             'body' => '黄派门窗-订单支付',
-            'out_trade_no' => $order->id,
+            'out_trade_no' => $order->order_no,
             //'total_fee' => $order->total_price,
             'total_fee' => '101',
             'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
@@ -226,6 +226,7 @@ class ShopController extends BaseController
             Log::info('【支付回调信息】----message='.json_encode($message));
             // 1.使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
             $order = Order::getOrderByNo($message['out_trade_no']);
+            Log::info('【订单信息】-----订单信息：order='.json_encode($order));
             if (!$order || $order->pay_status == 20 || $order->pay_time) { // 如果订单不存在 或者 订单已经支付过了
                 return true; // 告诉微信，我已经处理完了，订单没找到，别再通知我了
             }
