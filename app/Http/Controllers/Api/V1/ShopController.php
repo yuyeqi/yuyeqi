@@ -268,8 +268,8 @@ class ShopController extends BaseController
                     $order->pay_price = $amount;
                     //2.获取用户账户信息
                     $userStatistic = UserStatistic::getAccountDetail($order->user_id);
-                    Log::info('【用户信息】===========userInfo='.json_encode($user));
-                    if (!$user) {
+                    Log::info('【用户信息】===========userInfo='.json_encode($userStatistic));
+                    if (!$userStatistic) {
                         Log::error('用户信息不存在');
                         return true;
                     }
