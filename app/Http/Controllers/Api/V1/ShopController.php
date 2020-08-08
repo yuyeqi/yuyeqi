@@ -147,7 +147,7 @@ class ShopController extends BaseController
         if (empty($id)) {
             return Render::error("参数错误，请重试!");
         }
-        $detail = Order::getOrderDetail($id);
+        $detail = Order::getOrderByNo($id);
         return Render::success("获取成功", $detail);
     }
 
