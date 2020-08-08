@@ -166,7 +166,7 @@ class User extends Base
     {
         $map = ['status' => 10, 'is_delete' => 0, 'id' => $id];
         $field = ['id', 'nick_name', 'avatar_url', 'phone', 'user_name', 'position_name', 'user_type', 'org_name', 'birthday', 'user_brand',
-            'province', 'city', 'area', 'address', 'deliver_id', 'parent_name', 'share_type', 'audit_status', 'audit_user_name', 'status',
+            'province', 'city', 'area', 'address', 'delivery_id', 'parent_name', 'share_type', 'audit_status', 'audit_user_name', 'status',
             'create_time', 'token'];
         return self::select($field)->where($map)->with('userStatistic')->first();
     }
