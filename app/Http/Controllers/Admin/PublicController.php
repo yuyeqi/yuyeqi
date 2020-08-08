@@ -85,6 +85,7 @@ class PublicController extends Controller
      */
     public function uploadAdmin(Request $request){
         $file = $request->file('file');
+        $baseUrl = 'http://hpmc.oss-cn-beijing.aliyuncs.com/';
         if ($file && $file->isValid()) {
             // 获取文件相关信息
             $ext = $file->getClientOriginalExtension();     // 扩展名
@@ -100,7 +101,7 @@ class PublicController extends Controller
             }
             $bool = Storage::put(self::PHTHURL, $file);
             if ($bool){
-                $url = Storage::url($bool);
+                $url = $baseUrl.$bool;
                 return Render::success('上传成功',$url);
             }else{
                 return  Render::error('上传失败');
