@@ -103,7 +103,8 @@ class ShopController extends BaseController
             }
             return Render::error($this->orderSerice->getErrorMsg() ?: "创建订单失败");
         } catch (\Exception $e) {
-            return Render::error("创建失败");
+            Log::info('【创建订单】-----创建失败:e='.$e->getMessage());
+            return Render::error("系统异常，请稍后再试");
         }
     }
 
