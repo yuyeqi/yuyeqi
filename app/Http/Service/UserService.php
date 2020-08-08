@@ -202,7 +202,7 @@ class UserService extends BaseSerivce
                 $rcgCushLog = [
                     'deal_no' => $rgCushLog,
                     'user_id' => $userInfo->id,
-                    'user_name' => $promoterAccount->user_name,
+                    'user_name' => $userInfo->user_name,
                     'amount' => $cateInfo->register_account,
                     'surplus_amount' => bcadd($promoterAccount->amount, $cateInfo->register_account, 2),
                     'deal_type' => 3,
