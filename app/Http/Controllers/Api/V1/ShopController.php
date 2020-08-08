@@ -11,6 +11,7 @@ use App\Http\Service\UserService;
 use App\Library\Render;
 use App\Models\Order;
 use App\Models\ScoreDeal;
+use App\Models\UserStatistic;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -265,7 +266,7 @@ class ShopController extends BaseController
                     $order->transaction_id = $message['transaction_id'];
                     $order->pay_price = $amount;
                     //2.获取用户账户信息
-                    $user = $this->userStatistic->updateAccout($order->user_id);
+                    $user = UserStatistic::getAccountDetail($order->user_id);
                     if (!$user) {
                         Log::error('用户信息不存在');
                         return true;
