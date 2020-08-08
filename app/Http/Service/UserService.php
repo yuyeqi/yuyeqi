@@ -182,19 +182,31 @@ class UserService extends BaseSerivce
                         'share_type' => $userInfo->share_type
                     ];
                     Promoter::create($promoterData);
-                    //添加推广人的的推广积分
-                    $scoreLog = [
+                    //赠送推广人金额
+                    $stgCushLog = [
                         'deal_no' => $dealNo,
                         'user_id' => $promoterAccount->parent_id,
                         'user_name' => $promoterAccount->parent_name,
                         'deal_score' => $cateInfo->tg_account,
                         'surplus_score' => bcadd($promoterAccount->amount, $cateInfo->tg_account, 2),
-                        'deal_type' => 5,
-                        'remark' => '推广积分'
+                        'deal_type' => 4,
+                        'remark' => '推广赠送金额'
                     ];
+                    WalletDeal::create($stgCushLog);
                 }
                 //3.修改审核状态
                 $this->user->updateUserStatus($data);
+                //4.注册赠送金额
+                $rcgCushLog = [
+                    'deal_no' => $dealNo,
+                    'user_id' => $promoterAccount->id,
+                    'user_name' => $promoterAccount->user_name,
+                    'deal_score' => $cateInfo->register_account,
+                    'surplus_score' => bcadd($promoterAccount->amount, $cateInfo->register_account, 2),
+                    'deal_type' => 3,
+                    'remark' => '注册赠送金额'
+                ];
+                WalletDeal::create($rcgCushLog);
                 DB::commit();
                 return true;
             } catch (\Exception $e) {
