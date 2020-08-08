@@ -16,7 +16,35 @@ class User extends Base
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-   
+    //字段类型转换
+    protected $casts = [
+        'id' => 'integer',
+        'openid' => 'string',
+        'session_key' => 'string',
+        'nick_name' => 'string',
+        'avatar_url' => 'string',
+        'phone' => 'string',
+        'user_name' => 'string',
+        'sex' => 'integer',
+        'position_name' => 'string',
+        'org_name' => 'string',
+        //'birthday' => 'datetime',
+        'user_brand' => 'string',
+        'province' => 'string',
+        'city' => 'string',
+        'area' => 'string',
+        'address' => 'string',
+        'delivery_id' => 'integer',
+        'user_type' => 'integer',
+        'parent_id' => 'integer',
+        'parent_name' => 'string',
+        'share_type' => 'integer',
+        'audit_status' => 'integer',
+        'audit_user_id' => 'integer',
+        'audit_user_name' => 'string',
+        'audit_remark' => 'string',
+        'status' => 'integer'
+    ];
     /**
      * 关联用户统计
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -24,7 +52,7 @@ class User extends Base
     public function userStatistic()
     {
         return $this->hasOne('App\Models\UserStatistic', 'user_id', 'id')
-            ->select(['id', 'user_id', 'amount', 'withdraw_amount','frozen_amount', 'score', 'withdraw_score', 'present_score']);
+            ->select(['id', 'user_id', 'amount', 'withdraw_amount', 'frozen_amount', 'score', 'withdraw_score', 'present_score']);
     }
 
     /**
@@ -34,7 +62,7 @@ class User extends Base
     public function users()
     {
         return $this->hasOne('App\Models\User', 'parent_id', 'id')
-            ->select(['id','user_name'])
+            ->select(['id', 'user_name'])
             ->withDefault([
                 'id' => 0,
                 'user_name' => '平台'
@@ -48,7 +76,7 @@ class User extends Base
         $field = ['id', 'openid', 'nick_name', 'avatar_url', 'phone', 'user_name', 'sex', 'position_name',
             'org_name', 'birthday', 'user_brand', 'province', 'city', 'area', 'address', 'user_type', 'parent_id',
             'audit_status', 'status', 'audit_user_id', 'audit_user_name', 'update_user_name', 'create_time',
-            'update_time','parent_name'];
+            'update_time', 'parent_name'];
         //搜索条件
         $map = ['is_delete' => 0];
         $userType > 0 && $map['user_type'] = $userType;
@@ -125,8 +153,9 @@ class User extends Base
      * @param $data
      * @return mixed
      */
-    public function updateStatus($data){
-        return self::where(['id'=>$data['id']])->update($data);
+    public function updateStatus($data)
+    {
+        return self::where(['id' => $data['id']])->update($data);
     }
     /*---------------------------------------------小程序----------------------------------------------*/
     /**
@@ -136,9 +165,9 @@ class User extends Base
     public function getUserInfo($id)
     {
         $map = ['status' => 10, 'is_delete' => 0, 'id' => $id];
-        $field = ['id', 'nick_name', 'avatar_url', 'phone','user_name','position_name','user_type','org_name','birthday','user_brand',
-            'province','city','area','address','deliver_id','parent_name','share_type','audit_status','audit_user_name','status',
-            'create_time','token'];
+        $field = ['id', 'nick_name', 'avatar_url', 'phone', 'user_name', 'position_name', 'user_type', 'org_name', 'birthday', 'user_brand',
+            'province', 'city', 'area', 'address', 'deliver_id', 'parent_name', 'share_type', 'audit_status', 'audit_user_name', 'status',
+            'create_time', 'token'];
         return self::select($field)->where($map)->with('userStatistic')->first();
     }
 
@@ -150,7 +179,7 @@ class User extends Base
      */
     public function getUserAccount($id)
     {
-        $map = ['status' => 10, 'is_delete' => 0, 'id' => $id,'audit_status'=>2];
+        $map = ['status' => 10, 'is_delete' => 0, 'id' => $id, 'audit_status' => 2];
         $field = ['id', 'parent_name'];
         return self::select($field)->with('userStatistic')->where($map)->first();
     }
@@ -161,8 +190,9 @@ class User extends Base
      * @param $addressId
      * @return mixed
      */
-   public function updateUserAddress($userId,$addressId){
-        return self::where(['id'=>$userId,'is_delete'=>0])->update(['delivery_id'=>$addressId]);
+   public function updateUserAddress($userId, $addressId)
+   {
+       return self::where(['id' => $userId, 'is_delete' => 0])->update(['delivery_id' => $addressId]);
    }
 
     /**
@@ -172,7 +202,7 @@ class User extends Base
      */
     public function register($data)
     {
-        return self::where(['id'=>$data['id']])->update($data);
+        return self::where(['id' => $data['id']])->update($data);
     }
 
     /**
@@ -182,8 +212,8 @@ class User extends Base
      */
     public static function getUserInfoByOpenid($openid)
     {
-        $field = ['id','openid','token','audit_status'];
-        $map = ['is_delete'=>0,'openid'=>$openid];
+        $field = ['id', 'openid', 'token', 'audit_status'];
+        $map = ['is_delete' => 0, 'openid' => $openid];
         return self::select($field)->where($map)->first();
     }
 
@@ -192,10 +222,11 @@ class User extends Base
      * @param $token
      * @return mixed
      */
-    public static function getUserBytoken($token){
-       $field = ['*'];
+    public static function getUserBytoken($token)
+    {
+        $field = ['*'];
         // $field = ['id','openid','session_key','nick_name','avatar_url','phone','user_name','sex','audit_status','audit_status'];
-        $map = ['is_delete'=>0,'token'=>$token];
+        $map = ['is_delete' => 0, 'token' => $token];
         return self::select($field)->where($map)->first();
     }
 }

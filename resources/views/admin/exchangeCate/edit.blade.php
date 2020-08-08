@@ -18,7 +18,7 @@
                         <span class="x-red">*</span>排序
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" value="{{ $detail->sort or ''}}" id="sort" name="sort"  required="" lay-verify="sort"
+                        <input type="number" value="{{ $detail->sort or ''}}" id="sort" name="sort"  required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
