@@ -92,6 +92,7 @@ class ShopController extends BaseController
         try {
             if ($rst = $this->orderSerice->createOrder($data, $this->userInfo)) {
                 $payment = $this->unifiedorder($rst);
+                Log::info('【支付返回】------data='.json_encode($payment));
                 //修改前端冲突
                 $payment['packageValue'] = $payment['package'];
                 $payment['timeStamp'] = $payment['timestamp'];
@@ -182,6 +183,7 @@ class ShopController extends BaseController
             'openid' => $this->userInfo['openid'],
         ];
         $result = $this->app->order->unify($data);
+        Log::info('【统一下单】-----返回数据：data='.json_encode($result));
         //记录支付记录
         if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
             //
