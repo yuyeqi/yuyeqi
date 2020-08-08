@@ -137,7 +137,7 @@ class ShopController extends BaseController
         if (empty($id)) {
             return Render::error("参数错误，请重试!");
         }
-        $detail = Order::getOrderBy($id);
+        $detail = Order::getOrderDetail($id);
         return Render::success("获取成功", $detail);
     }
 
@@ -177,7 +177,7 @@ class ShopController extends BaseController
             'body' => '黄派门窗-订单支付',
             'out_trade_no' => $order->id,
             //'total_fee' => $order->total_price,
-            'total_fee' => 101,
+            'total_fee' => '101',
             'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
             'openid' => $this->userInfo['openid'],
         ];

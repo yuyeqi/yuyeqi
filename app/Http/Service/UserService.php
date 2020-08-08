@@ -183,8 +183,9 @@ class UserService extends BaseSerivce
                     ];
                     Promoter::create($promoterData);
                     //赠送推广人金额
+                    $tgDealNo = $this->getOrderNo('tg');
                     $stgCushLog = [
-                        'deal_no' => $dealNo,
+                        'deal_no' => $tgDealNo,
                         'user_id' => $promoterAccount->parent_id,
                         'user_name' => $promoterAccount->parent_name,
                         'deal_score' => $cateInfo->tg_account,
@@ -197,8 +198,9 @@ class UserService extends BaseSerivce
                 //3.修改审核状态
                 $this->user->updateUserStatus($data);
                 //4.注册赠送金额
+                $rgCushLog = $this->getOrderNo('zc');
                 $rcgCushLog = [
-                    'deal_no' => $dealNo,
+                    'deal_no' => $rgCushLog,
                     'user_id' => $promoterAccount->id,
                     'user_name' => $promoterAccount->user_name,
                     'deal_score' => $cateInfo->register_account,
