@@ -132,10 +132,10 @@ class ShopController extends BaseController
     public function getOrderDetail(Request $request)
     {
         $id = $request->input("id", 0);
-        if ($id <= 0) {
+        if (empty($id)) {
             return Render::error("参数错误，请重试!");
         }
-        $detail = Order::getOrderDetail($id);
+        $detail = Order::getOrderByNo($id);
         return Render::success("获取成功", $detail);
     }
 
@@ -216,7 +216,7 @@ class ShopController extends BaseController
         $response = $this->app->handlePaidNotify(function($message, $fail){
             Log::info('【支付回调信息】----message='.json_encode($message));
             // 1.使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
-            $order = Order::getOrderDetailByNo($message['out_trade_no']);
+            $order = Order::getOrderByNo($message['out_trade_no']);
             if (!$order || $order->pay_status == 20 || $order->pay_time) { // 如果订单不存在 或者 订单已经支付过了
                 return true; // 告诉微信，我已经处理完了，订单没找到，别再通知我了
             }

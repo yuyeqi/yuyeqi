@@ -99,6 +99,15 @@ class Order extends Base
     }
 
     /**
+     * 根据订单号获取订单信息
+     * @param $orderNo
+     * @return mixed
+     */
+    public static function getOrderByNo($orderNo){
+        $map = ['is_delete' => 0, 'order_no' => $orderNo];
+        return self::where($map)->first();
+    }
+    /**
      * 批量删除
      * @param $data
      * @param array $ids
