@@ -462,7 +462,7 @@ class UserService extends BaseSerivce
      */
     public function getPromoterLists($userInfo, $page, $limit)
     {
-        $field = ['p.id', 'promoter_user_id', 'promoter_user_name', 'promoter_amount', 'p.share_type', 'p.create_time', 'u.avatar_url'];
+        $field = ['promoter.id', 'promoter_user_id', 'promoter_user_name', 'promoter_amount', 'promoter.share_type', 'promoter.create_time', 'u.avatar_url'];
         $lists = Promoter::getPromoterLists($userInfo, $field, $page, $limit);
         return $this->getPageData($lists);
     }

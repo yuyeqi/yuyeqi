@@ -68,7 +68,7 @@ class UserCateController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function add(Request $request){
-        $data = $request->only(['cate_name','register_account','tg_account','book_score','store_score','order_score']);
+        $data = $request->only(['cate_name','bg_images','register_account','tg_account','book_score','store_score','order_score']);
         //添加数据
         try {
             if ($this->userCateService->add($data, $this->loginInfo)){
@@ -85,7 +85,7 @@ class UserCateController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function edit(Request $request){
-        $data = $request->only(['id','cate_name','register_account','tg_account','book_score','store_score','order_score']);
+        $data = $request->only(['id','cate_name','bg_images','register_account','tg_account','book_score','store_score','order_score']);
         //修改数据
         try {
             $result = $this->userCateService->edit($data, $this->loginInfo);

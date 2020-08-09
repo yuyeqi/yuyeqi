@@ -13,6 +13,22 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="case_cover" class="layui-form-label">
+                        <span class="x-red">*</span>背景图
+                    </label>
+                    <div class="layui-input-inline">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="test1">上传图片</button>
+                            <div class="layui-upload-list">
+                                <div id="" class="file-iteme">
+                                    <div class="handle" id="handle"></div>
+                                    <img src="{{ $detail->bg_images or '' }}" style="width: 100px;height: 100px;" alt="" id="uploadPic">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label for="register_account" class="layui-form-label">
                         <span class="x-red">*</span>注册赠送金额
                     </label>
@@ -119,6 +135,33 @@
                         }
                     })
                     return false;
+                });
+                //普通图片上传
+                var uploadInst = upload.render({
+                    elem: '#test1',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                    ,url: "{{ route('upload') }}" //改成您自己的上传接口
+                    ,accept:'images'
+                    ,exts: 'jpg|png|gif|bmp|jpeg'
+                    ,size: 4*1024*1024
+                    ,before: function(obj){
+                        layer.msg('图片上传中...', {
+                            icon: 16,
+                            shade: 0.01,
+                            time: 0
+                        })
+                    }
+                    ,done: function(res){
+                        //如果上传失败
+                        if(res.code > 0){
+                            return layer.msg('上传失败');
+                        }
+                        //上传成功
+                        $('#uploadPic').attr('src', res.data); //图片链接（base64）
+                        return layer.msg('上传成功');
+                    }
                 });
             });
     </script>

@@ -36,7 +36,7 @@ class Promoter extends Base
      */
     public static function getPromoterLists($userInfo, $field, $page, $limit)
     {
-        $map = ['promoter_id'=>$userInfo['id'],'p.is_delete'=>0];
+        $map = ['promoter_id'=>$userInfo['id'],'promoter.is_delete'=>0];
         return self::select($field)
             ->where($map)
             ->join('user as u', 'promoter_user_id', '=', 'u.id')
