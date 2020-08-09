@@ -347,7 +347,7 @@ class UserController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function cush($id){
-        return view('admin.user.cush');
+        return view('admin.user.cush',compact('id'));
     }
 
     /**
@@ -356,7 +356,7 @@ class UserController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function cushAudit(Request $request){
-        $data = $request->only(['id','status']);
+        $data = $request->only(['id','status','remark']);
         if (!$data['id']){
             return  Render::error('参数错误');
         }

@@ -87,13 +87,11 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'audit'){
-                xadmin.open('编辑',"/hp/goodsCate/editShow/"+data.id,500,300);
+                xadmin.open('审核',"/hp/user/cush/"+data.id,500,300);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);
                 })
-            }else if(obj.event === 'audit'){
-                xadmin.open('审核',"/hp/user/cush/"+data.id,450,200);
             }
         });
         //执行重载

@@ -173,6 +173,9 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('delBatchWallet','UserController@delBatchWallet')->name('user_wallet_del');
         Route::post('delBatchScore','UserController@delBatchScore')->name('user_score_del');
         Route::post('delBatchPromoter','UserController@delBatchPromoter')->name('user_promoter_del');
+        Route::post('delBatchPromoter','UserController@delBatchPromoter')->name('user_promoter_del');
+        Route::get('cush/{id}','UserController@cush')->name('user_cush_show');
+        Route::post('cushAudit','UserController@cushAudit')->name('user_audit_cush');
     });
     //订单
     Route::prefix('order')->group(function (){
