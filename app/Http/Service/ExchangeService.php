@@ -205,8 +205,9 @@ class ExchangeService extends BaseSerivce
      * 兑换商品分类
      * @return mixed
      */
-    public function getApiCateLists(){
-        return $this->exchange->getApiCateLists();
+    public function getGoodsLists(){
+        $pageData = $this->exchange->getGoodsLists();
+        return $this->getPageData($pageData);
     }
 
     /**
