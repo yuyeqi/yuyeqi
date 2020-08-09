@@ -47,7 +47,7 @@ class ExchangeController extends BaseController
        $page = $request->input('page',1);
        $limit = $request->input('limit',10);
        $cateType = $request->input('cateType',0);
-       $lists = $this->exchangeService->getGoodsLists($cateType,$page,$limit);
+       $lists = $this->exchangeService->getApiGoodsLists($cateType,$page,$limit);
        return Render::success('获取成功',$lists);
    }
 

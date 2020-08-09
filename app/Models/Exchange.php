@@ -117,18 +117,19 @@ class Exchange extends Model
     }
 
     /**
-     * 兑换商品分类
+     * 兑换商品列表
      * @return mixed
      */
-    public function getApiCateLists(){
+    public function getApiGoodsLists($cateType,$page,$limit){
         $field = ['id','goods_no','goods_name','goods_cover','cate_id','sales_score','line_score',
             'sales_num'];
         $map = ['is_delete'=>0,'status'=>10];
+        $cateType > 0 && $map['cate_id'] = $cateType;
         return self::select($field)
             ->where($map)
             ->orderBy('sort')
             ->orderBy('create_time','desc')
-            ->get();
+            ->paginate($limit);
     }
 
     /**
