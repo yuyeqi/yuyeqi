@@ -78,4 +78,13 @@ class Withdraw extends Base
         $map = ['id'=>$id,'is_delete'=>0];
         return self::where($map)->first();
     }
+
+    /**
+     * 更新提现状态
+     * @param $data
+     * @return mixed
+     */
+    public function updateStatus($data){
+        return self::where('user_id',$data['id'])->update($data);
+    }
 }

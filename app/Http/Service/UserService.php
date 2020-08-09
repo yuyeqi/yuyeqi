@@ -540,7 +540,6 @@ class UserService extends BaseSerivce
             DB::commit();
             return true;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             Log::error('【添加用户地址失败】----错误信息：e:' . json_encode($e->getMessage()));
             $this->setErrorMsg("系统异常，请稍后再试！");
             DB::rollBack();
@@ -608,7 +607,6 @@ class UserService extends BaseSerivce
             DB::commit();
             return true;
         } catch (\Exception $e) {
-            dd($e);
             Log::error('【设置用户默认地址】----错误信息：e:' . json_encode($e->getMessage()));
             $this->setErrorMsg("系统异常，请稍后再试！");
             DB::rollBack();
@@ -797,16 +795,17 @@ class UserService extends BaseSerivce
             if ($data['status'] == 20) {
                 //6.修改用户账户信息
                 $accountData = [
+                    'user_id' => $data['id'],
                     'frozen_amount' => bcsub($accountInfo->frozen_amount, $userInfo->amount, 2),  //解冻账户金额
                     'withdraw_amount' => bcadd($accountInfo->withdraw_amount, $userInfo->amount, 2),  //增加提现金额
                 ];
                 $this->userStatistic->updateAccout($accountData);
                 //7.生成提现记录
                 $cushLog = [
-                    'deal_no' => $cushInfo->dealNo,
+                    'deal_no' => $cushInfo->deal_no,
                     'user_id' => $userInfo['id'],
                     'user_name' => $userInfo['user_name'],
-                    'amount' => $cushInfo->account,
+                    'amount' => $cushInfo->amount,
                     'surplus_amount' => $cushInfo->surplus_amount,
                     'remark' => '用户提现'
                 ];
@@ -817,7 +816,7 @@ class UserService extends BaseSerivce
                     'openid' => $userInfo->openid,
                     'check_name' => 'NO_CHECK', // NO_CHECK：不校验真实姓名, FORCE_CHECK：强校验真实姓名
                     're_user_name' => $cushInfo->user_name, // 如果 check_name 设置为FORCE_CHECK，则必填用户真实姓名
-                    'amount' => bcmul($userInfo->account, 100, 2), // 企业付款金额，单位为分
+                    'amount' => bcmul($cushInfo->amount, 100, 2), // 企业付款金额，单位为分
                     'desc' => '用户' . $cushInfo->user_name . '的账户提现', // 企业付款操作说明信息。必填
                 ];
                 $this->app->transfer($payData);
