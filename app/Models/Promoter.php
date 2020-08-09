@@ -12,7 +12,7 @@ namespace App\Models;
 class Promoter extends Base
 {
     //定义模型关联表
-    protected $table = 'promoter as p';
+    protected $table = 'promoter';
     const UPDATED_AT = null;
     //设置保存字段
     protected $guarded = [];
