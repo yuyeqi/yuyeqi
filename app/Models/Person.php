@@ -10,7 +10,7 @@ namespace App\Models;
  */
 class Person extends Base
 {    //定义模型关联表
-    protected $table = 'hp_person';
+    protected $table = 'person';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

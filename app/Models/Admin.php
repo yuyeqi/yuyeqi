@@ -16,7 +16,7 @@ class Admin extends Authenticatable implements JWTSubject
 {
     use Notifiable;
     //定义模型关联表
-    protected $table = 'hp_admin';
+    protected $table = 'admin';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

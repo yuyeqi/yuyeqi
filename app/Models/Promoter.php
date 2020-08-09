@@ -12,7 +12,7 @@ namespace App\Models;
 class Promoter extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_promoter';
+    protected $table = 'promoter as p';
     const UPDATED_AT = null;
     //设置保存字段
     protected $guarded = [];
@@ -39,7 +39,7 @@ class Promoter extends Base
         $map = ['promoter_id'=>$userInfo['id'],'p.is_delete'=>0];
         return self::select($field)
             ->where($map)
-            ->join('hp_user as u', 'promoter_user_id', '=', 'u.id')
+            ->join('user as u', 'promoter_user_id', '=', 'u.id')
             ->orderBy('p.create_time','desc')
             ->paginate($limit);
     }

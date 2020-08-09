@@ -12,7 +12,7 @@ namespace App\Models;
 class ScoreDeal extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_score_deal';
+    protected $table = 'score_deal';
 
     //时间转换
     const CREATED_AT = 'create_time';

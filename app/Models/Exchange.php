@@ -16,7 +16,7 @@ use phpDocumentor\Reflection\Types\Self_;
 class Exchange extends Model
 {
     //定义模型关联表
-    protected $table = 'hp_exchange_goods';
+    protected $table = 'exchange_goods';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

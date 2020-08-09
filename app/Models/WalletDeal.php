@@ -12,7 +12,7 @@ namespace App\Models;
 class WalletDeal extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_wallet_deal';
+    protected $table = 'wallet_deal';
 
     //时间转换
     const CREATED_AT = 'create_time';

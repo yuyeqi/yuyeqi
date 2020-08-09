@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Config;
 class GoodsCate extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_goods_cate';
+    protected $table = 'goods_cate';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

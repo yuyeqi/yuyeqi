@@ -9,7 +9,7 @@ namespace App\Models;
  */
 class Cases extends Base
 {    //定义模型关联表
-    protected $table = 'hp_cases';
+    protected $table = 'cases';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

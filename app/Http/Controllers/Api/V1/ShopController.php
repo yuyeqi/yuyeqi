@@ -166,9 +166,9 @@ class ShopController extends BaseController
             return Render::error("参数错误，请重试");
         }
         if ($this->orderSerice->addComment($this->userInfo, $goods_id, $content, $pictures)) {
-            return Render::success("添加成功");
+            return Render::success("评价成功");
         }
-        return Render::error($this->orderSerice->getErrorMsg() ?: '添加失败');
+        return Render::error($this->orderSerice->getErrorMsg() ?: '评价失败');
     }
 
     /**

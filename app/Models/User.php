@@ -12,7 +12,7 @@ use phpDocumentor\Reflection\Types\Self_;
  */
 class User extends Base
 {    //定义模型关联表
-    protected $table = 'hp_user';
+    protected $table = 'user';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

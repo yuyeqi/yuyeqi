@@ -12,7 +12,7 @@ namespace App\Models;
 class ExchangeRecord extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_exchange_record';
+    protected $table = 'exchange_record';
 
     //设置保存字段
     protected $guarded = [];

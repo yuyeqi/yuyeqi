@@ -12,7 +12,7 @@ namespace App\Models;
 class UserAddress extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_user_address';
+    protected $table = 'user_address';
 
     const UPDATED_AT = null;
     //设置保存字段

@@ -12,7 +12,7 @@ use Carbon\Carbon;
 class Book extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_book';
+    protected $table = 'book';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

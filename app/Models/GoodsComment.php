@@ -15,7 +15,7 @@ use phpDocumentor\Reflection\Types\Self_;
 class GoodsComment extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_goods_comment';
+    protected $table = 'goods_comment';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

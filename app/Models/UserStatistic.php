@@ -12,7 +12,7 @@ use phpDocumentor\Reflection\Types\Self_;
 class UserStatistic extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_user_statistic';
+    protected $table = 'user_statistic';
 
     const CREATED_AT = null;
 

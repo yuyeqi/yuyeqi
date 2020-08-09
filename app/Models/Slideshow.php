@@ -11,7 +11,7 @@ namespace App\Models;
 class Slideshow extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_slideshow';
+    protected $table = 'slideshow';
     //时间转换
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
