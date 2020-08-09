@@ -86,13 +86,13 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
     });
     //私人定制管理
     Route::prefix('person')->group(function (){
-        Route::get('index','personController@index')->name('person_index');
-        Route::get('getPersonCateLists','personController@getPersonLists')->name('person_lists');
-        Route::get('editShow/{id}','personController@editShow')->name('person_edit_show')->where('id', '[0-9]+');
-        Route::post('edit','personController@edit')->name('person_edit');
-        Route::get('auditShow/{id}','personController@auditShow');
-        Route::post('delBatch','personController@delBatch')->name('person_del');
-        Route::post('updateStatus','personController@updateStatus')->name('person_update_status');
+        Route::get('index','PersonController@index')->name('person_index');
+        Route::get('getPersonCateLists','PersonController@getPersonLists')->name('person_lists');
+        Route::get('editShow/{id}','PersonController@editShow')->name('person_edit_show')->where('id', '[0-9]+');
+        Route::post('edit','PersonController@edit')->name('person_edit');
+        Route::get('auditShow/{id}','PersonController@auditShow');
+        Route::post('delBatch','PersonController@delBatch')->name('person_del');
+        Route::post('updateStatus','PersonController@updateStatus')->name('person_update_status');
     });
     //私人定制分类管理
     Route::prefix('personCate')->group(function (){
