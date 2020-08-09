@@ -303,13 +303,12 @@ class UserService extends BaseSerivce
         }
         //2.获取兑换比例
         $config = Config::getConfigByNo("scoreToCash");
-        $exchageRate = 0;
         if (!$config) {
             Log::info('【积分兑换】----缺少积分兑换配置项');
             $this->setErrorMsg("缺少系统配置，请联系管理人员");
             return false;
         }
-        $exchageRate = $config->config_value;
+        $exchageRate = $config->config_value ?? 0 ;
         if (empty($exchageRate) || $exchageRate <= 0) {
             Log::error("积分兑换-缺少兑换比例，请联系管理员");
             $this->setErrorMsg("缺少兑换比例，请联系管理人员!");
@@ -327,7 +326,7 @@ class UserService extends BaseSerivce
             'deal_score' => $score,
             'surplus_score' => $diffScore,
             'deal_type' => 4,
-            'remark' => $remark
+            'remark' => '积分兑换现金'
         ];
         //现金记录交易数据
         $cashLog = [
@@ -337,7 +336,7 @@ class UserService extends BaseSerivce
             'amount' => $cash,
             'surplus_amount' => $newCash,
             'deal_type' => 2,
-            'remark' => $remark
+            'remark' => '积分兑换现金'
         ];
         //更新账户数据
         $withdrawScore = $accountInfo['withdraw_score']; //以用积分
@@ -392,7 +391,7 @@ class UserService extends BaseSerivce
             $this->setErrorMsg("缺少系统配置，请联系管理人员");
             return false;
         }
-        $minWithdraw = $config->config_value;
+        $minWithdraw = $config->config_value ?? 0;
         if ($cush < $minWithdraw) {
             Log::error("[用户提现]-提现金额小于" . $minWithdraw);
             $this->setErrorMsg("提现金额不能小于" . $minWithdraw . '元');
@@ -413,7 +412,7 @@ class UserService extends BaseSerivce
             'user_name' => $userInfo['user_name'],
             'amount' => $cush,
             'surplus_amount' => $diffCush,
-            'remark' => $remark
+            'remark' => '用户提现'
         ];
         //5.更新账户数据
         $accountData = [
@@ -424,7 +423,7 @@ class UserService extends BaseSerivce
         DB::beginTransaction();
         try {
             //1.更新用户账户
-            UserStatistic::where(['id' => $userInfo['id']])->update($accountData);
+            UserStatistic::where(['user_id' => $userInfo['id']])->update($accountData);
             //2.提现记录
             Withdraw::create($walletLog);
             DB::commit();
