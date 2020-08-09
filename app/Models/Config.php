@@ -12,7 +12,7 @@ namespace App\Models;
 class Config extends Base
 {
     //定义模型关联表
-    protected $table = 'hp_config';
+    protected $table = 'config';
 
     //时间转换
     const CREATED_AT = 'create_time';
