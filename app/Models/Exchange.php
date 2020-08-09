@@ -141,7 +141,7 @@ class Exchange extends Model
     {
         $field = ['id','goods_no','goods_name','goods_cover','cate_id','sales_score','line_score',
             'sales_num','content','stock_num'];
-        $map = ['is_delete'=>0,'status'=>10];
+        $map = ['is_delete'=>0,'status'=>10,'id'=>$id];
         return self::select($field)->with('picture')->where($map)->first();
     }
 
