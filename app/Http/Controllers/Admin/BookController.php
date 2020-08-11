@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Service\BookService;
 use App\Library\Render;
+use App\Models\Book;
 use Illuminate\Http\Request;
 
 /**
@@ -89,6 +90,7 @@ class BookController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function audit($id){
-        return view('admin.book.audit',compact('id'));
+        $detail = Book::getApiBookDetail($id);
+        return view('admin.book.audit',compact('detail'));
     }
 }

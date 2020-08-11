@@ -40,6 +40,7 @@ class BookValidator extends FormRequest implements ValidatesWhenResolved
      */
     public function rules()
     {
+        $curr_date = date('Y-m-d');
         return [
             'client_name' => 'required',
             'client_phone' => 'regex:/^1[345789][0-9]{9}$/',     //正则验证
@@ -48,7 +49,7 @@ class BookValidator extends FormRequest implements ValidatesWhenResolved
             'district' => 'required',
             'community' => 'required',
             'house_name' => 'required',
-            'arrive_time' => 'required',
+            'arrive_time' => "date|after:{$curr_date}",
             'sex' => 'required'
         ];
     }
@@ -68,7 +69,8 @@ class BookValidator extends FormRequest implements ValidatesWhenResolved
             'community.required' => '请输入小区',
             'house_name.required' => '请输入楼号',
             'sex.required' => '请选择性别',
-            'arrive_time.required' => '请选择到店时间'
+            'arrive_time.date' => '到店时间错误',
+            'arrive_time.after' => '到店时间要大于当时间'
         ];
     }
 
