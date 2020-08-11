@@ -39,7 +39,7 @@
                 </div>
                 <div class="layui-form-item">
                     <label for="tg_account" class="layui-form-label">
-                        <span class="x-red">*</span>推广赠送积分
+                        <span class="x-red">*</span>推广赠送金额
                     </label>
                     <div class="layui-input-inline">
                         <input type="number" id="tg_account"  value="{{ $detail->tg_account or ''}}" name="tg_account"  required="" lay-verify="required"
@@ -66,7 +66,7 @@
                 </div>
                 <div class="layui-form-item">
                     <label for="order_score" class="layui-form-label">
-                        <span class="x-red">*</span>下单赠送积分
+                        <span class="x-red">*</span>结单赠送积分
                     </label>
                     <div class="layui-input-inline">
                         <input type="number"  value="{{ $detail->order_score or ''}}" id="order_score" name="order_score"  required="" lay-verify="required"

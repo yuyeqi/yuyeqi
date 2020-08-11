@@ -188,7 +188,7 @@ class BookService extends BaseSerivce
                 'user_id' => $userInfo['id'],
                 'user_name' => $userInfo['user_name'],
                 'deal_score' => $userCateInfo->store_score,
-                'surplus_score' => bcadd($accountInfo->amount,$userCateInfo->store_score,2),
+                'surplus_score' => bcadd($accountInfo->score,$userCateInfo->store_score,2),
                 'deal_type' => 1,
                 'remark' => '预约积分'
             ];
