@@ -3,13 +3,13 @@
     <div class="layui-fluid">
         <div class="layui-row">
             <form class="layui-form">
-                <input type="hidden" value="{{ $id }}" id="hiddenId">
+                <input type="hidden" value="{{ $detail->id }}" id="hiddenId">
                 <div class="layui-form-item">
                     <label class="layui-form-label">审核状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="status" value="20" title="到店">
-                        <input type="radio" name="status" value="30" title="预算">
-                        <input type="radio" name="status" value="40" title="完成">
+                        <input type="radio" name="status" @if($detail->status == 20 ) checked="" @endif value="20" title="到店">
+                        <input type="radio" name="status" @if($detail->status == 30 ) checked="" @endif  value="30" title="预算">
+                        <input type="radio" name="status" @if($detail->status == 40 ) checked="" @endif value="40" title="完成">
                     </div>
                 </div>
                 <form class="layui-form layui-form-pane" action="">

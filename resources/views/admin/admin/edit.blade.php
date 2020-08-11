@@ -55,8 +55,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">单选框</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="sex" value="1" title="男" checked="">
-                        <input type="radio" name="sex" value="2" title="女">
+                        <input type="radio" name="sex" value="1" title="男" @if($detail->status == 1 ) checked="" @endif>
+                        <input type="radio" name="sex" value="2" title="女" @if($detail->status == 2 ) checked="" @endif>
                     </div>
                 </div>
                 <form class="layui-form layui-form-pane" action="">
