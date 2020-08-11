@@ -89,14 +89,14 @@ class BookService extends BaseSerivce
                     'user_id' => $bookInfo->user_id,
                     'user_name' => $bookInfo->user_name,
                     'deal_score' => $bookInfo->store_score,
-                    'surplus_score' => bcadd($accountInfo->score, $bookInfo->store_score, 2),
+                    'surplus_score' => bcadd($accountInfo->score, $bookInfo->store_score),
                     'deal_type' => 2,
                     'remark' => '预约到店赠送积分'
                 ];
                 //到店修改账户信息
                 $userData = [
                     'user_id' => $bookInfo['user_id'],
-                    'score' => $bookInfo->store_score
+                    'score' => bcadd($accountInfo->score, $bookInfo->store_score),
                 ];
                 $this->userStatistic->updateAccout($userData);
                 ScoreDeal::create($scoreLog);
@@ -108,14 +108,14 @@ class BookService extends BaseSerivce
                     'user_id' => $bookInfo['user_id'],
                     'user_name' => $bookInfo['user_name'],
                     'deal_score' => $bookInfo->finished_score,
-                    'surplus_score' => bcadd($accountInfo->score, $bookInfo->finished_score, 2),
+                    'surplus_score' => bcadd($accountInfo->score, $bookInfo->finished_score),
                     'deal_type' => 3,
                     'remark' => '完成预定赠送积分'
                 ];
                 //完成赠送用户积分
                 $userData = [
                     'user_id' => $bookInfo['user_id'],
-                    'score' => $bookInfo->finished_score
+                    'score' => bcadd($accountInfo->score, $bookInfo->finished_score),
                 ];
                 $this->userStatistic->updateAccout($userData);
                 ScoreDeal::create($scoreLog);
