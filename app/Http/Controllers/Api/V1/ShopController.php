@@ -187,7 +187,7 @@ class ShopController extends BaseController
             'body' => '黄派门窗-订单支付',
             'out_trade_no' => $order->order_no,
             //'total_fee' => $order->total_price,
-            'total_fee' => '101',
+            'total_fee' => 1,
             'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
             'openid' => $this->userInfo['openid'],
         ];
