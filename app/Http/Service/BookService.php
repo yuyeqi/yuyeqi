@@ -33,7 +33,8 @@ class BookService extends BaseSerivce
      * 报备列表
      * @return int
      */
-    public function getBookList(){
+    public function getBookList()
+    {
         return $this->book->getBookList();
     }
 
@@ -45,7 +46,7 @@ class BookService extends BaseSerivce
      */
     public function getBookAdminLists(array $data, int $limit)
     {
-        return $this->book->getBookAdminLists($data,$limit);
+        return $this->book->getBookAdminLists($data, $limit);
     }
 
     /**
@@ -54,25 +55,26 @@ class BookService extends BaseSerivce
      * @param $loginInfo
      * @return bool
      */
-    public function updateStatus($data,$loginInfo){
+    public function updateStatus($data, $loginInfo)
+    {
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
         //1.预约信息
         $bookInfo = Book::getApiBookDetail($data['id']);
-        if (!$bookInfo){
+        if (!$bookInfo) {
             $this->setErrorMsg('预约信息不存在');
             return false;
         }
         //2.获取用户账户信息
         $accountInfo = UserStatistic::getAccountDetail($bookInfo->user_id);
-        if (!$accountInfo){
+        if (!$accountInfo) {
             $this->setErrorMsg('用户信息不存在');
-            return  false;
+            return false;
         }
         //状态验证
-        if ($bookInfo->status >= $data['status']){
+        if ($bookInfo->status >= $data['status']) {
             $this->setErrorMsg('不可以重复操作');
-            return  false;
+            return false;
         }
         //开启事务
         DB::beginTransaction();
@@ -91,6 +93,12 @@ class BookService extends BaseSerivce
                     'deal_type' => 2,
                     'remark' => '预约到店赠送积分'
                 ];
+                //到店修改账户信息
+                $userData = [
+                    'user_id' => $bookInfo['user_id'],
+                    'score' => $bookInfo->store_score
+                ];
+                $this->userStatistic->updateAccout($userData);
                 ScoreDeal::create($scoreLog);
             } else if ($data['status'] == 40) {
                 //生成积分记录
@@ -104,14 +112,21 @@ class BookService extends BaseSerivce
                     'deal_type' => 3,
                     'remark' => '完成预定赠送积分'
                 ];
+                //完成赠送用户积分
+                $userData = [
+                    'user_id' => $bookInfo['user_id'],
+                    'score' => $bookInfo->finished_score
+                ];
+                $this->userStatistic->updateAccout($userData);
                 ScoreDeal::create($scoreLog);
             }
+            //4.修改用户账户信息
             DB::commit();
-            return  true;
+            return true;
         } catch (\Exception $e) {
             $this->setErrorMsg('系统异常,请稍后再试');
             DB::rollBack();
-            return  false;
+            return false;
         }
 
 
@@ -138,9 +153,10 @@ class BookService extends BaseSerivce
      * @param $limit
      * @return mixed
      */
-    public function getApiBookLists($userInfo,$page,$limit){
-        $lists = $this->book->getApiBookLists($userInfo,$page,$limit);
-        return  $this->getPageData($lists);
+    public function getApiBookLists($userInfo, $page, $limit)
+    {
+        $lists = $this->book->getApiBookLists($userInfo, $page, $limit);
+        return $this->getPageData($lists);
     }
 
     /**
@@ -149,20 +165,21 @@ class BookService extends BaseSerivce
      * @param $userInfo
      * @return bool
      */
-    public function addBook($data,$userInfo){
-        Log::info('------------用户预约开始-------------用户id：'.$userInfo['id'].'，用户姓名：'.$userInfo['user_name']);
+    public function addBook($data, $userInfo)
+    {
+        Log::info('------------用户预约开始-------------用户id：' . $userInfo['id'] . '，用户姓名：' . $userInfo['user_name']);
         $data['user_id'] = $userInfo['id'];
         $data['user_name'] = $userInfo['user_name'];
         $data['user_type'] = $userInfo['user_type'];
         $data['book_no'] = $this->createBookNum();
         //根据预约人的用户类型获取预约的赠送积分
         $userCateInfo = UserCate::getUserCateInfoByUserType($userInfo['user_type']);
-        if (!$userCateInfo){
-            Log::error('[用户预约]------用户缺少类型，无法预约--------------用户id：'.$userInfo['id'].'，用户姓名：'.$userInfo['user_name']);
+        if (!$userCateInfo) {
+            Log::error('[用户预约]------用户缺少类型，无法预约--------------用户id：' . $userInfo['id'] . '，用户姓名：' . $userInfo['user_name']);
             $this->setErrorMsg('缺少用户类型，请联系管理员,');
             return false;
         }
-        Log::info('[用户类型信息]--------userCate：'.json_encode($userCateInfo));
+        Log::info('[用户类型信息]--------userCate：' . json_encode($userCateInfo));
         //根据用户的类型获取用户预约的赠送积分
         $bookScore = $userCateInfo['book_score'];   //预约赠送积分
         $storeScore = $userCateInfo['store_score']; //到店赠送积分
@@ -170,7 +187,7 @@ class BookService extends BaseSerivce
         $data['book_score'] = $bookScore;
         $data['store_score'] = $storeScore;
         $data['finished_score'] = $finishedScore;
-        Log::info('[用户预约]--------预约信息：data='.json_encode($data));
+        Log::info('[用户预约]--------预约信息：data=' . json_encode($data));
         //用户账户积分信息
         $accountInfo = UserStatistic::getAccountDetail($userInfo['id']);
         //开启事务
@@ -181,8 +198,8 @@ class BookService extends BaseSerivce
             //2.修改用户账户信息
             $userData = [
                 'user_id' => $userInfo['id'],
-                'score'    => bcadd($accountInfo->score,$userCateInfo->book_score,2),
-                'book_num' => bcadd($accountInfo->book_num,1)
+                'score' => bcadd($accountInfo->score, $userCateInfo->book_score, 2),
+                'book_num' => bcadd($accountInfo->book_num, 1)
             ];
             $this->userStatistic->updateAccout($userData);
             //3.生成积分记录
@@ -192,16 +209,16 @@ class BookService extends BaseSerivce
                 'user_id' => $userInfo['id'],
                 'user_name' => $userInfo['user_name'],
                 'deal_score' => $userCateInfo->book_score,
-                'surplus_score' => bcadd($accountInfo->score,$userCateInfo->book_score,2),
+                'surplus_score' => bcadd($accountInfo->score, $userCateInfo->book_score, 2),
                 'deal_type' => 1,
                 'remark' => '预约赠送积分'
             ];
             ScoreDeal::create($scoreLog);
-            Log::info("【客户预约】-----预约成功，预约人id:".$userInfo['id'].'，姓名:'.$userInfo['user_name']);
+            Log::info("【客户预约】-----预约成功，预约人id:" . $userInfo['id'] . '，姓名:' . $userInfo['user_name']);
             DB::commit();
             return true;
         } catch (\Exception $e) {
-            Log::error('【客户预约】-----预约失败，预约人id：'.$userInfo['id'].'姓名:'.$userInfo['user_name'].'，错误信息：$e:'.json_encode($e));
+            Log::error('【客户预约】-----预约失败，预约人id：' . $userInfo['id'] . '姓名:' . $userInfo['user_name'] . '，错误信息：$e:' . json_encode($e));
             $this->setErrorMsg($e->getMessage());
             DB::rollBack();
             return false;
@@ -212,14 +229,15 @@ class BookService extends BaseSerivce
      * 获取预约码
      * @return int|string
      */
-    private function createBookNum(){
+    private function createBookNum()
+    {
         $newBookNum = '';
         //获取当天的最后的预约号
         $bookNo = Book::getBookNum();
-        if (empty($bookNo)){
-            $newBookNum = date('Ymd').'0001';
-        }else{
-            $newBookNum = intval($bookNo)+1;
+        if (empty($bookNo)) {
+            $newBookNum = date('Ymd') . '0001';
+        } else {
+            $newBookNum = intval($bookNo) + 1;
         }
         return $newBookNum;
     }
