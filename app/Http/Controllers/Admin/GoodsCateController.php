@@ -66,7 +66,6 @@ class GoodsCateController extends BaseController
             }
             return Render::error('添加失败');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return Render::error("系统异常，请稍后再试！");
         }
     }

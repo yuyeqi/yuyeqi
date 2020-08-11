@@ -87,7 +87,7 @@ class BookService extends BaseSerivce
                     'user_id' => $bookInfo->user_id,
                     'user_name' => $bookInfo->user_name,
                     'deal_score' => $bookInfo->store_score,
-                    'surplus_score' => bcadd($accountInfo->amount, $bookInfo->store_score, 2),
+                    'surplus_score' => bcadd($accountInfo->score, $bookInfo->store_score, 2),
                     'deal_type' => 2,
                     'remark' => '预约到店赠送积分'
                 ];
@@ -100,7 +100,7 @@ class BookService extends BaseSerivce
                     'user_id' => $bookInfo['user_id'],
                     'user_name' => $bookInfo['user_name'],
                     'deal_score' => $bookInfo->finished_score,
-                    'surplus_score' => bcadd($accountInfo->amount, $bookInfo->finished_score, 2),
+                    'surplus_score' => bcadd($accountInfo->score, $bookInfo->finished_score, 2),
                     'deal_type' => 3,
                     'remark' => '完成预定赠送积分'
                 ];
@@ -109,7 +109,6 @@ class BookService extends BaseSerivce
             DB::commit();
             return  true;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             $this->setErrorMsg('系统异常,请稍后再试');
             DB::rollBack();
             return  false;
@@ -179,8 +178,13 @@ class BookService extends BaseSerivce
         try {
             //1.添加预约记录
             $this->book->addBook($data);
-            //2.修改预约用户预约记录数
-            $this->userStatistic->updateUserCount($userInfo['id'],'book_num');
+            //2.修改用户账户信息
+            $userData = [
+                'user_id' => $userInfo['id'],
+                'score'    => bcadd($accountInfo->score,$userCateInfo->book_score,2),
+                'book_num' => bcadd($accountInfo->book_num,1)
+            ];
+            $this->userStatistic->updateAccout($userData);
             //3.生成积分记录
             $dealNo = $this->getOrderNo("yy");
             $scoreLog = [
@@ -188,7 +192,7 @@ class BookService extends BaseSerivce
                 'user_id' => $userInfo['id'],
                 'user_name' => $userInfo['user_name'],
                 'deal_score' => $userCateInfo->book_score,
-                'surplus_score' => bcadd($accountInfo->score,$userCateInfo->store_score,2),
+                'surplus_score' => bcadd($accountInfo->score,$userCateInfo->book_score,2),
                 'deal_type' => 1,
                 'remark' => '预约赠送积分'
             ];

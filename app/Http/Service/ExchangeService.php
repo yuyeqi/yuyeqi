@@ -133,7 +133,6 @@ class ExchangeService extends BaseSerivce
             DB::commit();
             return true;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             $this->setErrorCode(0);
             $this->setErrorMsg($e);
