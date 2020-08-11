@@ -89,7 +89,7 @@ class BookService extends BaseSerivce
                     'deal_score' => $bookInfo->store_score,
                     'surplus_score' => bcadd($accountInfo->amount, $bookInfo->store_score, 2),
                     'deal_type' => 2,
-                    'remark' => '预约积分'
+                    'remark' => '预约到店赠送积分'
                 ];
                 ScoreDeal::create($scoreLog);
             } else if ($data['status'] == 40) {
@@ -102,7 +102,7 @@ class BookService extends BaseSerivce
                     'deal_score' => $bookInfo->finished_score,
                     'surplus_score' => bcadd($accountInfo->amount, $bookInfo->finished_score, 2),
                     'deal_type' => 3,
-                    'remark' => '完成预定积分'
+                    'remark' => '完成预定赠送积分'
                 ];
                 ScoreDeal::create($scoreLog);
             }
@@ -187,10 +187,10 @@ class BookService extends BaseSerivce
                 'deal_no' => $dealNo,
                 'user_id' => $userInfo['id'],
                 'user_name' => $userInfo['user_name'],
-                'deal_score' => $userCateInfo->store_score,
+                'deal_score' => $userCateInfo->book_score,
                 'surplus_score' => bcadd($accountInfo->score,$userCateInfo->store_score,2),
                 'deal_type' => 1,
-                'remark' => '预约积分'
+                'remark' => '预约赠送积分'
             ];
             ScoreDeal::create($scoreLog);
             Log::info("【客户预约】-----预约成功，预约人id:".$userInfo['id'].'，姓名:'.$userInfo['user_name']);
