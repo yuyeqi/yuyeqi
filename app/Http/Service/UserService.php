@@ -200,7 +200,7 @@ class UserService extends BaseSerivce
                 //4.注册赠送金额
                 $rgCushLog = $this->getOrderNo('zc');
                 //5.获取用户信息
-                $userAccount = UserStatistic::getAccountDetail($data['id'],['id','amount']);
+                $userAccount = UserStatistic::getAccountDetail($data['id'], ['id', 'amount']);
                 $rcgCushLog = [
                     'deal_no' => $rgCushLog,
                     'user_id' => $userInfo->id,
@@ -308,7 +308,7 @@ class UserService extends BaseSerivce
             $this->setErrorMsg("缺少系统配置，请联系管理人员");
             return false;
         }
-        $exchageRate = $config->config_value ?? 0 ;
+        $exchageRate = $config->config_value ?? 0;
         if (empty($exchageRate) || $exchageRate <= 0) {
             Log::error("积分兑换-缺少兑换比例，请联系管理员");
             $this->setErrorMsg("缺少兑换比例，请联系管理人员!");
@@ -317,18 +317,19 @@ class UserService extends BaseSerivce
         //3.计算用户金额账户
         $cash = bcdiv($score, $exchageRate, 2);    //提现金额
         $newCash = bcadd($cash, $accountInfo["amount"], 2); //剩余金额
-        //积分交易记录数据
+        //4积分交易记录数据
         $dealNo = $this->getOrderNo("cz");
         $scoreLog = [
             'deal_no' => $dealNo,
             'user_id' => $userInfo['id'],
             'user_name' => $userInfo['user_name'],
             'deal_score' => $score,
+            'deal_amount' => $cash,
             'surplus_score' => $diffScore,
             'deal_type' => 4,
             'remark' => '积分兑换现金'
         ];
-        //现金记录交易数据
+        //5.现金记录交易数据
         $cashLog = [
             'deal_no' => $dealNo,
             'user_id' => $userInfo['id'],
@@ -338,10 +339,11 @@ class UserService extends BaseSerivce
             'deal_type' => 2,
             'remark' => '积分兑换现金'
         ];
-        //更新账户数据
+        //6.更新账户数据
         $withdrawScore = $accountInfo['withdraw_score']; //以用积分
         $cushCore = $accountInfo['cush_score']; //已兑现积分
         $accountData = [
+            'user_id' => $userInfo['id'],
             'amount' => $newCash,   //账户余额
             'score' => $diffScore,  //账户剩余积分
             'withdraw_score' => bcadd($withdrawScore, $score, 2),
@@ -351,7 +353,7 @@ class UserService extends BaseSerivce
         DB::beginTransaction();
         try {
             //1.更新用户账户
-            UserStatistic::where(['id' => $userInfo['id']])->update($accountData);
+            $this->userStatistic->updateAccout($accountData);
             //2.记录积分交易
             ScoreDeal::create($scoreLog);
             //3.记录现金交易
@@ -477,7 +479,7 @@ class UserService extends BaseSerivce
      */
     public function getScoreList($userInfo, $dealType, $page, $limit)
     {
-        $field = ['id', 'deal_score', 'deal_type', 'create_time'];
+        $field = ['id', 'deal_score','deal_amount', 'deal_type', 'create_time'];
         $lists = ScoreDeal::getScoreList($userInfo, $field, $dealType, $page, $limit);
         return $this->getPageData($lists);
     }
@@ -820,7 +822,7 @@ class UserService extends BaseSerivce
                     'desc' => '用户' . $cushInfo->user_name . '的账户提现', // 企业付款操作说明信息。必填
                 ];
                 $this->app->transfer($payData);
-            }elseif ($data['status'] == 30){
+            } elseif ($data['status'] == 30) {
                 //6.拒绝申请,修改用户账户信息,返回余额
                 $accountData = [
                     'frozen_amount' => bcsub($accountInfo->frozen_amount, $userInfo->amount, 2),  //解冻账户金额
@@ -829,11 +831,11 @@ class UserService extends BaseSerivce
                 $this->userStatistic->updateAccout($accountData);
             }
             DB::commit();
-            return  true;
+            return true;
         } catch (\Exception $e) {
             $this->setErrorMsg($e->getMessage());
             DB::rollBack();
-            return  false;
+            return false;
         }
     }
 
@@ -842,7 +844,8 @@ class UserService extends BaseSerivce
      * @param $data
      * @return bool|mixed
      */
-    public function updateUserData($data){
+    public function updateUserData($data)
+    {
         return $this->userStatistic->updateAccout($data);
     }
 
