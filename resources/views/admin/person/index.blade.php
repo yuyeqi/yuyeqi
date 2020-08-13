@@ -86,7 +86,6 @@
                         }
                     } }
                 ,{field:'person_remark', width:150, title: '备注',align: "center"}
-                ,{field:'create_user_name',align: "center", width:100, title: '创建人'}
                 ,{field:'update_time', title: '更新时间',align: "center",width:200}
                 ,{field:'create_time', title: '创建时间',align: "center",width:200}
                 ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:200}
