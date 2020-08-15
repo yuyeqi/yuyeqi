@@ -19,7 +19,7 @@
         <![endif]-->
         <script>
             // 是否开启刷新记忆tab功能
-            // var is_remember = false;
+            var is_remember = false;
         </script>
     </head>
     <body class="index">
@@ -32,16 +32,7 @@
             </div>
             <ul class="layui-nav right" lay-filter="">
                 <li class="layui-nav-item">
-                    <a href="javascript:;">{{ Session::get('admin')['username'] }}</a>
-                    {{--<dl class="layui-nav-child">
-                        <!-- 二级菜单 -->
-                        <dd>
-                            <a onclick="xadmin.open('个人信息','http://www.baidu.com')">个人信息</a></dd>
-                        <dd>
-                            <a onclick="xadmin.open('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-                        <dd>
-                            <a href="{{ route('loginOut') }}">退出</a></dd>
-                    </dl>--}}
+                    <a href="javascript:;">{{ $username or '' }}</a>
                 </li>
                 <li class="layui-nav-item to-index">
                     <a href="{{ route('loginOut') }}">退出</a></li>

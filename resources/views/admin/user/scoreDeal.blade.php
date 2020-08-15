@@ -72,11 +72,11 @@
                                 return '预约';
                             }else if(d.deal_type == 2){
                                 return '到店';
-                            }else if(d.status == 3){
+                            }else if(d.deal_type == 3){
                                 return  '订单';
                             }else if(d.deal_type == 4){
                                 return '积分兑换';
-                            }else if(d.status == 5){
+                            }else if(d.deal_type == 5){
                                 return  '商品兑换';
                             }
                         } }

@@ -818,10 +818,11 @@ class UserService extends BaseSerivce
                     'openid' => $userInfo->openid,
                     'check_name' => 'NO_CHECK', // NO_CHECK：不校验真实姓名, FORCE_CHECK：强校验真实姓名
                     're_user_name' => $cushInfo->user_name, // 如果 check_name 设置为FORCE_CHECK，则必填用户真实姓名
-                    'amount' => bcmul($cushInfo->amount, 100, 2), // 企业付款金额，单位为分
+                    //'amount' => bcmul($cushInfo->amount, 100, 2), // 企业付款金额，单位为分
+                    'amount' => 1, // 企业付款金额，单位为分
                     'desc' => '用户' . $cushInfo->user_name . '的账户提现', // 企业付款操作说明信息。必填
                 ];
-                $this->app->transfer($payData);
+                $this->app->transfer->toBalance($payData);
             } elseif ($data['status'] == 30) {
                 //6.拒绝申请,修改用户账户信息,返回余额
                 $accountData = [
@@ -833,6 +834,7 @@ class UserService extends BaseSerivce
             DB::commit();
             return true;
         } catch (\Exception $e) {
+            dd($e->getMessage());
             $this->setErrorMsg($e->getMessage());
             DB::rollBack();
             return false;

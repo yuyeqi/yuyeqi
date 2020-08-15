@@ -126,6 +126,25 @@ class Order extends Base
     public function updateStatus($data){
         return self::where(['id'=>$data['id']])->update($data);
     }
+
+    /**
+     * 支付金额
+     * @return mixed
+     */
+    public static function getAmountData($type = '',$date = null){
+        $map = ['pay_status'=>20];
+        return self::where($map)
+            ->when($type == 'y', function ($query) use ($date){
+                return $query->whereYear('pay_time', $date);
+            })
+            ->when($type == 'm', function ($query) use ($date){
+                return $query->whereMonth('pay_time', $date);
+            })
+            ->when($type == 'd', function ($query) use ($date){
+                return $query->whereDate('pay_time', $date);
+            })
+            ->sum('pay_price');
+    }
     /*---------------------------------------------小程序----------------------------------------------*/
     /**
      * 用户信息
