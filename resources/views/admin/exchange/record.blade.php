@@ -61,8 +61,6 @@
                 ,{field:'deal_score', width:100, title: '兑换积分',align:"center"}
                 ,{field:'surplus_score', width:120,align: "center", title: '剩余积分'}
                 ,{field:'user_name', width:120,align: "center", title: '用户名'}
-                ,{field:'consignee', width:120, title: '收货人',align:"center"}
-                ,{field:'phone', width:150,align: "center", title: '电话'}
                 ,{field:'deal_status', title: '状态', width:120,templet: function(d){
                         if(d.deal_status == 10){
                             return '待处理';
@@ -76,10 +74,12 @@
                             return  '';
                         }
                     } }
-                ,{field:'deliver_time', width:200, title: '发货时间 ',align: "center"}
+                ,{field:'consignee', width:120, title: '收货人',align:"center"}
+                ,{field:'phone', width:150,align: "center", title: '电话'}
                 ,{field:'province', width:200, title: '收货地址',align:"center",templet:function (d) {
                         return d.province+d.city+d.area+d.address;
                     }}
+                ,{field:'deliver_time', width:180, title: '发货时间 ',align: "center"}
                 ,{field:'reject_reason', width:120, title: '备注',align:"center"}
                 ,{field:'update_user_name', title: '更新人',align: "center",width:100}
                 ,{field:'update_time', title: '更新时间',align: "center",width:200}
