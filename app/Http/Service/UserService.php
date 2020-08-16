@@ -493,7 +493,7 @@ class UserService extends BaseSerivce
      */
     public function getExRecordLists($userInfo, $page, $limit)
     {
-        $field = ['id','deal_no', 'deal_score', 'goods_name', 'deal_status', 'date_format(create_time,"%Y-%m-%d")'];
+        $field = ['id','deal_no', 'deal_score', 'goods_name', 'deal_status', 'create_time as date_format(create_time,"%Y-%m-%d")'];
         $lists = ExchangeRecord::getExRecordLists($userInfo, $field, $page, $limit);
         return $this->getPageData($lists);
     }
