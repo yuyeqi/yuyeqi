@@ -308,7 +308,6 @@ class ExchangeService extends BaseSerivce
             DB::commit();
             return  true;
         } catch (\Exception $e) {
-            dd($e);
             Log::error('【商品兑换】----系统异常：e='.json_encode($e->getMessage()));
             $this->setErrorMsg('系统异常，请稍后再试！');
             return  false;

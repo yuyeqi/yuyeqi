@@ -161,10 +161,6 @@ class ShopController extends BaseController
         $goods_id = $request->input('goods_id', 0);
         $content = $request->input('content');
         $pictures = $request->input('pictures', '');
-        if ($goods_id <= 0) {
-            Log::error('【订单评价】----参数错误，id:' . $goods_id);
-            return Render::error("参数错误，请重试");
-        }
         if ($this->orderSerice->addComment($this->userInfo, $goods_id, $content, $pictures)) {
             return Render::success("评价成功");
         }
