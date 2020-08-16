@@ -206,13 +206,12 @@ class UserService extends BaseSerivce
                 //4.注册赠送金额记录
                 $rgCushLog = $this->getOrderNo('zc');
                 //5.获取用户信息
-                $userAccount = UserStatistic::getAccountDetail($data['id'], ['id', 'amount']);
                 $rcgCushLog = [
                     'deal_no' => $rgCushLog,
                     'user_id' => $userInfo->id,
                     'user_name' => $userInfo->user_name,
                     'amount' => $cateInfo->register_account,
-                    'surplus_amount' => bcadd($userAccount->amount, $cateInfo->register_account, 2),
+                    'surplus_amount' => $cateInfo->register_account,
                     'deal_type' => 3,
                     'remark' => '注册赠送金额'
                 ];
