@@ -647,7 +647,7 @@ class UserService extends BaseSerivce
      */
     public function getCushLists($userInfo, $status, $page, $limit)
     {
-        $field = ['id', 'amount', 'status', 'create_time'];
+        $field = ['withdraw.id', 'withdraw.amount', 'withdraw.status', 'withdraw.create_time','user.avatar_url'];
         $pageData = Withdraw::getCushLists($userInfo, $field, $status, $page, $limit);
         return $this->getPageData($pageData);
     }

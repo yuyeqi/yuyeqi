@@ -29,10 +29,11 @@ class Withdraw extends Base
      * @return mixed
      */
     public static function getCushLists($userInfo, $field="*", $status, $page, $limit){
-        $map = ['user_id'=>$userInfo['id'],'is_delete'=>0];
+        $map = ['withdraw.user_id'=>$userInfo['id'],'withdraw.is_delete'=>0];
         $status > 0 && $map['status'] = $status;
         return self::select($field)
             ->where($map)
+            ->leftJoin('user','withdraw.user_id','=','user.id')
             ->orderBy('id','desc')
             ->paginate($limit);
     }
