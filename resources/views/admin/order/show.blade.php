@@ -70,7 +70,13 @@
                         订单状态:
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" value="{{ $detail->pay_status['status_name'] or ''}}" name="pay_status" disabled class="layui-input">
+                        <input type="text" value=
+                        @switch ($detail->pay_status)
+                        @case(10) '待支付' @break
+                        @case(20) ' 已支付' @break
+                        @case(30) '已退款' @break
+                        @default ''
+                        @endswitch() name="pay_status" disabled class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">

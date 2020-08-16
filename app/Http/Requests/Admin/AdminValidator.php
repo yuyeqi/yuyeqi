@@ -42,9 +42,9 @@ class AdminValidator extends FormRequest implements ValidatesWhenResolved
     {
         $id = $this->route('id');
         return [
-            'username' => 'required|max:32|unique:hp_admin,username,'.$id,
-            'account' => 'required|max:20|unique:hp_admin,account,'.$id,
-            'phone' => 'required|size:11|unique:hp_admin,phone,'.$id,
+            'username' => 'required|max:32|unique:admin,username,'.$id,
+            'account' => 'required|max:20|unique:admin,account,'.$id,
+            'phone' => 'required|size:11|unique:admin,phone,'.$id,
             'email' => 'required|email',
             'sex' => 'required',
             'password' => 'required|between:6,18'
