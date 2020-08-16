@@ -63,6 +63,7 @@ class Exchange extends Model
             })
             ->whereIn('status',[10,20])
             ->select($field)
+            ->with('cate')
             ->orderBy('id','desc')
             ->paginate($limit);
         return $lists;
