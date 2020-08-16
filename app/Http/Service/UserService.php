@@ -496,7 +496,7 @@ class UserService extends BaseSerivce
         $field = ['id','deal_no', 'deal_score', 'goods_name', 'deal_status', 'create_time'];
         $lists = ExchangeRecord::getExRecordLists($userInfo, $field, $page, $limit);
         foreach ($lists as $item){
-            $item['create_time'] = date(strtotime($item['create_time']),'Y-m-d');
+            $item['create_time'] = date('Y-m-d',strtotime($item['create_time']));
         }
         return $this->getPageData($lists);
     }
