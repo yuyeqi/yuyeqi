@@ -224,6 +224,9 @@ class UserService extends BaseSerivce
                 return false;
             }
 
+        }else{
+            //2.修改审核状态
+            return  $this->user->updateUserStatus($data);
         }
     }
 
