@@ -46,13 +46,13 @@
                 <ul id="nav">
                     <li>
                         <a href="javascript:;" onclick="xadmin.add_tab('首页','{{ route("welcome") }}')" >
-                            <i class="iconfont left-nav-li" lay-tips="首页">&#xe726;</i>
+                            <i class="layui-icon">&#xe68e;</i>
                             <cite>首页</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe726;</i>
+                            <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe753;</i>
                             <cite>管理员管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
@@ -80,7 +80,7 @@
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="配置管理">&#xe6b8;</i>
+                            <i class="iconfont left-nav-li" lay-tips="配置管理">&#xe6ae;</i>
                             <cite>配置管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
@@ -88,6 +88,11 @@
                                 <a onclick="xadmin.add_tab('用户列表','{{ route("config_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>配置列表</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('轮播列表','{{ route("slideshow_index") }}')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>轮播列表</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -167,7 +172,7 @@
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="系统统计">&#xe6ce;</i>
+                            <i class="iconfont left-nav-li" lay-tips="报备管理">&#xe6ce;</i>
                             <cite>报备管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
@@ -180,7 +185,7 @@
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="图标字体">&#xe6b4;</i>
+                            <i class="iconfont left-nav-li" lay-tips="私人定制">&#xe6b4;</i>
                             <cite>私人定制</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
@@ -198,20 +203,7 @@
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="其它页面">&#xe6b4;</i>
-                            <cite>轮播管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('轮播列表','{{ route("slideshow_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>轮播列表</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="其它页面">&#xe6b4;</i>
+                            <i class="iconfont left-nav-li" lay-tips="案例管理">&#xe6eb;</i>
                             <cite>案例管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
@@ -224,20 +216,20 @@
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="其它页面">&#xe6b4;</i>
+                            <i class="iconfont left-nav-li" lay-tips="动态管理">&#xe705;</i>
                             <cite>新闻管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('新闻列表','{{ route("news_index") }}')">
+                                <a onclick="xadmin.add_tab('动态管理','{{ route("news_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>新闻列表</cite></a>
+                                    <cite>动态列表</cite></a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="第三方组件">&#xe6b4;</i>
+                            <i class="iconfont left-nav-li" lay-tips="兑换商城">&#xe6f4;</i>
                             <cite>兑换商城</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
@@ -255,19 +247,6 @@
                                 <a onclick="xadmin.add_tab('兑换记录','{{ route("exchange_record") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>兑换记录</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="城市联动">&#xe723;</i>
-                            <cite>日志管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('日志列表','city.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>日志列表</cite></a>
                             </li>
                         </ul>
                     </li>

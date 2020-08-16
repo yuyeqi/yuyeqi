@@ -32,7 +32,7 @@ class Admin extends Authenticatable implements JWTSubject
     //后台用户列表
     public function getAdminLists($keyword,$limit){
         //查询
-        $field = ['id','username','phone','sex','account','status','is_login','update_user_name',
+        $field = ['id','username','phone','email','sex','account','status','is_login','update_user_name',
             'create_user_name','login_time','update_time','create_time'];
         $lists = self::where(['is_delete'=>0])
             ->when(!empty($keyword),function ($query) use ($keyword){

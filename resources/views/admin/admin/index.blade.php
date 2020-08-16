@@ -59,7 +59,7 @@
                 ,{field:'username', width:150, title: '用户名'}
                 ,{field:'phone', width:150, title: '手机'}
                 ,{field:'account', width:150, title: '账户'}
-                ,{field:'email', title: '邮件', minWidth: 100}
+                ,{field:'email', title: '邮件', width: 200}
                 ,{field:'status', title: '状态',templet: function(d){
                         if(d.status == 0){
                             return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
@@ -67,7 +67,6 @@
                             return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'
                         }
                     } }
-                ,{field:'login_ip', title: '登陆ip'}
                 ,{field:'is_login', title: '登陆状态',templet: function(d){
                         if(d.is_login == 0){
                             return '<button type="button" class="layui-btn layui-btn-disabled">离线</button>'

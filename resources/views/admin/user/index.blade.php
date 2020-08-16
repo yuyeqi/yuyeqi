@@ -139,6 +139,12 @@
                 xadmin.open('审核',"/hp/user/auditShow/"+data.id,500,400);
             }else if(obj.event === 'show'){
                 xadmin.open('查看',"/hp/user/show/"+data.id,800,600);
+            }else if(obj.event === 'showPic'){
+                layer.photos({
+                    photos: '#pic_' + data.id,
+                    //0-6的选择，指定弹出图片动画类型，默认随机
+                    anim: 5
+                })
             }
         });
         //执行重载
