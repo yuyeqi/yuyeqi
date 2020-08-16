@@ -112,7 +112,7 @@ class ExchangeService extends BaseSerivce
         $data['update_user_id'] = $loginInfo['id'];
         $data['update_user_name'] = $loginInfo['username'];
         if ($data['status'] == 20){
-            $data['deliver_time'] = date('Y-m-d h:m:s');
+            $data['deliver_time'] = date('Y-m-d h:m:s',time());
         }
         $mulPic = $data['mulPic'];
         unset($data['mulPic']);
