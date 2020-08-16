@@ -45,16 +45,19 @@ class ExchangeRecord extends Base
      * @return mixed
      */
     public function getRecordList($keywords,$page,$limit){
-        $map = ['is_delete'=>0];
-        $field = ['*'];
+        $map = ['exchange_record.is_delete'=>0];
+        $field = ['exchange_record.*','user_address.consignee','user_address.phone','user_address.province',
+            'user_address.city','user_address.area','user_address.address'];
         return self::select($field)
             ->where($map)
             ->when(!empty($keywords),function ($query) use ($keywords){
-                return $query->where('deal_no','like','%'.$keywords.'%')
-                    ->orWhere('user_name','like','%'.$keywords.'%')
-                    ->orWhere('goods_name','like','%'.$keywords.'%');
+                return $query->where('exchange_record.deal_no','like','%'.$keywords.'%')
+                    ->orWhere('exchange_record.user_name','like','%'.$keywords.'%')
+                    ->orWhere('exchange_record.goods_name','like','%'.$keywords.'%');
             })
-            ->orderBy('create_time','desc')
+            ->leftJoin('user','exchange_record.user_id','=','user.id')
+            ->leftJoin('user_address','user.delivery_id','=','user_address.id')
+            ->orderBy('exchange_record.create_time','desc')
             ->paginate($limit);
     }
 

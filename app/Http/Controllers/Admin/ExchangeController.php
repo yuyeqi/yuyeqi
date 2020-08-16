@@ -144,13 +144,6 @@ class ExchangeController extends BaseController
     }
 
     /**
-     * 修改商品状态
-     */
-    public function updateStatus(){
-
-    }
-
-    /**
      * 兑换记录
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */

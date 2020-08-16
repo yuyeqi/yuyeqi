@@ -260,6 +260,7 @@ class ShopController extends BaseController
                     //1.修改订单状态
                     $order->pay_time = date("Y-m-d h:i:s", time()); // 更新支付时间为当前时间
                     $order->pay_status = 20;
+                    $order->comment_num = bcadd($order->comment_num,1);
                     $order->transaction_id = $message['transaction_id'];
                     $order->pay_price = $amount;
                     //2.获取用户账户信息

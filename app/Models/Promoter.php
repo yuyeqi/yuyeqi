@@ -40,7 +40,7 @@ class Promoter extends Base
         return self::select($field)
             ->where($map)
             ->join('user as u', 'promoter_user_id', '=', 'u.id')
-            ->orderBy('p.create_time','desc')
+            ->orderBy('promoter.create_time','desc')
             ->paginate($limit);
     }
 
