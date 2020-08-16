@@ -203,7 +203,7 @@ class OrderService extends BaseSerivce
             'user_id' => $userInfo['id'],
             'user_name' => $userInfo['user_name'],
             'avatar_url' => $userInfo['avatar_url'],
-            'goods_id' => $goods_id,
+            'goods_id' => $orderInfo->goods_id,
             'goods_name' => $goodsInfo->goods_name,
             'comment_content' => $content
         ];
