@@ -217,7 +217,7 @@
                     <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="动态管理">&#xe705;</i>
-                            <cite>新闻管理</cite>
+                            <cite>动态管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>

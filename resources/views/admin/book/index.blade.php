@@ -149,7 +149,15 @@
                 ,{field:'book_no', width:150, title: '预约码', align:"center"}
                 ,{field:'client_name', width:120, title: '客户姓名',align: "center"}
                 ,{field:'client_phone', width:120, title: '客户电话',align: "center"}
-                ,{field:'sex', width:120, title: '性别',align: "center"}
+                ,{field:'sex', width:120, title: '性别',align: "center",templet:function (d) {
+                        if(d.sex == 1){
+                            return '男';
+                        }else if(d.sex == 2){
+                            return  '女';
+                        }else{
+                            return  '';
+                        }
+                    }}
                 ,{field:'province', width:120, title: '省市区', align:"center"}
                 ,{field:'community', width:120, title: '小区名称',align: "center"}
                 ,{field:'house_name', width:120, title: '楼层地址',align: "center"}

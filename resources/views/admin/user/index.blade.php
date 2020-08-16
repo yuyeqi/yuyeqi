@@ -78,7 +78,7 @@
                         }
                     }
                 }
-                ,{field:'phone', align: "center",width:100, title: '电话'}
+                ,{field:'phone', align: "center",width:120, title: '电话'}
                 ,{field:'sex',align: "center", title: '性别', minWidth: 80,templet: function(d){
                     if(d.sex == 1){
                         return  '男';

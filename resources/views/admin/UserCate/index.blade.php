@@ -60,7 +60,7 @@
                 ,{field:'store_score', width:120, title: '到店积分',align: "center"}
                 ,{field:'order_score', width:120, title: '接单积分',align: "center"}
                 ,{field:'status', title: '状态',align: "center", width:120,templet: function(d){
-                        if(d.status == 10){
+                        if(d.status == 0){
                             return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
                         }else{
                             return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'
