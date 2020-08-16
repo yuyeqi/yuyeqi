@@ -182,7 +182,7 @@ class UserService extends BaseSerivce
                         'share_type' => $userInfo->share_type
                     ];
                     Promoter::create($promoterData);
-                    //赠送推广人金额
+                    //4.赠送推广人金额
                     $tgDealNo = $this->getOrderNo('tg');
                     $stgCushLog = [
                         'deal_no' => $tgDealNo,
@@ -194,10 +194,16 @@ class UserService extends BaseSerivce
                         'remark' => '推广赠送金额'
                     ];
                     WalletDeal::create($stgCushLog);
+                    //5.修改推广人账户金额
+                    $promoterAccount = [
+                        'user_id' => $userInfo->parent_id,
+                        'amount'  => bcadd($promoterAccount->amount,$cateInfo->tg_account,2)
+                    ];
+                    $this->userStatistic->updateAccout($promoterAccount);
                 }
                 //3.修改审核状态
                 $this->user->updateUserStatus($data);
-                //4.注册赠送金额
+                //4.注册赠送金额记录
                 $rgCushLog = $this->getOrderNo('zc');
                 //5.获取用户信息
                 $userAccount = UserStatistic::getAccountDetail($data['id'], ['id', 'amount']);

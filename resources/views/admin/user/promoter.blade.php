@@ -61,7 +61,7 @@
                 {type: 'checkbox',field: 'left'}
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
                 ,{field:'deal_no', width:200, title: '交易单号',align:"center"}
-                ,{field:'promoter_user_name', width:100, title: '推广人 ',align: "center"}
+                ,{field:'promoter_user', width:100, title: '推广人 ',align: "center"}
                 ,{field:'promoter_amount', width:120, title: '推广佣金',align:"center"}
                 ,{field:'promoter_surplus_amount', width:120, title: '推广者余额 ',align: "center"}
                 ,{field:'promoter_type', title: '推广人类型',align: "center", width:120,templet: function(d){
