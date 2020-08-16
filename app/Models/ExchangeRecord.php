@@ -19,7 +19,7 @@ class ExchangeRecord extends Base
 
     //时间转换
     const CREATED_AT = 'create_time';
-    const UPDATED_AT = null;
+    const UPDATED_AT = 'update_time';
 
     /**
      * 商品兑换记录
