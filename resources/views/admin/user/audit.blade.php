@@ -7,7 +7,6 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">审核状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="audit_status" value="1" title="审核中" checked="">
                         <input type="radio" name="audit_status" value="2" title="通过">
                         <input type="radio" name="audit_status" value="3" title="拒绝">
                     </div>

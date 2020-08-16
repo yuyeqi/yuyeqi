@@ -7,7 +7,6 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">审核状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="deal_status" value="10" title="待处理">
                         <input type="radio" name="deal_status" value="20" title="已发货">
                         <input type="radio" name="deal_status" value="30" title="已完成">
                         <input type="radio" name="deal_status" value="40" title="拒绝">
