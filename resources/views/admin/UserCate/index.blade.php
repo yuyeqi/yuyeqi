@@ -54,8 +54,8 @@
                 {type: 'checkbox',field: 'left'}
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
                 ,{field:'cate_name', width:120, title: '分类名称',align: "center"}
-                ,{field:'register_account', width:120, title: '注册金额(元)',align: "center"}
-                ,{field:'tg_account', width:120, title: '推广金额(元)',align: "center"}
+                ,{field:'register_account', width:120, title: '注册金额',align: "center"}
+                ,{field:'tg_account', width:120, title: '推广金额',align: "center"}
                 ,{field:'book_score', width:120, title: '预约积分',align: "center"}
                 ,{field:'store_score', width:120, title: '到店积分',align: "center"}
                 ,{field:'order_score', width:120, title: '接单积分',align: "center"}
