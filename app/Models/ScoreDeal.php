@@ -30,10 +30,11 @@ class ScoreDeal extends Base
      * @return mixed
      */
     public static function getScoreList($userInfo, $field="*", $dealType, $page, $limit){
-        $map = ['user_id'=>$userInfo['id'],'is_delete'=>0];
+        $map = ['score_deal.user_id'=>$userInfo['id'],'score_deal.is_delete'=>0];
         $dealType > 0 && $map['deal_type'] = $dealType;
         return self::select($field)
             ->where($map)
+            ->leftJoin('user','score_deal.user_id','=','user.id')
             ->orderBy('id','desc')
             ->paginate($limit);
     }

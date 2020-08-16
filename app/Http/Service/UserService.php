@@ -479,7 +479,8 @@ class UserService extends BaseSerivce
      */
     public function getScoreList($userInfo, $dealType, $page, $limit)
     {
-        $field = ['id', 'deal_score','deal_amount', 'deal_type', 'create_time'];
+        $field = ['score_deal.id', 'score_deal.deal_score','score_deal.deal_amount',
+            'score_deal.deal_type', 'score_deal.create_time','user.avatar_url'];
         $lists = ScoreDeal::getScoreList($userInfo, $field, $dealType, $page, $limit);
         return $this->getPageData($lists);
     }
