@@ -36,6 +36,16 @@ class Goods extends Base
             ->where(['pic_type'=>Config::get('constants.PIC_GOODS_TYPE')]);
     }
 
+    /**
+     * 关联分类
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function cate(){
+        return $this->belongsTo('App\Models\GoodsCate','cate_id','id')
+            ->select(['id','cate_name'])
+            ->where(['is_delete'=>0]);
+    }
+
     /**关联评论
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -66,6 +76,7 @@ class Goods extends Base
             })
             ->whereIn('goods_status',[10,20])
             ->select($field)
+            ->with('cate')
             ->orderBy('id','desc')
             ->paginate($limit);
         return $lists;

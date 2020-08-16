@@ -148,7 +148,7 @@
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
                 ,{field:'book_no', width:150, title: '预约码', align:"center"}
                 ,{field:'client_name', width:120, title: '客户姓名',align: "center"}
-                ,{field:'client_phone', width:120, title: '客户电话',align: "center"}
+                ,{field:'client_phone', width:150, title: '客户电话',align: "center"}
                 ,{field:'sex', width:120, title: '性别',align: "center",templet:function (d) {
                         if(d.sex == 1){
                             return '男';
