@@ -22,6 +22,7 @@ Route::group(['prefix'=>'v1', 'namespace'=>'Api'],function (){
         Route::post('register','V1\PublicController@register');
         Route::get('aboutUser','V1\PublicController@aboutUser');
         Route::post('uploadImg','V1\PublicController@uploadImg');
+        Route::get('getBgImage','V1\PublicController@getBgImage');
     });
     //首页
     Route::prefix('index')->group(function (){

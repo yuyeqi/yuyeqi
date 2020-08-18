@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Service\AdminService;
 use App\Library\Render;
+use App\Models\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -108,5 +109,19 @@ class PublicController extends Controller
             }
         }
         return  Render::error('上传失败');
+    }
+
+    /**
+     * 获取配置图
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getBgImage(Request $request){
+        $imageUrl = $request->input('imageNO','');
+        if (empty($imageUrl)){
+            return  Render::error('参数错误');
+        }
+        $bgUrl = Config::getConfigDetail($imageUrl);
+        return Render::success('获取成功',compact('bgUrl'));
     }
 }
