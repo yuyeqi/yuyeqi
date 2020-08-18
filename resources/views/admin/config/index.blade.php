@@ -51,7 +51,7 @@
                     ,{field:'config_name', width:100, title: '配置名称',align:"center"}
                     ,{field:'config_value', width:200, title: '配置值',align: "center"}
                     ,{field:'background',width: 100,align: "center", title: '配置图',templet: function(d){
-                            return  "<span id='pic_" + d.btn_bg + "'><img src='" + d.background + "'  style='width: 40px' lay-event='showPic' ></span>";
+                            return  "<span id='pic_" + d.config_no + "'><img src='" + d.background + "'  style='width: 40px' lay-event='showPic' ></span>";
                         } }
                     ,{field:'content', width:300, title: '配置内容',align: "center"}
                     ,{field:'update_user_name',align: "center", width:100, title: '更新人'}
