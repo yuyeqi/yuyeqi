@@ -70,7 +70,7 @@
                     xadmin.open('编辑',"/hp/config/editShow/"+data.config_no,800,600);
                 } else if(obj.event === 'showPic'){
                     layer.photos({
-                        photos: '#pic_' + data.btn_bg,
+                        photos: '#pic_' + data.config_no,
                         //0-6的选择，指定弹出图片动画类型，默认随机
                         anim: 5
                     })
