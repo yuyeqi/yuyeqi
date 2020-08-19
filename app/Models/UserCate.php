@@ -116,7 +116,7 @@ class UserCate extends Base
      */
     public function getUserCateLists()
     {
-        $map = ['is_delete'=>0, 'status'=>0];
+        $map = ['is_delete'=>0, 'status'=>10];
         $field = ['id','cate_name','cate_type','bg_images'];
         return self::select($field)->where($map)->orderBy('id')->get();
     }
