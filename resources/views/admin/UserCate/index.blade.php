@@ -126,8 +126,8 @@
     });
     /*用户-停用*/
     function member_stop(id,status){
-        var status = status == 10 ? 20 : 10;
-        var msg = status == 20 ? '确认要停用吗？' : '确认要启用吗？';
+        var status = status == 0 ? 1 : 0;
+        var msg = status == 1 ? '确认要停用吗？' : '确认要启用吗？';
         layer.confirm(msg,function(index){
             $.ajax({
                 headers: {

@@ -213,4 +213,9 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::post('audit','ExchangeController@audit')->name('exchange_audit');
         Route::post('delBatchRecord','ExchangeController@delBatchRecord')->name('exchange_delete_record');
     });
+    //角色管理
+    Route::prefix('role')->group(function (){
+        Route::get('index','RoleController@index')->name('role_index');
+        Route::get('add','RoleController@add')->name('role_add');
+    });
 });

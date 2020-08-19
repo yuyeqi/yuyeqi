@@ -62,9 +62,9 @@
                                     <cite>管理员列表</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('角色管理','admin-role.html')">
+                                <a onclick="xadmin.add_tab('角色列表','{{ route("role_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>角色管理</cite></a>
+                                    <cite>角色列表</cite></a>
                             </li>
                             <li>
                                 <a onclick="xadmin.add_tab('权限分类','admin-cate.html')">
