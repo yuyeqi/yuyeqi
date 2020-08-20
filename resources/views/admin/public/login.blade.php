@@ -2,7 +2,7 @@
 <html  class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>黄派高端门窗</title>
+    <title>皇派系统门窗</title>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -20,7 +20,7 @@
 <body class="login-bg">
 
 <div class="login layui-anim layui-anim-up">
-    <div class="message">黄派高端门窗</div>
+    <div class="message">皇派系统门窗</div>
     <div id="darkbannerwrap"></div>
 
     <form method="post" class="layui-form" >

@@ -71,7 +71,7 @@
                             return '现金提现';
                         }else if(d.deal_type == 2){
                             return '积分充值';
-                        }else if(d.status == 3){
+                        }else if(d.deal_type == 3){
                             return  '用户注册';
                         }else {
                             return  '用户推广';

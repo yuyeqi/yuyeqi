@@ -172,14 +172,14 @@
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="报备管理">&#xe6ce;</i>
-                            <cite>报备管理</cite>
+                            <i class="iconfont left-nav-li" lay-tips="预约管理">&#xe6ce;</i>
+                            <cite>预约管理</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
                                 <a onclick="xadmin.add_tab('报备列表','{{ route("book_index") }}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>报备列表</cite></a>
+                                    <cite>预约列表</cite></a>
                             </li>
                         </ul>
                     </li>
