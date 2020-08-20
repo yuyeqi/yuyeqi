@@ -25,7 +25,7 @@ class UserCate extends Base
      * @return mixed
      */
     public function getLists($keyword,$limit){
-        $field = ['id','cate_name','status','register_account','tg_account','book_score','create_time','update_time',
+        $field = ['id','cate_name','bg_images','status','register_account','tg_account','book_score','create_time','update_time',
             'store_score','order_score','store_score','order_score','update_user_name','create_user_name'];
         return self::select($field)
             ->where(['is_delete'=>0])
