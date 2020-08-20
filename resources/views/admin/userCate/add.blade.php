@@ -103,8 +103,9 @@
                 //监听提交
                 form.on('submit(add)', function(data) {
                     var fields = data.field;
+                    var coverPic = $("#uploadPic").attr('src');
                     var data = {cate_name:fields.cate_name,sort:fields.sort,register_account:fields.register_account,tg_account:fields.tg_account,
-                        book_score:fields.book_score,store_score:fields.store_score,order_score:fields.order_score};
+                        book_score:fields.book_score,store_score:fields.store_score,order_score:fields.order_score,bg_images:coverPic};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -133,6 +134,33 @@
                         }
                     })
                     return false;
+                });
+                //普通图片上传
+                var uploadInst = upload.render({
+                    elem: '#test1',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                    ,url: "{{ route('upload') }}" //改成您自己的上传接口
+                    ,accept:'images'
+                    ,exts: 'jpg|png|gif|bmp|jpeg'
+                    ,size: 4*1024*1024
+                    ,before: function(obj){
+                        layer.msg('图片上传中...', {
+                            icon: 16,
+                            shade: 0.01,
+                            time: 0
+                        })
+                    }
+                    ,done: function(res){
+                        //如果上传失败
+                        if(res.code > 0){
+                            return layer.msg('上传失败');
+                        }
+                        //上传成功
+                        $('#uploadPic').attr('src', res.data); //图片链接（base64）
+                        return layer.msg('上传成功');
+                    }
                 });
             });
     </script>

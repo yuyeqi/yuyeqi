@@ -13,6 +13,22 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="case_cover" class="layui-form-label">
+                        <span class="x-red">*</span>案例主图
+                    </label>
+                    <div class="layui-input-inline">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="test1">上传图片</button>
+                            <div class="layui-upload-list">
+                                <div id="" class="file-iteme">
+                                    <div class="handle" id="handle"></div>
+                                    <img src="{{ $detail->bg_images or '' }}" style="width: 100px;height: 100px;" alt="" id="uploadPic">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label for="register_account" class="layui-form-label">
                         <span class="x-red">*</span>注册赠送金额
                     </label>
@@ -89,8 +105,9 @@
                 form.on('submit(add)', function(data) {
                     var fields = data.field;
                     var id = $('#hiddenId').val();
+                    var coverPic = $("#uploadPic").attr('src');
                     var data = {id:id,cate_name:fields.cate_name,sort:fields.sort,register_account:fields.register_account,tg_account:fields.tg_account,
-                        book_score:fields.book_score,store_score:fields.store_score,order_score:fields.order_score};
+                        book_score:fields.book_score,store_score:fields.store_score,order_score:fields.order_score,bg_images:coverPic};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -119,6 +136,33 @@
                         }
                     })
                     return false;
+                });
+                //普通图片上传
+                var uploadInst = upload.render({
+                    elem: '#test1',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                    ,url: "{{ route('upload') }}" //改成您自己的上传接口
+                    ,accept:'images'
+                    ,exts: 'jpg|png|gif|bmp|jpeg'
+                    ,size: 4*1024*1024
+                    ,before: function(obj){
+                        layer.msg('图片上传中...', {
+                            icon: 16,
+                            shade: 0.01,
+                            time: 0
+                        })
+                    }
+                    ,done: function(res){
+                        //如果上传失败
+                        if(res.code > 0){
+                            return layer.msg('上传失败');
+                        }
+                        //上传成功
+                        $('#uploadPic').attr('src', res.data); //图片链接（base64）
+                        return layer.msg('上传成功');
+                    }
                 });
             });
     </script>

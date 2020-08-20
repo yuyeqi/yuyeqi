@@ -54,6 +54,9 @@
                 {type: 'checkbox',field: 'left'}
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
                 ,{field:'cate_name', width:120, title: '分类名称',align: "center"}
+                ,{field:'bg_images',align: "center", title: '背景图',templet: function(d){
+                        return  "<span id='pic_" + d.id + "'><img src='" + d.bg_images + "'  style='width: 40px' lay-event='showPic' ></span>";
+                    } }
                 ,{field:'register_account', width:120, title: '注册金额',align: "center"}
                 ,{field:'tg_account', width:120, title: '推广金额',align: "center"}
                 ,{field:'book_score', width:120, title: '预约积分',align: "center"}
@@ -83,6 +86,12 @@
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);
+                })
+            }else if(obj.event === 'showPic'){
+                layer.photos({
+                    photos: '#pic_' + data.id,
+                    //0-6的选择，指定弹出图片动画类型，默认随机
+                    anim: 5
                 })
             }
         });
