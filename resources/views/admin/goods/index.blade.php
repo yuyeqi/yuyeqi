@@ -56,7 +56,7 @@
                 ,{field:'id', width:80, title: 'ID', sort: true}
                 ,{field:'goods_name', width:120, title: '商品名称'}
                 ,{field:'cate', title: '商品分类', width: 120,templet:function (d) {
-                        if(d.catecate_name != ''){
+                        if(d.cate.cate_name != '' && d.cate.cate_name != null){
                             return d.cate.cate_name
                         }else{
                             return '';
