@@ -57,7 +57,7 @@
                         <span class="x-red">*</span>商品分类
                     </label>
                     <div class="layui-input-inline">
-                        <select name="cate_id" id="cate_id">
+                        <select name="cate_id" id="cate_id" required>
                             <option value="0">请选择</option>
                             @isset($lists)
                                 @foreach($lists as $item)
@@ -207,6 +207,10 @@
                     $("#uploader-list img").each(function (index,$val) {
                         pics[index] = $(this).attr('src')
                     })
+                    if(pics == ''){//发异步，把数据提交给php
+                        layer.msg('请选择轮播图',{icon:6,time:1000});
+                        return  false;
+                    }
                     var data = {id:id,goods_no:fields.goods_no,goods_name:fields.goods_name,good_price:fields.good_price,book_price:fields.book_price,
                         score:fields.score,sales_initial:fields.sales_initial,sort:fields.sort,is_new:fields.is_new, goods_status:fields.goods_status,
                         is_hot:fields.is_hot,is_recommend:fields.is_recommend,goods_cover:coverPic,mulPic:pics,goods_desc:fields.goods_desc,
