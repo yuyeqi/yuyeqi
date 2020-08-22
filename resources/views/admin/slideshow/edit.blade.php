@@ -14,6 +14,15 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="slideshow_name" class="layui-form-label">
+                        <span class="x-red">*</span>产品链接
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="product_url" value="{{ $detail->product_url }}" name="product_url" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label for="slideshow_url" class="layui-form-label">
                         <span class="x-red">*</span>轮播图
                     </label>

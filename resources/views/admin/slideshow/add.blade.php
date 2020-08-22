@@ -13,6 +13,15 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="slideshow_name" class="layui-form-label">
+                        <span class="x-red">*</span>产品链接
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="product_url" name="product_url" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label for="slideshow_url" class="layui-form-label">
                         <span class="x-red">*</span>轮播图
                     </label>
@@ -92,7 +101,8 @@
                 form.on('submit(add)', function(data) {
                     var fields = data.field;
                     var coverPic = $("#uploadPic").attr('src');
-                    var data = {slideshow_name:fields.slideshow_name,description:fields.description, sort:fields.sort,slideshow_url:coverPic};
+                    var data = {slideshow_name:fields.slideshow_name,description:fields.description, sort:fields.sort,
+                        slideshow_url:coverPic,product_url:product_url};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
