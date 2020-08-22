@@ -57,7 +57,7 @@
                 ,{field:'goods_name', width:120, title: '商品名称'}
                 ,{field:'cate', title: '商品分类', width: 120,templet:function (d) {
                         if(d.catecate_name != ''){
-                            return d.catecate_name
+                            return d.cate.cate_name
                         }else{
                             return '';
                         }
