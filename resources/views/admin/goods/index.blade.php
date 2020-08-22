@@ -56,11 +56,7 @@
                 ,{field:'id', width:80, title: 'ID', sort: true}
                 ,{field:'goods_name', width:120, title: '商品名称'}
                 ,{field:'cate', title: '商品分类', width: 120,templet:function (d) {
-                        if(d.cate.cate_name != '' && d.cate.cate_name != null){
-                            return d.cate.cate_name
-                        }else{
-                            return '';
-                        }
+                        return d.cate.cate_name ?? '';
                     }}
                 ,{field:'goods_cover',align: "center", title: '封面图',templet: function(d){
                         return  "<span id='pic_" + d.id + "'><img src='" + d.goods_cover + "'  style='width: 40px' lay-event='showPic' ></span>";
