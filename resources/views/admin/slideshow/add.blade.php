@@ -102,7 +102,7 @@
                     var fields = data.field;
                     var coverPic = $("#uploadPic").attr('src');
                     var data = {slideshow_name:fields.slideshow_name,description:fields.description, sort:fields.sort,
-                        slideshow_url:coverPic,product_url:product_url};
+                        slideshow_url:coverPic,product_url:fields.product_url};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

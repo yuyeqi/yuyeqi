@@ -104,7 +104,8 @@
                     var coverPic = $("#uploadPic").attr('src');
                     var content = $("#LAY_demo_editor").text();
                     var id = $('#hiddenId').val();
-                    var data = {id:id,slideshow_name:fields.slideshow_name,description:fields.description, sort:fields.sort,slideshow_url:coverPic};
+                    var data = {id:id,slideshow_name:fields.slideshow_name,description:fields.description, sort:fields.sort,
+                        slideshow_url:coverPic,product_url:fields.product_url};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
