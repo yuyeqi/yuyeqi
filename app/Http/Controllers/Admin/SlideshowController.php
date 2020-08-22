@@ -58,7 +58,7 @@ class SlideshowController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function add(Request $request){
-        $data = $request->only(['slideshow_name','slideshow_url','sort','description']);
+        $data = $request->only(['slideshow_name','slideshow_url','sort','description','product_url']);
         //添加数据
         try {
             $result = $this->slideshowService->addSlideshow($data, $this->loginInfo);
@@ -87,7 +87,7 @@ class SlideshowController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function edit(Request $request){
-        $data = $request->only(['id','slideshow_name','slideshow_url','sort','description']);
+        $data = $request->only(['id','slideshow_name','slideshow_url','sort','description','product_url']);
         //修改数据
         try {
             $result = $this->slideshowService->editSlideshow($data, $this->loginInfo);
