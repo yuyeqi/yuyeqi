@@ -25,7 +25,7 @@ class Slideshow extends Base
      * @return int
      */
      public function getSlideshowLists(){
-         $field = ['id','slideshow_url'];
+         $field = ['*'];
          return self::select($field)
              ->where(['status'=>10,'is_delete'=>0])
              ->orderBy('sort')
