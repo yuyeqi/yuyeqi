@@ -86,6 +86,6 @@ class Withdraw extends Base
      * @return mixed
      */
     public function updateStatus($data){
-        return self::where('user_id',$data['id'])->update($data);
+        return self::where('id',$data['id'])->update($data);
     }
 }
