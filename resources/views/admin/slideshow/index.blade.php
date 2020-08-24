@@ -55,7 +55,7 @@
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
                 ,{field:'sort', width:80, title: '排序', sort: true,align:"center"}
                 ,{field:'slideshow_name', width:150, title: '名称',align: "center"}
-                ,{field:'product_url', width:200, title: '产品链接',align: "center"}
+                ,{field:'product_url', width:300, title: '产品链接',align: "center"}
                 ,{field:'slideshow_url',align: "center", title: '轮播图',templet: function(d){
                        return  "<span id='pic_" + d.id + "'><img src='" + d.slideshow_url + "'  style='width: 40px' lay-event='showPic' ></span>";
                     } }
