@@ -171,7 +171,7 @@ class WxController extends BaseController
         $page = 'pages/index/index';
         $parentId= $request->input('userId','');
         $appCode = $this->app->app_code->getUnlimit(
-            'parentId='.$parentId.'&entry=share',
+            'parentId='.$parentId,
             [
                 'page' => $page,
                 'width' => 600,
