@@ -169,8 +169,9 @@ class WxController extends BaseController
     {
         //获取页面路径
         $page = 'pages/index/index';
+        $parentId= $request->input('userId','');
         $appCode = $this->app->app_code->getUnlimit(
-            'scene-value',
+            'parentId='.$parentId.'&entry=share',
             [
                 'page' => $page,
                 'width' => 600,
