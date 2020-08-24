@@ -8,17 +8,24 @@
                         <span class="x-red">*</span>名称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="slideshow_name" name="slideshow_name" required="" lay-verify="required"
+                        <input style="width: 400px" type="text" id="slideshow_name" name="slideshow_name" required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="slideshow_name" class="layui-form-label">
-                        <span class="x-red">*</span>产品链接
+                    <label for="phone" class="layui-form-label">
+                        产品链接
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="product_url" name="product_url" required="" lay-verify="required"
-                               autocomplete="off" class="layui-input">
+                        <select name="product_url" lay-filter="轮播链接">
+                            <option value=""></option>
+                            <option value="/pages/newsDetail/index?id=">商品</option>
+                            <option value="/pages/caseDetail/index?id=" >案例</option>
+                            <option value="/pages/newsDetail/index?id=" >新闻</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" id="product_id" name="product_id" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -42,7 +49,7 @@
                         <span class="x-red">*</span>排序
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="sort" name="sort"  required="" lay-verify="sort"
+                        <input style="width: 400px" type="number" id="sort" name="sort"  required="" lay-verify="sort"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -100,9 +107,10 @@
                 //监听提交
                 form.on('submit(add)', function(data) {
                     var fields = data.field;
+                    var productUrl = data.field.product_url+data.field.product_id;
                     var coverPic = $("#uploadPic").attr('src');
                     var data = {slideshow_name:fields.slideshow_name,description:fields.description, sort:fields.sort,
-                        slideshow_url:coverPic,product_url:fields.product_url};
+                        slideshow_url:coverPic,product_url:productUrl};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

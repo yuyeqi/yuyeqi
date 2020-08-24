@@ -79,7 +79,7 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'edit'){
-                xadmin.open('编辑',"/hp/slideshow/editShow/"+data.id,600,650);
+                xadmin.open('编辑',"/hp/slideshow/editShow/"+data.id,700,500);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);

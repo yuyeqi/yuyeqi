@@ -8,18 +8,25 @@
                         <span class="x-red">*</span>名称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="slideshow_name" name="slideshow_name" required="" lay-verify="required"
+                        <input style="width: 400px" type="text" id="slideshow_name" name="slideshow_name" required="" lay-verify="required"
                                autocomplete="off" class="layui-input" value="{{ $detail->slideshow_name or '' }}">
                         <input type="hidden" value="{{ $detail->id or '' }}" id="hiddenId">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="slideshow_name" class="layui-form-label">
-                        <span class="x-red">*</span>产品链接
+                    <label for="phone" class="layui-form-label">
+                        产品链接
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="product_url" value="{{ $detail->product_url }}" name="product_url" required="" lay-verify="required"
-                               autocomplete="off" class="layui-input">
+                        <select name="product_url" lay-filter="轮播链接">
+                            <option value=""></option>
+                            <option value="/pages/newsDetail/index?id=" @if($detail->product_url == '/pages/newsDetail/index?id' ) selected @endif>商品</option>
+                            <option value="/pages/caseDetail/index?id="  @if($detail->product_url == '/pages/caseDetail/index?id' ) selected @endif>案例</option>
+                            <option value="/pages/newsDetail/index?id=" @if($detail->product_url == '/pages/newsDetail/index?id' ) selected @endif>新闻</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" id="product_id" value="{{ $detail->product_id or '' }}" name="product_id" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -43,7 +50,7 @@
                         <span class="x-red">*</span>排序
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="sort" name="sort"  required="" lay-verify="sort"
+                        <input style="width: 400px" type="number" id="sort" name="sort"  required="" lay-verify="sort"
                                autocomplete="off" class="layui-input" value="{{ $detail->sort or '' }}">
                     </div>
                 </div>
