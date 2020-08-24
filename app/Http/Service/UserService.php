@@ -846,8 +846,8 @@ class UserService extends BaseSerivce
                     'desc' => '用户' . $cushInfo->user_name . '的账户提现', // 企业付款操作说明信息。必填
                 ];
                 Log::info('【提现审核】--------------转账到用户信息:cushLog='.json_encode($payData));
-                $result = $this->app->transfer->toBalance($payData);*/
-                Log::info('【提现审核】----------------------转到到用户结果：result='.json_encode($result));
+                $result = $this->app->transfer->toBalance($payData);
+                Log::info('【提现审核】----------------------转到到用户结果：result='.json_encode($result));*/
             } elseif ($data['status'] == 30) {
                 //6.拒绝申请,修改用户账户信息,返回余额
                 $accountData = [
