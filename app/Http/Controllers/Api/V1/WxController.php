@@ -182,7 +182,8 @@ class WxController extends BaseController
             $filename = $appCode->save('qrcode/', 'qrcode.jpg');
         }
         //文件名非空时返回图片路径
-        $baseUrl = url()->previous() . '/qrcode/' . $filename;
+       // $baseUrl = url()->previous() . '/qrcode/' . $filename;
+	$baseUrl = 'https://www.xahpmc.com/qrcode/' . $filename;
         return Render::success("获取成功", $baseUrl);
     }
 
