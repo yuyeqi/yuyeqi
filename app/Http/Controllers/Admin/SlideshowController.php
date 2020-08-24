@@ -78,6 +78,13 @@ class SlideshowController extends BaseController
      */
     public function editShow($id){
         $detail = $this->slideshowService->getAdminSlideshowById($id);
+        if (!empty($detail)){
+            $productUrl = explode('=',$detail->product_url,2);
+            if (!empty($productUrl[0])){
+                $detail['product_url'] = $productUrl['0'];
+                $detail['product_id'] = $productUrl['1'];
+            }
+        }
         return view('admin.slideshow.edit',['detail'=>$detail]);
     }
 
