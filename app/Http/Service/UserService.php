@@ -642,7 +642,16 @@ class UserService extends BaseSerivce
             $this->setErrorMsg("请先微信授权");
             return false;
         }
+        //2.获取推广人
+        $parentName = '平台';
+        if (isset($data['parent_id']) && $data['parent_id'] > 0){
+            $parentInfo = User::getUserDetail($data['parent_id']);
+            if (!empty($parentInfo)){
+                $parentName = $parentInfo->user_name ?? '平台' ;
+            }
+        }
         $data['audit_status'] = 1;
+        $data['parent_name'] = $parentName;
         return $this->user->register($data);
     }
 
@@ -777,10 +786,12 @@ class UserService extends BaseSerivce
      */
     public function cushAudit($data, $loginInfo)
     {
+        Log::info('【提现审核开始】-----------data='.json_encode($data).',当前操作人:loginInfo'.json_encode($loginInfo));
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
         //1.获取提现记录信息
         $cushInfo = Withdraw::getWalletdrawInfo($data['id']);
+        Log::error('【提现审核】-----------提现记录信息:cushInfo='.json_encode($cushInfo));
         if (!$cushInfo) {
             $this->setErrorMsg('提现记录不存在');
             return false;
@@ -799,6 +810,7 @@ class UserService extends BaseSerivce
             $accountInfo = UserStatistic::getAccountDetail($cushInfo->user_id);
             //5.提现用户的账户信息
             $userInfo = User::getUserDetail($cushInfo->user_id);
+            Log::info('【体现审核】----------提现用户账户信息:userInfo='.json_encode($userInfo));
             if (!$accountInfo && !$userInfo) {
                 $this->setErrorMsg('用户不存在,请联系管理员');
                 return false;
@@ -810,6 +822,7 @@ class UserService extends BaseSerivce
                     'frozen_amount' => bcsub($accountInfo->frozen_amount, $userInfo->amount, 2),  //解冻账户金额
                     'withdraw_amount' => bcadd($accountInfo->withdraw_amount, $userInfo->amount, 2),  //增加提现金额
                 ];
+                Log::info('【体现审核】-------------用户账户信息：accountData='.json_encode($accountData));
                 $this->userStatistic->updateAccout($accountData);
                 //7.生成提现记录
                 $cushLog = [
@@ -820,6 +833,7 @@ class UserService extends BaseSerivce
                     'surplus_amount' => $cushInfo->surplus_amount,
                     'remark' => '用户提现'
                 ];
+                Log::info('【提现审核】--------------积分记录数据:cushLog='.json_encode($cushLog));
                 WalletDeal::create($cushLog);
                 //8.企业转账到用户
                 $payData = [
@@ -831,19 +845,22 @@ class UserService extends BaseSerivce
                     'amount' => 1, // 企业付款金额，单位为分
                     'desc' => '用户' . $cushInfo->user_name . '的账户提现', // 企业付款操作说明信息。必填
                 ];
-                $this->app->transfer->toBalance($payData);
+                Log::info('【提现审核】--------------转账到用户信息:cushLog='.json_encode($payData));
+                $result = $this->app->transfer->toBalance($payData);
+                Log::info('【提现审核】----------------------转到到用户结果：result='.json_encode($result));
             } elseif ($data['status'] == 30) {
                 //6.拒绝申请,修改用户账户信息,返回余额
                 $accountData = [
                     'frozen_amount' => bcsub($accountInfo->frozen_amount, $userInfo->amount, 2),  //解冻账户金额
                     'amount' => bcadd($accountInfo->amount, $userInfo->amount, 2),  //增加提现金额
                 ];
+                Log::info('【体现审核】----------提现被拒绝,修改账户数据:accountData='.json_encode($accountData));
                 $this->userStatistic->updateAccout($accountData);
             }
             DB::commit();
             return true;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            Log::error('【后台提现审核】-----------出现异常：e='.$e->getMessage());
             $this->setErrorMsg($e->getMessage());
             DB::rollBack();
             return false;
