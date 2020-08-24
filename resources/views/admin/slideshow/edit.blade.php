@@ -111,8 +111,9 @@
                     var coverPic = $("#uploadPic").attr('src');
                     var content = $("#LAY_demo_editor").text();
                     var id = $('#hiddenId').val();
+                    var productUrl = data.field.product_url+data.field.product_id;
                     var data = {id:id,slideshow_name:fields.slideshow_name,description:fields.description, sort:fields.sort,
-                        slideshow_url:coverPic,product_url:fields.product_url};
+                        slideshow_url:coverPic,product_url:productUrl};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
