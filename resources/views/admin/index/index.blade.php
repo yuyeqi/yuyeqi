@@ -44,212 +44,27 @@
         <div class="left-nav">
             <div id="side-nav">
                 <ul id="nav">
-                    <li>
-                        <a href="javascript:;" onclick="xadmin.add_tab('首页','{{ route("welcome") }}')" >
-                            <i class="layui-icon">&#xe68e;</i>
-                            <cite>首页</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe753;</i>
-                            <cite>管理员管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
+                    @isset($mean)
+                        @foreach($mean as $item)
                             <li>
-                                <a onclick="xadmin.add_tab('管理员列表','{{ route("admin_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>管理员列表</cite></a>
+                                <a href="javascript:;" @if($item->uri != '/') onclick="xadmin.add_tab('{{ $item->name }}','{{ route($item->uri) }}')" @endif>
+                                    <i class="iconfont left-nav-li" lay-tips="{{ $item->name or '' }}">{!! $item['icon'] or '' !!}</i>
+                                    <cite>{{ $item->name or '' }}</cite>
+                                    <i class="iconfont nav_right">&#xe697;</i></a>
+                                <ul class="sub-menu">
+                                    @isset($item->first)
+                                        @foreach($item->first as $value)
+                                            <li>
+                                                <a onclick="xadmin.add_tab('{{ $value->name }}','{{ route($value->uri) }}')">
+                                                    <i class="iconfont">&#xe6a7;</i>
+                                                    <cite>{{ $value->name }}</cite></a>
+                                            </li>
+                                        @endforeach
+                                    @endisset
+                                </ul>
                             </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('角色列表','{{ route("role_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>角色列表</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('权限分类','admin-cate.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>权限分类</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('权限管理','admin-rule.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>权限管理</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="配置管理">&#xe6ae;</i>
-                            <cite>配置管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('用户列表','{{ route("config_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>配置列表</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('轮播列表','{{ route("slideshow_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>轮播列表</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="会员管理">&#xe6b8;</i>
-                            <cite>用户管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('用户列表','{{ route("user_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>用户列表</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('用户分类','{{ route("userCate_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>用户分类</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('提现记录','{{ route("user_withdraw") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>提现记录</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('钱包记录','{{ route("user_walletDeal") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>钱包记录</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('积分记录','{{ route("user_scoreDeal") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>积分记录</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('推广用户','{{ route("user_promoter") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>推广用户</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="订单管理">&#xe723;</i>
-                            <cite>订单管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('订单列表','{{route('order_index')}}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>订单列表</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="分类管理">&#xe723;</i>
-                            <cite>商品管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('商品列表','{{ route('goods_index') }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>商品列表</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('商品分类','{{ route('goodsCate_index') }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>商品分类</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('评论列表','{{ route('goods_comment') }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>评论列表</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="预约管理">&#xe6ce;</i>
-                            <cite>预约管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('报备列表','{{ route("book_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>预约列表</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="私人定制">&#xe6b4;</i>
-                            <cite>私人定制</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('私人定制','{{ route('person_index') }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>私人定制</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('分类列表','{{ route('personCate_index') }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>分类列表</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="案例管理">&#xe6eb;</i>
-                            <cite>案例管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('案例列表','{{ route("cases_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>案例列表</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="动态管理">&#xe705;</i>
-                            <cite>动态管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('动态管理','{{ route("news_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>动态列表</cite></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="兑换商城">&#xe6f4;</i>
-                            <cite>兑换商城</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a onclick="xadmin.add_tab('商品分类','{{ route("exchangeCate_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>商品分类</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('商品列表','{{ route("exchange_index") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>商品列表</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('兑换记录','{{ route("exchange_record") }}')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>兑换记录</cite></a>
-                            </li>
-                        </ul>
-                    </li>
+                        @endforeach
+                    @endisset
                 </ul>
             </div>
         </div>
@@ -259,19 +74,18 @@
         <div class="page-content">
             <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
                 <ul class="layui-tab-title">
-                    <li class="home">
-                        <i class="layui-icon">&#xe68e;</i>首页</li></ul>
+                    <li class="home"></li></ul>
                 <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
                     <dl>
                         <dd data-type="this">关闭当前</dd>
                         <dd data-type="other">关闭其它</dd>
                         <dd data-type="all">关闭全部</dd></dl>
                 </div>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">
-                        <iframe src='{{ route('welcome') }}' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <iframe  frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                        </div>
                     </div>
-                </div>
                 <div id="tab_show"></div>
             </div>
         </div>

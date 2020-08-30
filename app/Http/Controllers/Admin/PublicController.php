@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Service\AdminService;
 use App\Library\Render;
-use App\Models\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Excel;
 
 /**
  * 公共类
@@ -111,4 +111,21 @@ class PublicController extends Controller
         return  Render::error('上传失败');
     }
 
+    //Excel文件导出功能 By Laravel学院
+    public function export()
+    {
+        $cellData = [
+            ['学号', '姓名', '成绩'],
+            ['10001', 'AAAAA', '99'],
+            ['10002', 'BBBBB', '92'],
+            ['10003', 'CCCCC', '95'],
+            ['10004', 'DDDDD', '89'],
+            ['10005', 'EEEEE', '96'],
+        ];
+        Excel::create('学生成绩', function ($excel) use ($cellData) {
+            $excel->sheet('score', function ($sheet) use ($cellData) {
+                $sheet->rows($cellData);
+            });
+        })->export('xls');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\AdminValidator;
 use App\Http\Service\AdminService;
+use App\Http\Service\RoleService;
 use App\Library\Render;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -15,7 +16,10 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends BaseController
 
 {
+    //后台用户服务层
     private $adminService;
+    //角色服务层
+    private $roleService;
 
     /**
      * 构造方法
@@ -25,6 +29,7 @@ class AdminController extends BaseController
     public function __construct(){
         parent:: __construct();
         $this->adminService = isset($this->adminService) ?: new AdminService();
+        $this->roleService = isset($this->roleService) ?: new RoleService();
     }
 
     /**
@@ -53,7 +58,8 @@ class AdminController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function addShow(){
-        return view('admin.admin.add');
+        $roles = $this->roleService->getRolesLists();
+        return view('admin.admin.add',compact('roles'));
     }
     /**
      * 添加用户
@@ -61,12 +67,12 @@ class AdminController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function add(AdminValidator $request){
-        $data = $request->only('username','account','phone','password','sex','email','remark');
+        $data = $request->only('username','ids','account','phone','password','sex','email','remark');
         //添加数据
         if ($this->adminService->addAdmin($data,$this->loginInfo)){
             return  Render::success('添加成功');
         }
-        return Render::error('添加失败');
+        return Render::error($this->adminService->getErrorMsg() ?: '添加失败');
     }
 
     /**
@@ -86,7 +92,13 @@ class AdminController extends BaseController
      */
     public function edit($id){
         $detail = $this->adminService->getAdminDetail($id);
-        return view('admin.admin.edit',['detail'=>$detail]);
+        $roles = $this->roleService->getRolesLists();
+        $ids = [];
+        $adminRoles = $this->roleService->getAdminRoles($id);
+        if (!empty($adminRoles)){
+            $ids = array_pluck($adminRoles,'role_id');
+        }
+        return view('admin.admin.edit',compact('detail','roles','ids'));
     }
 
     /**
@@ -94,13 +106,13 @@ class AdminController extends BaseController
      * @param PersonValidator $adminPost
      * @return \Illuminate\Http\JsonResponse
      */
-    public function editPost(AdminValidator $adminPost, $id){
-        $data = $adminPost->only('id','username','account','phone','password','sex','email','remark');
+    public function editPost(AdminValidator $adminPost){
+        $data = $adminPost->only('id','username','ids','account','phone','password','sex','email','remark');
         //修改
         if ($this->adminService->updateAdmin($data,$this->loginInfo)){
             return  Render::success('修改成功');
         }
-        return Render::error('修改失败');
+        return Render::error($this->adminService->getErrorMsg() ?: '修改失败');
     }
 
     /**

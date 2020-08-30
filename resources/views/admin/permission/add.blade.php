@@ -2,13 +2,72 @@
 @section('content')
     <div class="layui-fluid">
         <div class="layui-row">
-            <form class="layui-form">
+            <form class="layui-form" action="javascript:return false">
                 <div class="layui-form-item">
                     <label for="cate_name" class="layui-form-label">
-                        <span class="x-red">*</span>名称
+                        <span class="x-red">*</span>父级菜单
+                    </label>
+                    <div class="layui-input-inline"  style="width: 300px">
+                        <select name="pid" lay-filter="aihao">
+                            <option value="0">顶级分类</option>
+                            @isset($permission)
+                                @foreach($permission as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @isset($item->first)
+                                        @foreach($item->first as $v)
+                                            <option value="{{ $v->id }}">&ensp;&ensp;&ensp;&ensp;{{ $v->name }}</option>
+                                        @endforeach
+                                    @endisset
+                                @endforeach
+                            @endisset
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>类型
+                    </label>
+                    <div class="layui-input-inline"  style="width: 300px">
+                        <select name="type" lay-filter="aihao">
+                            <option value="1">目录</option>
+                            <option value="2">菜单</option>
+                            <option value="3">按钮</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>菜单名称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="cate_name" name="cate_name" required="" lay-verify="required"
+                        <input style="width: 300px" type="text" name="name"  required="" lay-verify="required"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>权限值
+                    </label>
+                    <div class="layui-input-inline">
+                        <input style="width: 300px" type="text" name="permission_value"  required="" lay-verify="required"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>路径
+                    </label>
+                    <div class="layui-input-inline">
+                        <input style="width: 300px" type="text" name="uri"  required="" lay-verify="required"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                        <span class="x-red">*</span>目录图标
+                    </label>
+                    <div class="layui-input-inline">
+                        <input style="width: 300px" type="text" name="icon"  required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -17,7 +76,7 @@
                         <span class="x-red">*</span>排序
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="sort" name="sort"  required="" lay-verify="sort"
+                        <input style="width: 300px" type="text" name="sort"  required="" lay-verify="required"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -30,7 +89,7 @@
                         </button>
                     </div>
                 </form>
-
+            </form>
         </div>
     </div>
 @endsection
@@ -41,24 +100,17 @@
             function() {
                 $ = layui.jquery;
                 table = layui.table;
-                var form = layui.form,
-                    layer = layui.layer,
-                    layedit = layui.layedit,
-                    upload = layui.upload,
-                    $ = layui.$;
-                //
-
+                var form = layui.form
                 //监听提交
                 form.on('submit(add)', function(data) {
                     var fields = data.field;
-                    var data = {cate_name:fields.cate_name,sort:fields.sort};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '{{route('goodsCate_add')}}',
-                        data: data,
+                        url: '{{route('permission_add')}}',
+                        data: fields,
                         dataType: 'json',
                         success: function (data) {
                             if (data.code == 1){

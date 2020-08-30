@@ -53,12 +53,23 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="x-red">*</span>角色</label>
+                    <div class="layui-input-block">
+                        @isset($roles)
+                            @foreach($roles as $role)
+                                <input type="checkbox" name="ids[]" lay-skin="primary" @if(in_array($role->id,$ids)) checked @endif value="{{ $role->id }}" title="{{ $role->name }}">
+                            @endforeach
+                        @endisset
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">单选框</label>
                     <div class="layui-input-block">
                         <input type="radio" name="sex" value="1" title="男" @if($detail->sex == 1 ) checked @endif>
                         <input type="radio" name="sex" value="2" title="女" @if($detail->sex == 2 ) checked @endif>
                     </div>
                 </div>
+                <input name="id" type="hidden" value="{{ $detail->id or 0 }}">
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <label class="layui-form-label">备注</label>
@@ -114,7 +125,7 @@
                         },
                         type: 'POST',
                         url: '/hp/admin/editPost/'+id,
-                        data: data,
+                        data: fields,
                         dataType: 'json',
                         success: function (data) {
                             if (data.code == 1){

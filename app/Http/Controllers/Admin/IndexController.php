@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Service\RoleService;
 use App\Models\Admin;
 use App\Models\Book;
 use App\Models\ExchangeRecord;
@@ -14,19 +15,23 @@ use Illuminate\Http\Request;
 
 class IndexController extends BaseController
 {
+    //用户角色
+    private $roleService;
     /**
      * 构造方法
      * AdminController constructor.
-     * @param Admin $admin
      */
     public function __construct(){
         parent:: __construct();
+        $this->roleService = isset($this->roleService) ?: new RoleService();
     }
 
     //后台首页
     public function index(Request $request){
         $username = $this->loginInfo['username'];
-        return view('admin.index.index',compact('username'));
+        //菜单
+        $mean = $this->roleService->getMeanLists($this->loginInfo['id']);
+        return view('admin.index.index',compact('username','mean'));
     }
 
     //后台欢迎页

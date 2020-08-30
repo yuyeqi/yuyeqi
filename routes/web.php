@@ -17,6 +17,7 @@ Route::prefix('public')->group(function (){
     Route::get('login','Admin\PublicController@login')->name('login');
     Route::post('login','Admin\PublicController@login')->name('login');
     Route::get('loginOut','Admin\PublicController@loginOut')->name('loginOut');
+    Route::get('export','Admin\PublicController@export')->name('export');
     Route::any('uploadAdmin','Admin\PublicController@uploadAdmin')->name('upload');
 });
 Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],function () {
@@ -216,6 +217,19 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
     //角色管理
     Route::prefix('role')->group(function (){
         Route::get('index','RoleController@index')->name('role_index');
-        Route::get('add','RoleController@add')->name('role_add');
+        Route::get('lists','RoleController@getLists')->name('role_lists');
+        Route::get('addShow','RoleController@addShow')->name('role_add_show');
+        Route::get('editShow/{id}','RoleController@editShow')->name('role_edit_show');
+        Route::post('add','RoleController@add')->name('role_add');
+        Route::post('edit','RoleController@edit')->name('role_edit');
+    });
+    //权限管理
+    Route::prefix('permission')->group(function (){
+        Route::get('index','PermissionController@index')->name('permission_index');
+        Route::get('lists','PermissionController@getLists')->name('permission_lists');
+        Route::get('addShow','PermissionController@addShow')->name('permission_addShow');
+        Route::get('editShow/{id}','PermissionController@editShow')->name('permission_editShow');
+        Route::post('add','PermissionController@add')->name('permission_add');
+        Route::post('edit','PermissionController@edit')->name('permission_edit');
     });
 });

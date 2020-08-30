@@ -8,8 +8,8 @@
                         <span class="x-red">*</span>角色名
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="name" name="name" required="" lay-verify="required"
-                               autocomplete="off" class="layui-input">
+                        <input type="text" name="name" required="" lay-verify="required" style="width: 300px"
+                               autocomplete="off" class="layui-input" value="{{ $detail->name or '' }}">
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
@@ -18,52 +18,44 @@
                     </label>
                     <table  class="layui-table layui-input-block">
                         <tbody>
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="like1[write]" lay-skin="primary" lay-filter="father" title="用户管理">
-                            </td>
-                            <td>
-                                <div class="layui-input-block">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" title="用户停用" value="2">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户删除">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户修改">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户改密">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户列表">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户改密">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户列表">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户改密">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户列表">
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-
-                                <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="文章管理" lay-filter="father">
-                            </td>
-                            <td>
-                                <div class="layui-input-block">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="文章添加">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="文章删除">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="文章修改">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="文章改密">
-                                    <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="文章列表">
-                                </div>
-                            </td>
-                        </tr>
+                        @isset($permission)
+                            @foreach($permission as $item)
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="ids[]" @if(in_array($item->id,$roles)) checked @endif value="{{ $item->id }}" lay-skin="primary" lay-filter="father" title="{{ $item->name }}">
+                                    </td>
+                                    <td>
+                                        <div class="layui-input-block">
+                                            @isset($item->first)
+                                                @foreach($item->first as $value)
+                                                    <input name="ids[]" lay-skin="primary" @if(in_array($value->id,$roles)) checked @endif type="checkbox" value="{{ $value->id }}" title="{{ $value->name }}">
+                                                    @isset($value->second)
+                                                        @foreach($value->second as $v)
+                                                            <input name="ids[]" lay-skin="primary" @if(in_array($v->id,$roles)) checked @endif type="checkbox" value="{{ $v->id }}" title="{{ $v->name }}">
+                                                        @endforeach
+                                                    @endisset
+                                                @endforeach
+                                            @endisset
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endisset
                         </tbody>
                     </table>
                 </div>
-                <div class="layui-form-item layui-form-text">
-                    <label for="desc" class="layui-form-label">
-                        描述
+                <input name="id" type="hidden" id="hiddenId" value="{{ $detail->id or 0 }}">
+                <div class="layui-form-item">
+                    <label for="name" class="layui-form-label">
+                        <span class="x-red">*</span>描述
                     </label>
-                    <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>
+                    <div class="layui-input-inline">
+                        <input type="text" name="description" required="" lay-verify="required" style="width: 600px"
+                               autocomplete="off" class="layui-input" value="{{ $detail->description or '' }}">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn" lay-submit="" lay-filter="add">增加</button>
+                    <button class="layui-btn" lay-submit="" lay-filter="add">保存</button>
                 </div>
             </form>
         </div>
@@ -75,36 +67,38 @@
             $ = layui.jquery;
             var form = layui.form
                 ,layer = layui.layer;
-
-            //自定义验证规则
-            form.verify({
-                nikename: function(value){
-                    if(value.length < 5){
-                        return '昵称至少得5个字符啊';
-                    }
-                }
-                ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-                ,repass: function(value){
-                    if($('#L_pass').val()!=$('#L_repass').val()){
-                        return '两次密码不一致';
-                    }
-                }
-            });
-
             //监听提交
             form.on('submit(add)', function(data){
-                console.log(data);
-                //发异步，把数据提交给php
-                layer.alert("增加成功", {icon: 6},function () {
-                    // 获得frame索引
-                    var index = parent.layer.getFrameIndex(window.name);
-                    //关闭当前frame
-                    parent.layer.close(index);
-                });
+                var fields = data.field;
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'POST',
+                    url: '{{route('role_edit')}}',
+                    data: fields,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.code == 1){
+                            //发异步，把数据提交给php
+                            layer.msg(data.msg,{icon:5,time:1000});
+                        }else {
+                            //发异步，把数据提交给php
+                            layer.alert(data.msg, {icon: 6},function () {
+                                // 获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                //刷新页面
+                                window.parent.location.reload();
+                            });
+                        }
+                    },
+                    error: function (xhr,type) {
+                    }
+                })
                 return false;
             });
-
-
             form.on('checkbox(father)', function(data){
 
                 if(data.elem.checked){

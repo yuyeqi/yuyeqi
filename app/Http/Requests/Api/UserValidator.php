@@ -44,7 +44,7 @@ class UserValidator extends FormRequest implements ValidatesWhenResolved
             'id' => 'required',
             'user_type' => 'required',
             'user_name' => 'required',
-            'phone' => 'regex:/^1[345789][0-9]{9}$/|unique:user'
+            'phone' => 'regex:/^1[345789][0-9]{9}$/'
         ];
     }
     /**

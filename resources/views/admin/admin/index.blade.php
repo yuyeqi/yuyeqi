@@ -23,7 +23,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('admin_add_show') }}',700,500)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','{{ route('admin_add_show') }}',800,650)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -94,7 +94,7 @@
                     member_del(data.id);
                 })
             } else if(obj.event === 'edit'){
-                xadmin.open('编辑',"/hp/admin/edit/"+data.id,600,650);
+                xadmin.open('编辑',"/hp/admin/edit/"+data.id,800,650);
             }else if(obj.event === 'pwd'){
                 setPasword(data.id);
             }

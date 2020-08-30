@@ -18,7 +18,7 @@
                 <div class="layui-card">
                     <div class="layui-card-header">
                         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                         <button class="layui-btn" onclick="xadmin.open('添加角色','{{ route('role_add') }}',600,400)"><i class="layui-icon"></i>添加</button>
+                         <button class="layui-btn" onclick="xadmin.open('添加角色','{{ route('role_add_show') }}',1000,850,true)"><i class="layui-icon"></i>添加</button>
                     </div>
                     <div class="layui-card-body layui-table-body layui-table-main">
                         <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -43,14 +43,12 @@
             //表格展示
             table.render({
                 elem: '#table'
-                ,url: "{{ route('book_lists') }}"
+                ,url: "{{ route('role_lists') }}"
                 ,cols: [[
                     {type: 'checkbox',field: 'left'}
                     ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
-                    ,{field:'order', width:80, title: '排序', sort: true,align: "center"}
                     ,{field:'name', width:150, title: '角色名称', align:"center"}
-                    ,{field:'title', width:120, title: '角色标题',align: "center"}
-                    ,{field:'create_user_name',align: "center", width:100, title: '创建人'}
+                    ,{field:'description', width:300, title: '角色描述',align: "center"}
                     ,{field:'create_time', title: '创建时间',align: "center",width:200}
                     ,{field:'update_user_name',align: "center", width:100, title: '更新人'}
                     ,{field:'update_time', title: '更新时间',align: "center",width:200}
@@ -64,7 +62,7 @@
             table.on('tool(tableTool)', function(obj){
                 var data = obj.data;
                 if(obj.event === 'edit'){
-                    xadmin.open('编辑',"/hp/cases/editShow/"+data.id,600,650);
+                    xadmin.open('编辑',"/hp/role/editShow/"+data.id,1000,850,true);
                 } else if(obj.event === 'del'){
                     layer.confirm('确认要删除吗？',function (){
                         member_del(data.id);

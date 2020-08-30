@@ -4,6 +4,8 @@
 namespace App\Http\Service;
 
 use App\Models\Admin;
+use App\Models\AdminRole;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 后台用户服务层
@@ -14,6 +16,8 @@ class AdminService extends BaseSerivce
 {
     //用户模型对象
     private $admin;
+    //用户角色模型
+    private $adminRole;
     /**
      * AdminService constructor.
      */
@@ -21,6 +25,7 @@ class AdminService extends BaseSerivce
     {
         parent::__construct();
         $this->admin = isset($this->admin) ?: new Admin();
+        $this->adminRole = isset($this->adminRole) ?: new AdminRole();
     }
 
     /**
@@ -43,7 +48,31 @@ class AdminService extends BaseSerivce
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
         $data['password'] = bcrypt($data['password']);
-        return $this->admin->addAdmin($data);
+        $ids = $data['ids'];
+        unset($data['ids']);
+        //1.开启事务
+        DB::beginTransaction();
+        try {
+            //2.添加后台用户
+            $admin = $this->admin->addAdmin($data);
+            //3.添加用户角色
+            $adminRole = [];
+            if (!empty($admin) && count($ids) > 0){
+                foreach ($ids as $item){
+                    $adminRole[] = [
+                        'admin_id' => $admin->id,
+                        'role_id' => $item
+                    ];
+                }
+                AdminRole::insert($adminRole);
+            }
+            DB::commit();
+            return  true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->setErrorMsg($e->getMessage());
+            return  false;
+        }
     }
 
     /**
@@ -60,10 +89,37 @@ class AdminService extends BaseSerivce
      * @param $data
      * @return mixed
      */
-    public function updateAdmin($data,$loginInfo){
+    public function updateAdmin($data, $loginInfo)
+    {
         $data['update_user_id'] = $loginInfo['id'];
         $data['update_user_name'] = $loginInfo['username'];
-        return $this->admin->updateAdmin($data);
+        $ids = $data['ids'];
+        unset($data['ids']);
+        //1.开启事务
+        DB::beginTransaction();
+        try {
+            //2.添加后台用户
+            $this->admin->updateAdmin($data);
+            //3.删除角色
+            $this->adminRole->deletAminRole($data['id']);
+            //4.添加用户角色
+            $adminRole = [];
+            if (!empty($data) && count($ids) > 0) {
+                foreach ($ids as $item) {
+                    $adminRole[] = [
+                        'admin_id' => $data['id'],
+                        'role_id' => $item
+                    ];
+                }
+                AdminRole::insert($adminRole);
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->setErrorMsg($e->getMessage());
+            return false;
+        }
     }
 
     /**

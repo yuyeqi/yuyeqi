@@ -24,7 +24,7 @@
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                    <button class="layui-btn" onclick="xadmin.open('添加分类','{{ route('goodsCate_add_show') }}',500,300)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加权限','{{ route('permission_addShow') }}',800,600)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-hide" id="table" lay-filter="tableTool"></table>
@@ -39,29 +39,45 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-    var table;
     layui.use(['laydate','form','table'], function(){
         var laydate = layui.laydate;
         var  form = layui.form,
-        table = layui.table,
-        $ = layui.$;
+            table = layui.table;
         //表格展示
         table.render({
             elem: '#table'
-            ,url: "{{ route('goodsCate_lists') }}"
+            ,url: "{{ route('permission_lists') }}"
             ,cols: [[
                 {type: 'checkbox',field: 'left'}
                 ,{field:'id', width:80, title: 'ID', sort: true,align: "center"}
                 ,{field:'sort', width:80, title: '排序', sort: true,align:"center"}
-                ,{field:'cate_name', width:150, title: '标题',align: "center"}
-                ,{field:'status', title: '状态',align: "center", width:120,templet: function(d){
-                        if(d.status == 10){
-                            return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
-                        }else{
-                            return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'
+                ,{field:'permission', width:150, title: '父级权限',align: "center",templet:function (d) {
+                        if (d.permission != null){
+                            return d.permission.name;
                         }
-                    } }
+                        return '顶级权限';
+                    }}
+                ,{field:'name', width:200, title: '权限名称',align: "left",templet:function (d) {
+                        if (d.type == 2){
+                            return '----'+d.name;
+                        }else if(d.type == 3){
+                            return '--------'+d.name;
+                        }
+                        return d.name;
+                    }}
+                ,{field:'type', width:150, title: '权限类型',align: "center",templet:function (d) {
+                    if(d.type == 1){
+                        return '目录';
+                    }else if (d.type == 2){
+                        return  '菜单';
+                    }else{
+                        return  '按钮';
+                    }
+                    }}
+                ,{field:'permission_value', width:200, title: '权限值',align: "center"}
+                ,{field:'uri', width:200, title: '权限url',align: "center"}
                 ,{field:'update_user_name',align: "center", width:100, title: '更新人'}
                 ,{field:'update_time', title: '更新时间',align: "center",width:200}
                 ,{field:'create_time', title: '创建时间',align: "center",width:200}
@@ -75,7 +91,7 @@
         table.on('tool(tableTool)', function(obj){
             var data = obj.data;
             if(obj.event === 'edit'){
-                xadmin.open('编辑',"/hp/goodsCate/editShow/"+data.id,500,300);
+                xadmin.open('编辑',"/hp/permission/editShow/"+data.id,800,600);
             } else if(obj.event === 'del'){
                 layer.confirm('确认要删除吗？',function (){
                     member_del(data.id);
@@ -120,89 +136,5 @@
             elem: '#end' //指定元素
         });
     });
-    /*用户-停用*/
-    function member_stop(id,status){
-        var status = status == 10 ? 20 : 10;
-        var msg = status == 20 ? '确认要停用吗？' : '确认要启用吗？';
-        layer.confirm(msg,function(index){
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'post',
-                url: "{{ route('gooodsCate_update_status') }}",
-                dataType: 'json',
-                data: {id:id,status:status},
-                success: function (data) {
-                    if(data.code == 0){
-                        layer.msg(data.msg,{icon:1,time:1000});
-                    }else{
-                        layer.msg(data.msg,{icon:5,time:1000});
-                    }
-                    //刷新页面
-                    location.reload();
-                },
-                error: function (xhr,type) {
-
-                }
-            })
-        });
-    }
-    /*用户-删除*/
-    function member_del(id){
-        var data = [id];
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'post',
-            data: {ids:data},
-            url: "{{ route('gooodsCate_del') }}",
-            dataType: 'json',
-            success: function (data) {
-                if(data.code == 0){
-                    layer.msg(data.msg,{icon:1,time:1000});
-                }else{
-                    layer.msg(data.msg,{icon:5,time:1000});
-                }
-                //刷新页面
-                location.reload();
-            },
-            error: function (xhr,type) {
-
-            }
-        })
-    }
-    function delAll (argument) {
-        layui.use(['table'],function () {
-            var table = layui.table;
-            var ids = [];
-            var checkStatus = table.checkStatus('tableId').data
-            $.each(checkStatus,function (index,val) {
-                ids.push(val['id'])
-            })
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'post',
-                url: '{{route("gooodsCate_del")}}',
-                dataType: 'json',
-                data: {ids: ids},
-                success: function (data) {
-                    if(data.code == 0){
-                        layer.msg(data.msg,{icon:1,time:1000});
-                    }else{
-                        layer.msg(data.msg,{icon:5,time:1000});
-                    }
-                    //刷新页面
-                    location.reload();
-                },
-                error: function (xhr,type) {
-
-                }
-            })
-        })
-    }
 </script>
 @endsection

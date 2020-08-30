@@ -52,6 +52,16 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="x-red">*</span>角色</label>
+                    <div class="layui-input-block">
+                        @isset($roles)
+                            @foreach($roles as $role)
+                                <input type="checkbox" name="ids[]" lay-skin="primary" value="{{ $role->id }}" title="{{ $role->name }}">
+                            @endforeach
+                        @endisset
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">单选框</label>
                     <div class="layui-input-block">
                         <input type="radio" name="sex" value="1" title="男" checked="">
@@ -133,7 +143,7 @@
                             },
                             type: 'POST',
                             url: '{{route('admin_add')}}',
-                            data: data,
+                            data: fields,
                             dataType: 'json',
                             success: function (data) {
                                 if (data.code == 1){
