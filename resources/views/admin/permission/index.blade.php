@@ -136,5 +136,61 @@
             elem: '#end' //指定元素
         });
     });
+    /*用户-删除*/
+    function member_del(id){
+        var data = [id];
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            data: {ids:data},
+            url: "{{ route('permission_del') }}",
+            dataType: 'json',
+            success: function (data) {
+                if(data.code == 0){
+                    layer.msg(data.msg,{icon:1,time:1000});
+                }else{
+                    layer.msg(data.msg,{icon:5,time:1000});
+                }
+                //刷新页面
+                location.reload();
+            },
+            error: function (xhr,type) {
+
+            }
+        })
+    }
+    function delAll (argument) {
+        layui.use(['table'],function () {
+            var table = layui.table;
+            var ids = [];
+            var checkStatus = table.checkStatus('tableId').data
+            $.each(checkStatus,function (index,val) {
+                ids.push(val['id'])
+            })
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '{{route("permission_del")}}',
+                dataType: 'json',
+                data: {ids: ids},
+                success: function (data) {
+                    if(data.code == 0){
+                        layer.msg(data.msg,{icon:1,time:1000});
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                    }
+                    //刷新页面
+                    location.reload();
+                },
+                error: function (xhr,type) {
+
+                }
+            })
+        })
+    }
 </script>
 @endsection

@@ -231,5 +231,6 @@ Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],functi
         Route::get('editShow/{id}','PermissionController@editShow')->name('permission_editShow');
         Route::post('add','PermissionController@add')->name('permission_add');
         Route::post('edit','PermissionController@edit')->name('permission_edit');
+        Route::post('delBatch','PermissionController@delBatch')->name('permission_del');
     });
 });
