@@ -163,12 +163,12 @@ class Permission extends Base
     public function getPermission($permissionids)
     {
         $fields = ['id', 'pid', 'name','type','permission_value','uri','icon'];
-        $map = ['is_delete' => 0, 'type' => 1];
+        $map = ['is_delete' => 0,'type'=>1];
         return self::select($fields)
             ->where($map)
             ->whereIn('id', $permissionids)
+            ->with('first')
             ->orderBy('sort')
-            ->with(['first'])
             ->get();
     }
 }
