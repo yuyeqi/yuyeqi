@@ -103,7 +103,42 @@ class PublicController extends Controller
             $bool = Storage::put(self::PHTHURL, $file);
             if ($bool){
                 $url = $baseUrl.$bool;
-                return Render::success('上传成功',$url,$url);
+                return Render::success('上传成功',$url);
+            }else{
+                return  Render::error('上传失败');
+            }
+        }
+        return  Render::error('上传失败');
+    }
+
+    /**
+     * 后台上传图片
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadEdit(Request $request){
+        $file = $request->file('file');
+        $baseUrl = 'http://hpmc.oss-cn-beijing.aliyuncs.com/';
+        if ($file && $file->isValid()) {
+            // 获取文件相关信息
+            $ext = $file->getClientOriginalExtension();     // 扩展名
+            $realPath = $file->getRealPath();   //临时文件的绝对路径
+            $type = $file->getClientMimeType();     // image/jpeg
+            $size =$file->getSize();
+            if($size > 4*1024*1024){
+                return Render::error('文件大小超过4M');
+            }
+            $extArr = array('jpg','jpeg','png','gif');
+            if(!in_array($ext,$extArr)){
+                return Render::error('文件格式不正确');
+            }
+            $bool = Storage::put(self::PHTHURL, $file);
+            if ($bool){
+                $url = $baseUrl.$bool;
+                $url = [
+                    'src'=>$url
+                ];
+                return Render::success('上传成功',$url);
             }else{
                 return  Render::error('上传失败');
             }
