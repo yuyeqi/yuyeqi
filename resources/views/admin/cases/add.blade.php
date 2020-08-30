@@ -99,6 +99,15 @@
                         layedit.sync(editIndex);
                     }
                 });
+                layedit.set({
+                    uploadImage: {
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('uploadEdit') }}" //接口url
+                        ,type: '' //默认post
+                    }
+                });
                 //创建一个编辑器
                 var editIndex = layedit.build('LAY_demo_editor');
                 //监听提交

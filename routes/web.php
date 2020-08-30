@@ -19,6 +19,7 @@ Route::prefix('public')->group(function (){
     Route::get('loginOut','Admin\PublicController@loginOut')->name('loginOut');
     Route::get('export','Admin\PublicController@export')->name('export');
     Route::any('uploadAdmin','Admin\PublicController@uploadAdmin')->name('upload');
+    Route::any('uploadEdit','Admin\PublicController@uploadEdit')->name('uploadEdit');
 });
 Route::group(['prefix'=>'hp', 'namespace'=>'Admin','middleware'=>'login'],function () {
     //后台首页
