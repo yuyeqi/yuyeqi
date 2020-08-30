@@ -24,6 +24,9 @@ class RoleService extends BaseSerivce
 
     //用户角色模型
     private $adminRole;
+
+    //权限服务层
+    private $permissionService;
     /**
      * CasesService constructor.
      */
@@ -32,6 +35,7 @@ class RoleService extends BaseSerivce
         $this->role = isset($this->role) ?: new Role();
         $this->rolePermission = isset($this->rolePermission) ?: new RolePermission();
         $this->adminRole = isset($this->adminRole) ?: new AdminRole();
+        $this->permissionService = isset($this->permissionService) ?: new PermissionService();
     }
 
     /**
@@ -199,6 +203,10 @@ class RoleService extends BaseSerivce
      * @return mixed
      */
     public function getMeanLists($adminId){
+        //1.超管直接进
+        if($adminId == 1){
+           return $this->permissionService->getPermissionLists();
+        }
         return $this->adminRole->getMeanLists($adminId);
     }
 }

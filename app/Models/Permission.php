@@ -147,7 +147,7 @@ class Permission extends Base
      * @return mixed
      */
     public function getPermissionLists(){
-        $fields = ['id', 'pid', 'name'];
+        $fields = ['id', 'pid', 'name','type','permission_value','uri','icon'];
         $map = ['is_delete' => 0, 'type' => 1];
         return self::select($fields)
             ->where($map)
