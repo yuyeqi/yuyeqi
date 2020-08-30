@@ -104,7 +104,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: "{{ route('upload') }}" //接口url
+                        url: "{{ route('uploadEdit') }}" //接口url
                         ,type: '' //默认post
                     }
                 });
