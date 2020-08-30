@@ -151,7 +151,7 @@ class AdminController extends BaseController
         if ($this->adminService->deleteAdmin($id,$this->loginInfo)){
             return  Render::success('删除成功');
         }
-        return  Render::error('删除失败');
+        return  Render::error($this->adminService->getErrorMsg() ?: '删除失败');
     }
 
     /**

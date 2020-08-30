@@ -144,6 +144,10 @@ class AdminService extends BaseSerivce
         $data['update_user_id'] = $loginInfo['id'];
         $data['update_user_name'] = $loginInfo['username'];
         $data['is_delete'] = 1;
+        if ($id == 1){
+            $this->setErrorMsg('禁止删除超级管理员');
+            return  false;
+        }
         return $this->admin->updateAdmin($data);
     }
 
@@ -168,6 +172,10 @@ class AdminService extends BaseSerivce
         $data['update_user_id'] = $loginInfo['id'];
         $data['update_user_name'] = $loginInfo['username'];
         $data['is_delete'] = 1;
+        if (in_array(1,$ids)){
+            $this->setErrorMsg('禁止删除超级管理员');
+            return  false;
+        }
         return $this->admin->deleteAll($ids,$data);
     }
 
