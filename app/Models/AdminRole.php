@@ -46,11 +46,11 @@ class AdminRole extends Base
         $permissionids = (new RolePermission())->getPermissionIds($roles);
         //3.获取所有的权限
         $permission = (new Permission())->getPermission($permissionids);
-        foreach ($permission as &$item){
+        foreach ($permission as $key=>$item){
             if (isset($item['first'])){
-                foreach ($item['first'] as &$val){
-                    if (!in_array($val['id'],$permissionids->toArray())){
-                        unset($val);
+                foreach ($item['first'] as $k=>$val){
+                    if (in_array($val['id'],$permissionids->toArray())){
+                        unset($permission[$key]['first'][$k]);
                     }
                 }
             }

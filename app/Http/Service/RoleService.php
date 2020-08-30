@@ -204,9 +204,9 @@ class RoleService extends BaseSerivce
      */
     public function getMeanLists($adminId){
         //1.超管直接进
-        if($adminId == 1){
+        /*if($adminId == 1){
            return $this->permissionService->getPermissionLists();
-        }
+        }*/
         return $this->adminRole->getMeanLists($adminId);
     }
 }
