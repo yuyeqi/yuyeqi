@@ -43,8 +43,7 @@ class UserCate extends Base
      */
     public function getDetail($id){
         $map = ['id'=>$id,'is_delete'=>0];
-        $field = ['id','cate_name','status','register_account','tg_account','book_score','create_time','update_time',
-            'store_score','order_score','store_score','order_score','update_user_name','create_user_name'];
+        $field = ['*'];
         return self::select($field)
             ->where($map)
             ->first();
