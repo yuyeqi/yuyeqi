@@ -142,7 +142,7 @@ class Goods extends Base
     public function getShopLists($keywords,$cateId,$sort,$page,$limit){
         //输出字段
         $field = ['id','goods_no','goods_name','goods_cover','good_price','score','book_price','sales_actual',
-            'cate_id','sort','comment_num'];
+            'cate_id','sort','comment_num','sales_initial'];
         //设置查询条件
         $map = ['is_delete'=>0,'goods_status'=>10];
         $cateId>0 && $map['cate_id'] = $cateId;
