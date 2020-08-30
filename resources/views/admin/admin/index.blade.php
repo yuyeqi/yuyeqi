@@ -201,7 +201,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
-                url: '{{route("goods_delete_all")}}',
+                url: '{{route("admin_delete_all")}}',
                 dataType: 'json',
                 data: {ids: ids},
                 success: function (data) {
