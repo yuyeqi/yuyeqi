@@ -103,7 +103,7 @@ class PublicController extends Controller
             $bool = Storage::put(self::PHTHURL, $file);
             if ($bool){
                 $url = $baseUrl.$bool;
-                return Render::success('上传成功',$url);
+                return Render::success('上传成功',$url,$url);
             }else{
                 return  Render::error('上传失败');
             }
