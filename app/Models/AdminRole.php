@@ -49,7 +49,7 @@ class AdminRole extends Base
         foreach ($permission as $key=>$item){
             if (isset($item['first'])){
                 foreach ($item['first'] as $k=>$val){
-                    if (in_array($val['id'],$permissionids->toArray())){
+                    if (!in_array($val['id'],$permissionids->toArray())){
                         unset($permission[$key]['first'][$k]);
                     }
                 }
