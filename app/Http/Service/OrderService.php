@@ -170,9 +170,6 @@ class OrderService extends BaseSerivce
     public function getOrderLists($userInfo, $page, $limit)
     {
         $lists = $this->order->getOrderLists($userInfo, $page, $limit);
-        foreach ($lists as &$item){
-            $item['sales_actual'] = bcadd($item['sales_actual'],$item['sales_initial']);
-        }
         return $this->getPageData($lists);
     }
 

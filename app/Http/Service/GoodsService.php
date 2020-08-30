@@ -199,6 +199,9 @@ class GoodsService extends BaseSerivce
     public function getLists($keywords, $cateId, $sort, $page, $limit)
     {
         $pageData = $this->goods->getShopLists($keywords,$cateId,$sort,$page,$limit);
+        foreach ($pageData as &$item){
+            $item['sales_actual'] = bcadd($item['sales_actual'],$item['sales_initial']);
+        }
         return $this->getPageData($pageData);
     }
 
