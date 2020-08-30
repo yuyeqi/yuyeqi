@@ -16,9 +16,9 @@ use Illuminate\Http\Request;
 class RoleController extends BaseController
 {
 
-    //角色服务层
+    // 角色服务层
     private $roleService;
-    //权限服务层
+    // 权限服务层
     private $permissionService;
     /**
      * PersonController constructor.

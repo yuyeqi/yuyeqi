@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends BaseController
 
 {
-    //后台用户服务层
+    //后台用户
     private $adminService;
     //角色服务层
     private $roleService;

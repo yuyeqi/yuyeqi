@@ -34,7 +34,7 @@ class UserValidator extends FormRequest implements ValidatesWhenResolved
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     *  Get the validation rules that apply to the request.
      *
      * @return array
      */
