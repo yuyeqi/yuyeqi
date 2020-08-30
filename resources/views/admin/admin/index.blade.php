@@ -189,31 +189,34 @@
         })
     }
     function delAll (argument) {
-        var ids = [];
-        var checkStatus = table.checkStatus('tableId').data;
-        $.each(checkStatus,function (index,val) {
-            ids.push(val['id'])
-        })
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'post',
-            url: '{{route("admin_delete_all")}}',
-            dataType: 'json',
-            data: {ids: ids},
-            success: function (data) {
-                if(data.code == 0){
-                    layer.msg(data.msg,{icon:1,time:1000});
-                }else{
-                    layer.msg(data.msg,{icon:5,time:1000});
-                }
-                //刷新页面
-                location.reload();
-            },
-            error: function (xhr,type) {
+        layui.use(['table'],function () {
+            var table = layui.table;
+            var ids = [];
+            var checkStatus = table.checkStatus('tableId').data
+            $.each(checkStatus,function (index,val) {
+                ids.push(val['id'])
+            })
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '{{route("goods_delete_all")}}',
+                dataType: 'json',
+                data: {ids: ids},
+                success: function (data) {
+                    if(data.code == 0){
+                        layer.msg(data.msg,{icon:1,time:1000});
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                    }
+                    //刷新页面
+                    location.reload();
+                },
+                error: function (xhr,type) {
 
-            }
+                }
+            })
         })
     }
     //设置密码
