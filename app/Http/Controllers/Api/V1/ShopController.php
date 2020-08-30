@@ -293,6 +293,7 @@ class ShopController extends BaseController
                     ];
                     ScoreDeal::create($scoreLog);
                     //5.修改商品销量
+                    Log::info('【支付回调】------------order_id'.$order->goods_id);
                     $goods = Goods::getGoodsDetailById($order->goods_id);
                     $goods->sales_actual = bcadd($goods->sales_actual,1);
                     $goods->save();
