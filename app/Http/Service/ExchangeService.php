@@ -150,7 +150,7 @@ class ExchangeService extends BaseSerivce
         $data['update_user_id'] = $loginInfo['id'];;
         $data['update_user_name'] = $loginInfo['username'];
         $data['is_delete'] = 1;
-        return $this->goods->delBatch($ids,$data);
+        return $this->exchange->delBatch($ids,$data);
     }
 
     /**
