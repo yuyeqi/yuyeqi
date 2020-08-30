@@ -9,6 +9,7 @@ use App\Http\Service\GoodsService;
 use App\Http\Service\OrderService;
 use App\Http\Service\UserService;
 use App\Library\Render;
+use App\Models\Goods;
 use App\Models\Order;
 use App\Models\ScoreDeal;
 use App\Models\UserStatistic;
@@ -291,6 +292,10 @@ class ShopController extends BaseController
                         'remark' => '订单赠送积分'
                     ];
                     ScoreDeal::create($scoreLog);
+                    //5.修改商品销量
+                    $goods = Goods::getGoodsDetailById($order->goods_id);
+                    $goods->sales_actual = bcadd($goods->sales_actual,1);
+                    $goods->save();
                 } elseif (array_get($message, 'result_code') === 'FAIL') {
                     $order->pay_status = '10';
                 }
