@@ -64,7 +64,7 @@ class PermissionController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function add(Request $request){
-        $data = $request->only(['pid','name','permission_value','type','uri','sort']);
+        $data = $request->only(['pid','name','icon','permission_value','type','uri','sort']);
         //添加数据
         try {
             $result = $this->permissionService->addPermission($data, $this->loginInfo);
@@ -93,7 +93,7 @@ class PermissionController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function edit(Request $request){
-        $data = $request->only(['id','pid','name','permission_value','type','uri','sort']);
+        $data = $request->only(['id','pid','icon','name','permission_value','type','uri','sort']);
         //修改数据
         try {
             $result = $this->permissionService->edit($data, $this->loginInfo);
