@@ -364,6 +364,6 @@ class UserController extends BaseController
         if ($result > 0){
             return  Render::success('审核通过');
         }
-        return  Render::error('操作失败');
+        return  Render::error($this->userService->getErrorMsg() ?: '操作失败');
     }
 }
