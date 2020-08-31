@@ -851,6 +851,7 @@ class UserService extends BaseSerivce
             } elseif ($data['status'] == 30) {
                 //6.拒绝申请,修改用户账户信息,返回余额
                 $accountData = [
+                    'user_id' => $userInfo['id'],
                     'frozen_amount' => bcsub($accountInfo->frozen_amount, $userInfo->amount, 2),  //解冻账户金额
                     'amount' => bcadd($accountInfo->amount, $userInfo->amount, 2),  //增加提现金额
                 ];

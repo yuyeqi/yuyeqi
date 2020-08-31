@@ -71,8 +71,8 @@ return [
         ],
         'oss' => [
             'driver' => 'oss',
-            'access_id' => '',
-            'access_key' => '',
+            'access_id' => env('OSS_KEY',''),
+            'access_key' => env('OSS_SECRET',''),
             'bucket' => 'hpmc',
             'endpoint' => 'oss-cn-beijing-internal.aliyuncs.com', // OSS 外网节点或自定义外部域名
             //'endpoint' => 'oss-cn-beijing.aliyuncs.com', // OSS 外网节点或自定义外部域名
