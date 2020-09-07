@@ -69,7 +69,7 @@
                             return '<button type="button" onclick="member_top('+d.id+','+d.is_top+')" class="layui-btn layui-btn-danger">置顶</button>'
                         }
                     } }
-                ,{field:'goods_name', width:120, title: '商品名称',align:"center"}
+                ,{field:'goods_name', width:150, title: '商品名称',align:"center"}
                 ,{field:'comment_content', width:300, title: '评价内容 ',align: "center"}
                 ,{field:'picture', width:180, title: '评价图片',align:"评价图片",templet: function(d){
                     var html = '';

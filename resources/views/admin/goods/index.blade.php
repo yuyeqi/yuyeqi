@@ -54,7 +54,7 @@
             ,cols: [[
                 {type: 'checkbox',field: 'left',width: 30}
                 ,{field:'id', width:80, title: 'ID', sort: true}
-                ,{field:'goods_name', width:120, title: '商品名称'}
+                ,{field:'goods_name', width:150, title: '商品名称'}
                 ,{field:'cate', width:120, title: '商品分类',templet:function (d) {
                         if (d.cate == '' || d.cate == null){
                             return '';

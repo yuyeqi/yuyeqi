@@ -82,7 +82,7 @@
                     } }
                 ,{field:'user_name',align: "center", minWidth:100, title: '用户名'}
                 ,{field:'phone',align: "center", minWidth:150, title: '电话'}
-                ,{field:'goods_name',align: "center", minWidth:100, title: '商品名称'}
+                ,{field:'goods_name',align: "center", width:150, title: '商品名称'}
                 ,{field:'goods_cover',align: "center", title: '商品图',templet: function(d){
                         return  "<span id='pic_" + d.id + "'><img src='" + d.goods_cover + "'  style='width: 40px' lay-event='showPic' ></span>";
                     } }
@@ -91,7 +91,7 @@
                 ,{field:'pay_price', align: "center",title: '支付金额', minWidth: 100}
                 ,{field:'update_price', align: "center",title: '更新金额', minWidth: 100}
                 ,{field:'score', align: "center",title: '赠送积分', minWidth: 150}
-                ,{field:'transaction_id', align: "center",title: '微信交易单号'}
+                ,{field:'transaction_id', align: "center",width:200, title: '微信交易单号'}
                 ,{field:'pay_time', align: "center",title: '支付时间'}
                 ,{field:'update_user_name',align: "center", title: '更新人'}
                 ,{field:'update_time', align: "center",title: '更新时间'}

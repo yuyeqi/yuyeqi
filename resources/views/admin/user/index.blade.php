@@ -94,10 +94,10 @@
                         }
                         return d.parent_name;
                     } }
-                ,{field:'position_name', align: "center",title: '职称', minWidth: 100}
-                ,{field:'org_name', align: "center",title: '单位名称', minWidth: 100}
+                ,{field:'position_name', align: "center",title: '职称', width: 120}
+                ,{field:'org_name', align: "center",title: '单位名称', width: 200}
                 ,{field:'status', title: '状态',align: "center", width:120,templet: function(d){
-                        if(d.status.status == 10){
+                        if(d.status == 10){
                             return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-normal">正常</button>'
                         }else{
                             return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'

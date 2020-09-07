@@ -62,7 +62,7 @@
                             return '<button type="button" onclick="member_stop('+d.id+','+d.status+')" class="layui-btn layui-btn-danger">禁用</button>'
                         }
                     } }
-                ,{field:'update_user_name',align: "center", width:100, title: '更新人'}
+                ,{field:'update_user_name',align: "center", width:150, title: '更新人'}
                 ,{field:'update_time', title: '更新时间',align: "center",width:200}
                 ,{field:'create_time', title: '创建时间',align: "center",width:200}
                 ,{fixed: 'right', align: 'center', title:'操作', toolbar: '#barDemo', width:120}
