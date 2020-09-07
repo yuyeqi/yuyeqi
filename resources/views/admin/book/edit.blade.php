@@ -5,49 +5,52 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <label for="case_name" class="layui-form-label">
-                        <span class="x-red">*</span>案例名称
+                        <span class="x-red">*</span>客户姓名
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="case_name" name="case_name" required="" lay-verify="required"
-                               autocomplete="off" class="layui-input" value="{{ $detail->case_name or '' }}">
-                        <input type="hidden" value="{{ $detail->id or '' }}" id="hiddenId">
+                        <input type="text" id="client_name" name="client_name" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="{{ $detail->client_name or '' }}">
+                        <input type="hidden" name="id" value="{{ $detail->id or '' }}" id="hiddenId">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="case_cover" class="layui-form-label">
-                        <span class="x-red">*</span>案例主图
+                    <label for="case_name" class="layui-form-label">
+                        <span class="x-red">*</span>客户电话
                     </label>
                     <div class="layui-input-inline">
-                        <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="test1">上传图片</button>
-                            <div class="layui-upload-list">
-                                <div id="" class="file-iteme">
-                                    <div class="handle" id="handle"></div>
-                                    <img src="{{ $detail->case_cover or '' }}" style="width: 100px;height: 100px;" alt="" id="uploadPic">
-                                </div>
-                            </div>
-                        </div>
+                        <input type="text" id="client_phone" name="client_phone" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="{{ $detail->client_phone or '' }}">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="L_email" class="layui-form-label">
-                        <span class="x-red">*</span>排序
+                    <label for="case_name" class="layui-form-label">
+                        <span class="x-red">*</span>省市区
                     </label>
                     <div class="layui-input-inline">
-                        <input type="number" id="sort" name="sort"  required="" lay-verify="required"
-                               autocomplete="off" class="layui-input" value="{{ $detail->sort or '' }}">
+                        <input type="text" id="province" name="province" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="{{ $detail->province or '' }}">
+                        <input type="text" id="city" name="city" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="{{ $detail->city or '' }}">
+                        <input type="text" id="district" name="district" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="{{ $detail->district or '' }}">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">简介</label>
-                    <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" name="case_desc" class="layui-textarea">{{ $detail->case_desc or '' }}</textarea>
+                    <label for="case_name" class="layui-form-label">
+                        <span class="x-red">*</span>小区名称
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="community" name="community" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="{{ $detail->community or '' }}">
                     </div>
                 </div>
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">编辑器</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor">{{ $detail->content or '' }}</textarea>
+                <div class="layui-form-item">
+                    <label for="case_name" class="layui-form-label">
+                        <span class="x-red">*</span>楼层地址
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="house_name" name="house_name" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="{{ $detail->house_name or '' }}">
                     </div>
                 </div>
                 <form class="layui-form layui-form-pane" action="">
@@ -72,51 +75,17 @@
                 table = layui.table;
                 var form = layui.form,
                     layer = layui.layer,
-                    layedit = layui.layedit,
-                    upload = layui.upload,
                     $ = layui.$;
-                //
-                $(document).on("mouseenter mouseleave", ".file-iteme", function(event){
-                    if(event.type === "mouseenter"){
-                        //鼠标悬浮
-                        $(this).children(".info").fadeIn("fast");
-                        $(this).children(".handle").fadeIn("fast");
-                    }else if(event.type === "mouseleave") {
-                        //鼠标离开
-                        $(this).children(".info").hide();
-                        $(this).children(".handle").hide();
-                    }
-                });
-                // 删除图片
-                $(document).on("click", ".file-iteme .pic", function(event){
-                    $(this).parent().remove();
-                });
-                // 删除单图图片
-                $(document).on("click", "#handle", function(event){
-                    $('#uploadPic').attr('src',null);//图片链接（base64）
-                });
-                form.verify({
-                    article_desc: function(value){
-                        layedit.sync(editIndex);
-                    }
-                });
-                //创建一个编辑器
-                var editIndex = layedit.build('LAY_demo_editor');
                 //监听提交
                 form.on('submit(add)', function(data) {
-                    data.field.content = layedit.getContent(editIndex);//获取编辑器内容并赋值给保存对象内
                     var fields = data.field;
-                    var coverPic = $("#uploadPic").attr('src');
-                    var content = $("#LAY_demo_editor").text();
-                    var id = $('#hiddenId').val();
-                    var data = {id:id,case_name:fields.case_name,case_desc:fields.case_desc, sort:fields.sort,case_cover:coverPic,content:fields.content};
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '{{route('cases_edit')}}',
-                        data: data,
+                        url: '{{route('book_edit')}}',
+                        data: fields,
                         dataType: 'json',
                         success: function (data) {
                             if (data.code == 1){
@@ -138,33 +107,6 @@
                         }
                     })
                     return false;
-                });
-                //普通图片上传
-                var uploadInst = upload.render({
-                    elem: '#test1',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                    ,url: "{{ route('upload') }}" //改成您自己的上传接口
-                    ,accept:'images'
-                    ,exts: 'jpg|png|gif|bmp|jpeg'
-                    ,size: 4*1024*1024
-                    ,before: function(obj){
-                        layer.msg('图片上传中...', {
-                            icon: 16,
-                            shade: 0.01,
-                            time: 0
-                        })
-                    }
-                    ,done: function(res){
-                        //如果上传失败
-                        if(res.code > 0){
-                            return layer.msg('上传失败');
-                        }
-                        //上传成功
-                        $('#uploadPic').attr('src', res.data); //图片链接（base64）
-                        return layer.msg('上传成功');
-                    }
                 });
             });
     </script>

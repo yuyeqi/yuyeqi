@@ -241,4 +241,17 @@ class BookService extends BaseSerivce
         }
         return $newBookNum;
     }
+
+    /**
+     * 修改
+     * @param array $data
+     * @param $loginInfo
+     * @return mixed
+     */
+    public function edit(array $data, $loginInfo)
+    {
+        $data['update_user_id'] = $loginInfo['id'];;
+        $data['update_user_name'] = $loginInfo['username'];
+        return $this->book->edit($data);
+    }
 }

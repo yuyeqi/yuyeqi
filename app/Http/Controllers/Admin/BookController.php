@@ -93,4 +93,32 @@ class BookController extends BaseController
         $detail = Book::getApiBookDetail($id);
         return view('admin.book.audit',compact('detail'));
     }
+
+    /**
+     * 预约详情
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function editshow($id){
+        $detail = Book::getApiBookDetail($id);
+        return view('admin.book.edit',compact('detail'));
+    }
+
+    /**
+     * 修改预定信息
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function edit(Request $request){
+        $data = $request->only(['id','client_name','client_phone','province','city','district','community','house_name']);
+        try {
+            $res = $this->bookService->edit($data,$this->loginInfo);
+            if ($res > 0){
+                return Render::success('修改成功');
+            }
+            return  Render::error('修改失败');
+        } catch (\Exception $e) {
+            return  Render::error($e->getMessage());
+        }
+    }
 }

@@ -137,7 +137,15 @@ class Book extends Base
             ->paginate($limit);
     }
 
-
+    /**
+     * 修改
+     * @param array $data
+     * @return mixed
+     */
+    public function edit(array $data)
+    {
+        return self::where(["id"=>$data['id']])->update($data);
+    }
     /*--------------------------------------------------小程序----------------------------*/
     /**
      * 预约列表
