@@ -110,11 +110,11 @@ class Book extends Base
         $dealStartTime = '';
         $dealEndTime = '';
         !isset($data['book_no']) ?: $map['book_no'] = $data['book_no'];
-        !isset($data['client_name']) ?: $map['client_name'] = ['like','%'.$data['client_name'].'%'];
-        !isset($data['client_phone']) ?: $map['client_phone'] = ['like','%'.$data['client_phone'].'%'];
-        !isset($data['community']) ?: $map['community'] = ['like','%'.$data['community'].'%'];
-        !isset($data['house_name']) ?: $map['house_name'] = ['like','%'.$data['house_name'].'%'];
-        !isset($data['user_name']) ?: $map['user_name'] = ['like','%'.$data['user_name'].'%'];
+        !isset($data['client_name']) ?: $map[] = ['client_name','like','%'.$data['client_name'].'%'];
+        !isset($data['client_phone']) ?: $map[] = ['client_phone','like','%'.$data['client_phone'].'%'];
+        !isset($data['community']) ?: $map[] = ['community','like','%'.$data['community'].'%'];
+        !isset($data['house_name']) ?: $map[] = ['house_name','like','%'.$data['house_name'].'%'];
+        !isset($data['user_name']) ?: $map[] = ['user_name','like','%'.$data['user_name'].'%'];
         !isset($data['status']) ?: $map['status'] = $data['status'];
         !isset($data['start_time']) ?: $startTime = $data['start_time'];
         !isset($data['end_time']) ?: $endTime = $data['end_time'];
