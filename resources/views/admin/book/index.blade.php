@@ -222,7 +222,7 @@
                 var end_time = $("input[name='end']").val();
                 var deal_start_time = $("input[name='deal_start']").val();
                 var deal_end_time = $("input[name='deal_end']").val();
-                var status = $("input[name='status']").val();
+                var status = $("#selectStatus").val();
                 var user_name =  $("input[name='user_name']").val();
                 //执行重载
                 table.reload('tableId',{
