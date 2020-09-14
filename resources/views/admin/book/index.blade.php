@@ -160,7 +160,7 @@
                         }
                     }}
                 ,{field:'province', width:200, title: '省市区', align:"center",templet:function (d) {
-                    return d.provice+d.city+d.district;
+                    return d.province+d.city+d.district;
                     }}
                 ,{field:'community', width:120, title: '小区名称',align: "center"}
                 ,{field:'house_name', width:120, title: '楼层地址',align: "center"}
