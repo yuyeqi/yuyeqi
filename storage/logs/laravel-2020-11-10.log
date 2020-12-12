@@ -1,0 +1,3 @@
+[2020-11-10 23:06:51] local.INFO: 【微信授权登录】----保存用户信息，user={"id":55,"openid":"ouz335a2KE3mouaHwjgfTVGzajSY","token":"wdMaf7TM4nlk1w8ZelICrT3kt8dQL8YpvJGEyj7t8Zh91MhtdhnyjdkvR9S9sfos","audit_status":0}  
+[2020-11-10 23:06:51] local.INFO: 【微信授权登录】----保存用户信息，user={"id":55,"openid":"ouz335a2KE3mouaHwjgfTVGzajSY","token":"bUcpHdjDrxG59GOlhpqxbkSP2EvYSKPyPUxFUAokeYp44EGBm2AllVnYuTWGxxr7","audit_status":0}  
+[2020-11-10 23:17:09] local.INFO: 【微信授权登录】----保存用户信息，user={"id":56,"openid":"ouz335YaRW7ogsslc6g9dbJhzZe0","token":"Mr5qmQfMfsxk18mUPk7ymkH2Z0Bmf6RofPtaGhBVkodDCcjaUc4gderHMjrdBZuF","audit_status":0}  

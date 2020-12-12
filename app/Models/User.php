@@ -91,6 +91,7 @@ class User extends Base
             })
             ->where($map)
             ->select($field)
+	    //->orderBy("audit_status","asc")
             ->orderBy('id', 'desc')
             ->paginate($limit);
         return $lists;
